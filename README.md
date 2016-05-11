@@ -26,9 +26,9 @@ To check out:
     $ cd RCM_spack_deploy
 
 
-    $ source spack/share/spack/setup-env.sh
-    $ spack repo add repo
-    $ spack list
+    source spack/share/spack/setup-env.sh
+    spack repo add repo
+    spack list
 
 
 Take some inspiration from icebin spack setup:
