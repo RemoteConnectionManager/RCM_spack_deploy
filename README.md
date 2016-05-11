@@ -3,8 +3,9 @@ deploy components and scripts for RCM
 
 
 Git submodule experiments, following:
-https://medium.com/@porteneuve/mastering-git-submodules-34c65e940407#.qv37vr398
-https://medium.com/@porteneuve/getting-solid-at-git-rebase-vs-merge-4fa1a48c53aa#.3iuiwupoz
+
+ https://medium.com/@porteneuve/mastering-git-submodules-34c65e940407#.qv37vr398
+ https://medium.com/@porteneuve/getting-solid-at-git-rebase-vs-merge-4fa1a48c53aa#.3iuiwupoz
 
 This has been created with:
 
