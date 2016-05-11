@@ -1,14 +1,16 @@
 # RCM_spack_deploy
 deploy components and scripts for RCM
 
+Try to take some inspiration from:
+  * [icebin spack setup](https://github.com/citibeth/icebin)
+  * [Wirecell spck build](https://github.com/WireCell/wire-cell-spack)
 
-Git submodule experiments, following:
+Currently experimenting with Git submodule, following some hints:
 
- https://medium.com/@porteneuve/mastering-git-submodules-34c65e940407#.qv37vr398
- https://medium.com/@porteneuve/getting-solid-at-git-rebase-vs-merge-4fa1a48c53aa#.3iuiwupoz
+  * [Tutorial and setup for submodules](https://medium.com/@porteneuve/mastering-git-submodules-34c65e940407#.qv37vr398)
+  * [Hints on rebase](https://medium.com/@porteneuve/getting-solid-at-git-rebase-vs-merge-4fa1a48c53aa#.3iuiwupoz)
 
-This has been created with:
-
+This are command used to create first local copy and upload on github:
 
     git clone https://github.com/RemoteConnectionManager/RCM_spack_deploy.git
     cd RCM_spack_deploy
@@ -21,20 +23,16 @@ This has been created with:
     # add the submodule, check it out and add .gitmodules
     git commit -m "Spack submodule added"
     git push
-
-To check out:
-
+    
+To check out a new copy:
 
     git clone --recursive https://github.com/RemoteConnectionManager/RCM_spack_deploy.git
     cd RCM_spack_deploy
 
-
+To initialize repo
+    
     source spack/share/spack/setup-env.sh
     spack repo add repo
     spack list
 
 
-Take some inspiration from icebin spack setup:
-https://github.com/citibeth/icebin
-and
-https://github.com/WireCell/wire-cell-spack
