@@ -9,21 +9,23 @@ https://medium.com/@porteneuve/getting-solid-at-git-rebase-vs-merge-4fa1a48c53aa
 This has been created with:
 
 
-    $ git clone https://github.com/RemoteConnectionManager/RCM_spack_deploy.git
-    $ cd RCM_spack_deploy
-    $ git submodule init
-    $ git submodule add https://github.com/RemoteConnectionManager/spack.git spack
+    git clone https://github.com/RemoteConnectionManager/RCM_spack_deploy.git
+    cd RCM_spack_deploy
+    git submodule init
+    git submodule add https://github.com/RemoteConnectionManager/spack.git spack
+
     # to make git status show submodule status as well
     $ git config --global status.submoduleSummary true 
+
     # add the submodule, check it out and add .gitmodules
-    $ git commit -m "Spack submodule added"
-    $ git push
+    git commit -m "Spack submodule added"
+    git push
 
 To check out:
 
 
-    $ git clone --recursive https://github.com/RemoteConnectionManager/RCM_spack_deploy.git
-    $ cd RCM_spack_deploy
+    git clone --recursive https://github.com/RemoteConnectionManager/RCM_spack_deploy.git
+    cd RCM_spack_deploy
 
 
     source spack/share/spack/setup-env.sh
