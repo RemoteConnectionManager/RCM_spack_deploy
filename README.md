@@ -17,8 +17,13 @@ This are command used to create first local copy and upload on github:
     git submodule init
     git submodule add https://github.com/RemoteConnectionManager/spack.git spack
 
-    # to make git status show submodule status as well
-    $ git config --global status.submoduleSummary true 
+    # this set up the reference to the branch to include
+    git config -f .gitmodules submodule.spack.branch clean/develop
+    
+    # to make git status show submodule status as well, this is added in local config
+    git config --local status.submoduleSummary true 
+    git config --local diff.submodule log
+    git config --local --add submodule.spack.update rebase
 
     # add the submodule, check it out and add .gitmodules
     git commit -m "Spack submodule added"
@@ -28,7 +33,14 @@ To check out a new copy:
 
     git clone --recursive https://github.com/RemoteConnectionManager/RCM_spack_deploy.git
     cd RCM_spack_deploy
+    git config --local status.submoduleSummary true
+    git config --local diff.submodule log
 
+    cd spack
+    git remote add upstream https://github.com/LLNL/spack
+    git checkout clean/develop
+    git pull --ff-only upstream develop
+    
 To initialize repo
     
     source spack/share/spack/setup-env.sh
