@@ -41,6 +41,8 @@ To check out a new copy:
     git remote add upstream https://github.com/LLNL/spack
     git checkout clean/develop
     git pull --ff-only upstream develop
+    cd ..
+    git commit spack -m "updating clean/develop to upstream"
     
 To initialize repo
     
