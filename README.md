@@ -9,6 +9,8 @@ Try to take some inspiration from:
 Currently experimenting with Git submodule, following some hints:
 
   * [Tutorial and setup for submodules](https://medium.com/@porteneuve/mastering-git-submodules-34c65e940407#.qv37vr398)
+  * [other submodule tutorial](https://git-scm.com/book/en/v2/Git-Tools-Submodules)
+  * [other submodule tutorial](https://chrisjean.com/git-submodules-adding-using-removing-and-updating/)
   * [Hints on rebase](https://medium.com/@porteneuve/getting-solid-at-git-rebase-vs-merge-4fa1a48c53aa#.3iuiwupoz)
 
 This are command used to create first local copy and upload on github:
