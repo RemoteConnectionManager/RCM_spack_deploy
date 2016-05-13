@@ -4,6 +4,7 @@ deploy components and scripts for RCM
 Try to take some inspiration from:
   * [icebin spack setup](https://github.com/citibeth/icebin)
   * [Wirecell spck build](https://github.com/WireCell/wire-cell-spack)
+  * [hints on rebase a messed up spack PR](https://github.com/LLNL/spack/pull/796#issuecomment-218904402)
 
 Currently experimenting with Git submodule, following some hints:
 
