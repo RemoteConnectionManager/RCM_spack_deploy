@@ -1,0 +1,5 @@
+cd spack_clean
+git checkout clean/develop
+git pull --ff-only upstream develop
+cd ..
+git commit spack -m "updating clean/develop to upstream"

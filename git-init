@@ -1,0 +1,4 @@
+git config --local status.submoduleSummary true
+git config --local diff.submodule log
+cd spack_clean
+git remote add upstream https://github.com/LLNL/spack
