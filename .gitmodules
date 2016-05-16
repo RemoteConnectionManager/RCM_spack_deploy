@@ -1,4 +1,4 @@
-[submodule "spack"]
-	path = spack
-	url = https://github.com/RemoteConnectionManager/spack.git
+[submodule "spack_clean"]
 	branch = clean/develop
+	path = spack_clean
+	url = https://github.com/RemoteConnectionManager/spack.git
