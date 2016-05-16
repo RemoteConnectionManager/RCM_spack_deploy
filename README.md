@@ -18,7 +18,8 @@ This are command used to create first local copy and upload on github:
     git clone https://github.com/RemoteConnectionManager/RCM_spack_deploy.git
     cd RCM_spack_deploy
     git submodule init
-    git submodule add https://github.com/RemoteConnectionManager/spack.git spack
+    git submodule add --name spack_clean -b clean/develop  https://github.com/RemoteConnectionManager/spack.git spack_clean
+    git submodule add --name develop -b develop  https://github.com/RemoteConnectionManager/spack.git spack
 
     # this set up the reference to the branch to include
     git config -f .gitmodules submodule.spack.branch clean/develop
