@@ -50,6 +50,7 @@ To check out a new copy:
 To initialize repo
     
     source spack/share/spack/setup-env.sh
+    spack  compiler find --scope site
     spack repo add repo
     spack list
 
