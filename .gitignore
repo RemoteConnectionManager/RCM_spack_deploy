@@ -1,5 +1,9 @@
 # Byte-compiled / optimized / DLL files
 
+# Editors
+*.kate-swp
+
+
 *~
 #spack-mirror*
 *.pyc
@@ -15,4 +19,7 @@
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
 *.manifest
 *.spec
+
+# this files is generated
+setup/intel/intel.cfg
 
