@@ -9,8 +9,6 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
 done
 SCRIPTPATH="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 ROOTPATH="$( dirname "$SCRIPTPATH" )"
-module load intel/cs-xe-2015--binary
-source $ROOTPATH/spack/share/spack/setup-env.sh
 echo "write ${SCRIPTPATH}/intel.cfg"
 echo "\
 -Xlinker -rpath=${INTEL_HOME}/ipp/lib/intel64 \

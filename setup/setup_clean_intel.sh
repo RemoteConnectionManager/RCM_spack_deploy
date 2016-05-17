@@ -14,4 +14,10 @@ echo "ROOTPATH-->$ROOTPATH<--"
 source $ROOTPATH/spack_clean/share/spack/setup-env.sh
 source $SCRIPTPATH/intel/setup.sh
 
-spack  compiler find --scope site
+echo "these are site available compilers"
+spack  compilers --scope site
+echo "these are user available compilers --- should be none"
+spack  compilers --scope user
+echo "these are the registered repositories"
+spack  repo list
+

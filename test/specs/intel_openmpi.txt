@@ -1,0 +1,3 @@
+
+spack install -v -j 30  hdf5%intel@15  +mpi ^ openmpi
+spack install -v -j 30  parmetis%intel@15  ^ openmpi
