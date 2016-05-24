@@ -33,6 +33,14 @@ This are command used to create first local copy and upload on github:
     git commit -m "Spack submodule added"
     git push
     
+    # Here are functions that require new git, tested with git 2.7.4
+    
+    #to move submodule:
+    git mv spack_clean deploy/spack_clean
+    
+    #remove submodule
+    git rm spack
+    
 To check out a new copy:
 
     git clone --recursive https://github.com/RemoteConnectionManager/RCM_spack_deploy.git
