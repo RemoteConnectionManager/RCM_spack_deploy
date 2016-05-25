@@ -63,3 +63,9 @@ To initialize repo
     spack list
 
 
+Other git workflow, not using submodules, run git checkout and merge PR:
+
+    #clone clean repo 
+    git clone -b clean/develop https://github.com/RemoteConnectionManager/spack.git spack_clean
+    cd spack_clean
+    git remote add upstream https://github.com/LLNL/spack
