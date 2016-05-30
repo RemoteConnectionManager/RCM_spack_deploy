@@ -2,8 +2,18 @@
 
 folder_name=spack_test
 branch_name=integrate/develop
-pr_to_integrate="946 579 902 869"
-branches_to_integrate="local/modules pr/fix/boost_intel pr/intel/fix_openmpi"
+
+#946 --> intel compiler install          https://github.com/LLNL/spack/pull/946
+#869 --> add views command               https://github.com/LLNL/spack/pull/869
+#943 --> config ure compilers env vars   https://github.com/LLNL/spack/pull/943
+#984 --> modules files suffixes          https://github.com/LLNL/spack/pull/984
+#820 --> qt 5.6 ( OSX ?)                 https://github.com/LLNL/spack/pull/820
+#797 --> cmake gui separate package      https://github.com/LLNL/spack/pull/797
+#579 --> cache downloads                 https://github.com/LLNL/spack/pull/579
+#378 --> dependency types                https://github.com/LLNL/spack/pull/378
+
+pr_to_integrate="946 579 869 984 797"
+branches_to_integrate="local/modules pr/fix/boost_intel pr/intel/fix_openmpi pr/fix_gmp virtualgl wip/vtk"
 
 cd deploy
 
@@ -27,7 +37,9 @@ done
   
 for br in ${branches_to_integrate} ; do
   git checkout ${br}
-  git merge --ff -m "sync to develop" clean/develop
+  #git pull --rebase origin clean/develop
+  #git pull --ff-only
+  git merge --ff-only clean/develop
   git checkout ${branch_name}
   git merge -m "merge branch ${br}" ${br}
 done
