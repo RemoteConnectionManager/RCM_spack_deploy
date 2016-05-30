@@ -69,3 +69,13 @@ Other git workflow, not using submodules, run git checkout and merge PR:
     git clone -b clean/develop https://github.com/RemoteConnectionManager/spack.git spack_clean
     cd spack_clean
     git remote add upstream https://github.com/LLNL/spack
+    
+    
+Useful pr to integrate
+946 : intel_compiler
+579 : cache
+
+git fetch upstream pull/946/head:pull/946/clean
+git checkout pull/946/clean
+git checkout -b pull/946/update
+git merge -m "sync to develop" clean/develop
