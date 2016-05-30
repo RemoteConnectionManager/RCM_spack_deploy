@@ -1,0 +1,33 @@
+#! /bin/bash
+
+folder_name=spack_test
+branch_name=integrate/develop
+pr_to_integrate="946 579 902 869"
+branches_to_integrate="local/modules pr/fix/boost_intel pr/intel/fix_openmpi"
+
+cd deploy
+
+git clone -b clean/develop https://github.com/RemoteConnectionManager/spack.git ${folder_name}
+cd ${folder_name}
+git remote add upstream https://github.com/LLNL/spack
+#git pull --ff-only upstream develop
+
+git checkout -b ${branch_name}
+git fetch origin clean/develop:clean/develop
+
+for pr in ${pr_to_integrate} ; do  
+  echo "integrating PR $pr"
+  git fetch upstream pull/${pr}/head:pull/${pr}/clean
+  git checkout pull/${pr}/clean
+  git checkout -b pull/${pr}/update
+  git merge -m "sync to develop" clean/develop
+  git checkout ${branch_name}
+  git merge -m "merge pr ${pr}" pull/${pr}/update
+done
+  
+for br in ${branches_to_integrate} ; do
+  git checkout ${br}
+  git merge --ff -m "sync to develop" clean/develop
+  git checkout ${branch_name}
+  git merge -m "merge branch ${br}" ${br}
+done
