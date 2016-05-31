@@ -1,0 +1,14 @@
+#! /bin/bash
+
+#install development components
+dev_comp="py-coverage py-flake8 py-autopep8 cmake-gui"
+
+for pk in ${dev_comp} ; do  
+  echo "spec of package $pk"
+  spack spec $pk
+done
+
+for pk in ${dev_comp} ; do  
+  echo "spec of package $pk"
+  spack install -v -j 30 $pk
+done

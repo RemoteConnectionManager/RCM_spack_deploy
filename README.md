@@ -57,10 +57,25 @@ To check out a new copy:
     
 To initialize repo
     
-    source spack/share/spack/setup-env.sh
-    spack  compiler find --scope site
-    spack repo add repo
+    #go into top spack folder (inside deploy)
+    #cd deploy/spack_test
+    
+    source share/spack/setup-env.sh
+    spack  config --site  get bad_section_name
+
+    #add system compiler
+    spack  compiler find --scope site    
+    #print what has been found
+    spack  config --site  get compilers
+    
+    #add our our package repo folder
+    spack repo add ../../repo --scope site
+    #print what has been added
+    spack  config --site  get repos
+
+    #list all available packages   
     spack list
+    
 
 
 Other git workflow, not using submodules, run git checkout and merge PR:
