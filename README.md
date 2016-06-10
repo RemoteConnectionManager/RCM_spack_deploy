@@ -96,3 +96,11 @@ git checkout -b pull/946/update
 git merge -m "sync to develop" clean/develop
 
 #######################################
+
+## git hints:
+
+# show which branch contains a commit
+git branch --contains 86d2b2f4904f4fdbaf3e810db25a3c62799f321c
+
+#print the commit diff
+git show 86d2b2f4904f4fdbaf3e810db25a3c62799f321c

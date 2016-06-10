@@ -1,19 +1,20 @@
 #! /bin/bash
 
-folder_name=spack_test
-branch_name=integrate/develop
+folder_name=spack_test1
+branch_name=integrate/develop1
 
 #946 --> intel compiler install          https://github.com/LLNL/spack/pull/946
-#869 --> add views command               https://github.com/LLNL/spack/pull/869
-#943 --> config ure compilers env vars   https://github.com/LLNL/spack/pull/943
+# merged #869 --> add views command      https://github.com/LLNL/spack/pull/869
+#943 --> configure compilers env vars    https://github.com/LLNL/spack/pull/943
 #984 --> modules files suffixes          https://github.com/LLNL/spack/pull/984
 #820 --> qt 5.6 ( OSX ?)                 https://github.com/LLNL/spack/pull/820
 #797 --> cmake gui separate package      https://github.com/LLNL/spack/pull/797
 #579 --> cache downloads                 https://github.com/LLNL/spack/pull/579
 #378 --> dependency types                https://github.com/LLNL/spack/pull/378
 
-pr_to_integrate="946 579 869 984 797"
-branches_to_integrate="local/modules pr/fix/boost_intel pr/intel/fix_openmpi pr/fix_gmp virtualgl wip/vtk"
+pr_to_integrate="946 579 984 797 820"
+branches_to_integrate="pr/modules/fix_delim pr/libxcb/pkgconfig
+pr/fix/boost_intel pr/intel/fix_openmpi pr/fix_gmp virtualgl wip/vtk"
 
 cd deploy
 

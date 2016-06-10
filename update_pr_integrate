@@ -1,0 +1,40 @@
+branch_name=integrate/develop_1
+pr_to_integrate="946 579 984 797 820"
+
+git remote add upstream https://github.com/LLNL/spack
+git checkout clean/develop
+git pull origin
+git pull --ff-only upstream develop
+
+#git checkout  ${branch_name}
+#git pull --ff-only upstream develop
+
+#git checkout ${branch_name}
+#git rebase -m "sync to develop" clean/develop
+
+git branch -D ${branch_name}
+git checkout -b ${branch_name}
+
+for pr in ${pr_to_integrate} ; do  
+  echo "removing PR $pr branches"
+  git checkout clean/develop
+  git branch -D pull/${pr}/update
+  git branch -D pull/${pr}/clean
+done
+
+for pr in ${pr_to_integrate} ; do  
+  echo "integrating PR $pr"
+#  git rebase --abort
+  git fetch upstream pull/${pr}/head:pull/${pr}/clean
+#  git checkout pull/${pr}/clean
+  git checkout clean/develop
+  git checkout -b pull/${pr}/update
+  git merge -m "sync to develop" clean/develop
+#  git rebase clean/develop 
+#  git checkout ${branch_name}
+#  git merge -m "merge pr ${pr}" pull/${pr}/update
+done
+
+
+
+
