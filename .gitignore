@@ -1,25 +1,5 @@
-# Byte-compiled / optimized / DLL files
-
-# Editors
-*.kate-swp
-
-
-*~
-#spack-mirror*
 *.pyc
-*.log
-
-# C extensions
-*.so
-
-# Distribution / packaging
-#build/
-# PyInstaller
-#  Usually these files are written by a python script from a template
-#  before PyInstaller builds the exe, so as to inject date/other infos into it.
-*.manifest
-*.spec
-
-# this files is generated
-setup/intel/intel.cfg
-
+*~
+.DS_Store
+.idea
+.coverage
