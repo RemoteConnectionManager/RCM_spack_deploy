@@ -6,23 +6,34 @@ import sys
 import subprocess
 import io
 import re
+import collections
 
 class git_repo:
-    def __init__(self, folder,debug_level=0,stop_on_error=True):
+    def __init__(self, folder,debug_level=0,stop_on_error=True,dry_run=False):
         self.folder = os.path.abspath(folder)
         self.debug=int(debug_level)
         self.stop_on_error=stop_on_error
+        self.dry_run=dry_run
         print("debug level-->",self.debug)
 
     def run(self,cmd):
-        child =  subprocess.Popen(cmd, cwd=self.folder, stdout=subprocess.PIPE)
-        output = child.communicate()[0]
-        ret = child.returncode
         if self.debug:
-            print("executed: ",' '.join(cmd), 'result: ',ret)
-            if self.debug > 1:
-                print(self.debug,"output->" + output + "<-")
-        return (ret,output)
+            print("executing: ", ' '.join(cmd))
+        if not self.dry_run :
+            child =  subprocess.Popen(cmd, cwd=self.folder, stdout=subprocess.PIPE)
+            output = child.communicate()[0]
+            ret = child.returncode
+            if self.debug:
+                print('result: ',ret)
+                if self.debug > 1:
+                    print(self.debug,"output->" + output + "<-")
+            if self.stop_on_error and ret:
+                print("ERROR:",ret,"Exiting")
+                sys.exit()
+            return (ret,output)
+        else:
+            if self.debug: print("DRY RUN... nothing done")
+            return(0,'')
 
     def init(self):
         if not os.path.exists(self.folder):
@@ -48,10 +59,8 @@ class git_repo:
         return remotes
 
     def add_remote(self, url, name='origin', fetch_branches=[]):
-#        cmd = ['git', 'remote', 'remove', name]
-#        subprocess.Popen(cmd, cwd=dest).wait()
         remotes=self.get_remotes()
-#        print("remotes-->",remotes,"<<-")
+        if self.debug : print("remotes-->",remotes,"<<-")
         if name not in self.get_remotes():
             cmd = ['git', 'remote', 'add']
             for branch in fetch_branches:
@@ -62,21 +71,37 @@ class git_repo:
             (ret,output) = self.run(cmd)
 
 
-    def fetch(self, name='origin', branches=[]):
+    def fetch(self, name='origin', prefix='',  branches=[]):
         cmd = [ 'git', 'fetch', name ]
+
         if isinstance(branches,list):
             for branch in branches:
-                cmd.append(branch)
+ #               cmd.append(branch)
+                cmd.append( branch + ':' + prefix.format(name=name) + branch)
         elif isinstance(branches,dict):
             for branch in branches:
-                cmd.append( branch + ':' + branches[branch])
+                cmd.append( branch + ':' + prefix.format(name=name) + branches[branch])
         else:
             print('Invalid branches type: either list or dict')
             return
 
         (ret,output) = self.run(cmd)
 
+    def checkout(self, branch, newbranch=None):
+        cmd = [ 'git', 'checkout', branch ]
+        if newbranch: cmd.extend(['-b', newbranch])
+        (ret,output) = self.run(cmd)
 
+    def sync_upstream(self, upstream='upstream', master='develop', options=['--ff-only']):
+        cmd = [ 'git', 'pull'] + options  + [upstream, master]
+        (ret,output) = self.run(cmd)
+        if ret : print("sync_upstream failed")
+
+    def merge(self, branch, comment='merged branch '):
+        if self.debug : print("merge-->",branch,"<<-")
+        cmd = [ 'git', 'merge', '-m', '"' + comment  + branch + '"', branch]
+        (ret,output) = self.run(cmd)
+        if ret : print("merge " + branch + "failed")
 
 # ------ List the branches on the origin
 # And select only those that match our branch regexp
@@ -140,7 +165,7 @@ def get_branches(url, branch_pattern='.*?\s+refs/heads/(.*?)\s+', branch_format_
     return fetch_branches
 
 def trasf_match(in_list,in_match='(.*)',out_format='{name}'):
-    out=dict()
+    out=collections.OrderedDict()
     in_RE = re.compile(in_match)
     for entry in in_list:
         match = in_RE.match(entry)

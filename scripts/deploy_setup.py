@@ -15,10 +15,10 @@ parser = argparse.ArgumentParser(description="""
   Clone origin repository, opionally update the develop branch, integrate a list of PR and branches into a new branch
   usage examples: 
    python test.py --prlist 579 984 943 946 1042 797 --branches clean/develop 'pr/(.*)' 
-   python test.py --prlist  -579 984  797 -branches clean/develop 'pr/fix.*' 'pr/.*' 'wip/.*'
+   python test.py --debug=1 --dest=../deploy/spack2 --prlist   797 -branches clean/develop 'pr/fix.*' 'pr/.*' 'wip/.*'
 """, formatter_class=argparse.RawTextHelpFormatter)
 
-parser.add_argument('--debug', action='store',
+parser.add_argument('-d', '--debug', action='store',
                     help='debug level',
                     default=0)
 parser.add_argument('--origin', action='store',
@@ -35,6 +35,9 @@ parser.add_argument('--master', action='store', default='develop',
 
 parser.add_argument('--upstream_master', action='store', default='develop',
                     help='upstream branch to sync with.')
+
+parser.add_argument('--dry_run', action='store_true', default=False,
+                    help='do not perform any action')
 
 parser.add_argument('--prlist', nargs='*', default=[],
                     help='Regular expressions of upstream pr to fetch and merge.')
@@ -79,7 +82,7 @@ branchRE = re.compile('^(' + '|'.join(branchRE) + r')$')
 if not os.path.exists(dest):
     os.makedirs(dest)
 
-dev_git = util.git_repo(dest,debug_level=args.debug)
+dev_git = util.git_repo(dest,debug_level=args.debug,dry_run=args.dry_run)
 
 dev_git.init()
 # cmd = ['git', 'init']
@@ -92,6 +95,31 @@ dev_git.add_remote(args.upstream, name='upstream')
 local_pr=util.trasf_match(upstream_branches,in_match='.*/([0-9]*)/(.*)',out_format='pull/{name}/clean')
 #print(local_branches)
 
-dev_git.fetch(name='upstream',branches=local_pr)
 dev_git.fetch(name='origin',branches=origin_branches)
+
+if len(origin_branches) > 0 :
+    upstream_clean = origin_branches[0]
+    print(upstream_clean)
+    dev_git.checkout(upstream_clean)
+    dev_git.sync_upstream()
+    dev_git.checkout(upstream_clean,newbranch=args.master)
+
+    dev_git.sync_upstream()
+
+    for b in origin_branches[1:] :
+        dev_git.checkout(b)
+        dev_git.sync_upstream(options=['--rebase'])
+
+    dev_git.fetch(name='upstream',branches=local_pr)
+
+    for n,branch in local_pr.items():
+        print("local_pr",n,branch)
+        dev_git.checkout(branch,newbranch=branch+'_update')
+        dev_git.merge(upstream_clean,comment='sync with upstream develop ')
+        dev_git.checkout(args.master)
+        dev_git.merge(branch+'_update',comment='merged '+branch)
+
+    for branch in origin_branches[1:] :
+        dev_git.checkout(args.master)
+        dev_git.merge(branch,comment='merged '+branch)
 

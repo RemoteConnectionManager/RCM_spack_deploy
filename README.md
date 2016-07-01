@@ -104,3 +104,17 @@ git branch --contains 86d2b2f4904f4fdbaf3e810db25a3c62799f321c
 
 #print the commit diff
 git show 86d2b2f4904f4fdbaf3e810db25a3c62799f321c
+
+#################   suggestion for rebase  ##############
+https://github.com/LLNL/spack/pull/1040/#issuecomment-225345722
+
+#first try to pull --rebase from upstream
+git pull --rebase upstream develop
+
+
+################ rename a remote branch ############
+#from https://gist.github.com/lttlrck/9628955
+git branch -m pr/libxcb/pkgconfig old/libxcb/pkgconfig
+git push origin :pr/libxcb/pkgconfig
+git push --set-upstream origin old/libxcb/pkgconfig
+
