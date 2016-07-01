@@ -1,0 +1,7 @@
+#! /bin/bash
+
+pushd .
+spack cd -i environment-modules 
+source Modules/init/bash
+popd
+#module load py-flake8 py-autopep8
