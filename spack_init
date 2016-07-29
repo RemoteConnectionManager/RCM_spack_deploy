@@ -1,4 +1,16 @@
 #! /bin/bash
+# Absolute path to this script. /home/user/bin/foo.sh
+
+SOURCE="${BASH_SOURCE[0]}"
+while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symlink
+  DIR="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+  SOURCE="$(readlink "$SOURCE")"
+  [[ $SOURCE != /* ]] && SOURCE="$DIR/$SOURCE" # if $SOURCE was a relative symlink, we need to resolve it relative to the path where the symlink file was located
+done
+ROOTPATH="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+
+#python scripts/deploy_setup.py --dest=deploy/spack_hope --debug=1  --branches clean/develop pr/modules/fix_delim pr/update/797 'wip/.*' virtualgl --prlist 1350
+
 source share/spack/setup-env.sh
 spack  config --site  get bad_section_name
 
@@ -6,6 +18,12 @@ spack  config --site  get bad_section_name
 spack  compiler find --scope site    
 #print what has been found
 spack  config --site  get compilers
+
+#add site specific module configuration
+cp ${ROOTPATH}/config/modules.yaml etc/spack
+
+#symbolic link to cache folder
+ln -s ${ROOTPATH}/cache var/spack
 
 #add our our package repo folder
 spack repo add ../../repo --scope site

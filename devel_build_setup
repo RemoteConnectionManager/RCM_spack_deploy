@@ -1,7 +1,7 @@
 #! /bin/bash
 
 #install development components
-dev_comp="py-coverage py-flake8 py-autopep8 git"
+dev_comp="py-coverage py-flake8 py-autopep8 cmake-gui"
 
 for pk in ${dev_comp} ; do  
   echo "spec of package $pk"
@@ -12,6 +12,14 @@ for pk in ${dev_comp} ; do
   echo "spec of package $pk"
   spack install -v -j 30 $pk
 done
+
+
+echo "packages:
+  cmake:
+    paths:
+      cmake@system: $(spack location -i cmake-gui)
+    buildable: False
+" > etc/spack/packages.yaml
 
 #install paraview
 #spack -v -d install paraview+python+mpi+qt+opengl2

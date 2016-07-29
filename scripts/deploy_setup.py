@@ -11,12 +11,13 @@ import argparse
 
 import util
 
+
 parser = argparse.ArgumentParser(description="""
   Clone origin repository, opionally update the develop branch, integrate a list of PR and branches into a new branch
   usage examples: 
-   python test.py --prlist 579 984 943 946 1042 797 --branches clean/develop 'pr/(.*)' 
-   python test.py --debug=1 --dest=../deploy/spack2 --prlist   797 -branches clean/develop 'pr/fix.*' 'pr/.*' 'wip/.*'
-""", formatter_class=argparse.RawTextHelpFormatter)
+   python {scriptname} --prlist 579 984 943 946 1042 797 --branches clean/develop 'pr/(.*)'
+   python {scriptname} --debug=1 --dest=../deploy/spack2 --prlist   797 -branches clean/develop 'pr/fix.*' 'pr/.*' 'wip/.*'
+""".format(scriptname=sys.argv[0]), formatter_class=argparse.RawTextHelpFormatter)
 
 parser.add_argument('-d', '--debug', action='store',
                     help='debug level',
