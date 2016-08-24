@@ -2,12 +2,15 @@
 
 
 from __future__ import print_function
+import pprint, StringIO
+
 import os
 import sys
 import subprocess
 import io
 import re
 import argparse
+import logging
 
 import util
 
@@ -20,11 +23,14 @@ parser = argparse.ArgumentParser(description="""
 """.format(scriptname=sys.argv[0]), formatter_class=argparse.RawTextHelpFormatter)
 
 parser.add_argument('-d', '--debug', action='store',
-                    help='debug level',
-                    default=0)
+                    help='debug level: warning,error,debug',
+                    default='info')
 parser.add_argument('--origin', action='store',
                     help='URL of the origin git repo being cloned.',
                     default='https://github.com/RemoteConnectionManager/spack.git')
+parser.add_argument('--logfile', action='store',
+                    help='logfile to log into.',
+                    default= os.path.splitext(sys.argv[0])[0]+'.log')
 parser.add_argument('--upstream', action='store',
                     help='URL of the upstream git repo.', default='https://github.com/LLNL/spack.git')
 
@@ -49,7 +55,7 @@ place into subdirectory named after the URL")
 
 args = parser.parse_args()
 
-print("-----args-------->", args)
+#print("-----args-------->", args)
 
 # ------ Determine destination directory
 destRE = re.compile('.*/(.*?).git')
@@ -62,7 +68,52 @@ if 'dest' in args:
 else:
     dest = os.path.join('.', repo_name)
 
+logdir=os.path.dirname(args.logfile)
+if not os.path.exists( logdir ): logdir=dest
 
+LEVELS = {'debug': logging.DEBUG,
+          'info': logging.INFO,
+          'warning': logging.WARNING,
+          'error': logging.ERROR,
+          'critical': logging.CRITICAL}
+loglevel=LEVELS.get(args.debug, logging.INFO)
+LONGFORMAT = "[%(filename)s:%(lineno)s - %(funcName)20s() %(asctime)s] %(message)s"
+SHORTFORMAT = "%(message)s"
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+# create file handler which logs even debug messages
+actual_logfile=os.path.join(logdir,os.path.basename(args.logfile))
+print("logfile in "+actual_logfile)
+
+fh = logging.FileHandler(os.path.join(logdir,os.path.basename(args.logfile)))
+fh.setLevel(logging.DEBUG)
+
+# create console handler with a higher log level
+ch = logging.StreamHandler()
+ch.setLevel(loglevel)
+
+# create formatter and add it to the handlers
+long_formatter = logging.Formatter("[%(filename)s:%(lineno)s - %(funcName)20s() %(asctime)s] %(message)s")
+short_formatter = logging.Formatter("%(message)s")
+ch.setFormatter(short_formatter)
+fh.setFormatter(long_formatter)
+
+# add the handlers to logger
+logger.addHandler(ch)
+logger.addHandler(fh)
+
+#logging.basicConfig(filename=os.path.join(logdir,os.path.basename(args.logfile)))
+
+#logging.basicConfig(level=loglevel)
+
+
+
+
+s = StringIO.StringIO()
+pprint.pprint(args, s)
+
+logger.info("lanciato con---->"+s.getvalue())
 
 origin_branches = util.get_branches(args.origin, branch_selection=args.branches)
 
@@ -83,7 +134,7 @@ branchRE = re.compile('^(' + '|'.join(branchRE) + r')$')
 if not os.path.exists(dest):
     os.makedirs(dest)
 
-dev_git = util.git_repo(dest,debug_level=args.debug,dry_run=args.dry_run)
+dev_git = util.git_repo(dest,logger = logger,dry_run=args.dry_run)
 
 dev_git.init()
 # cmd = ['git', 'init']

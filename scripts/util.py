@@ -7,32 +7,37 @@ import subprocess
 import io
 import re
 import collections
+import logging
 
 class git_repo:
-    def __init__(self, folder,debug_level=0,stop_on_error=True,dry_run=False):
+    def __init__(self, folder, logger=None,stop_on_error=True,dry_run=False):
         self.folder = os.path.abspath(folder)
-        self.debug=int(debug_level)
+        self.logger = logger or logging.getLogger(__name__)
         self.stop_on_error=stop_on_error
         self.dry_run=dry_run
-        print("debug level-->",self.debug)
+        #print("debug level-->",self.debug)
 
     def run(self,cmd):
-        if self.debug:
-            print("executing: ", ' '.join(cmd))
+#        if self.debug:
+#            print("  ", ' '.join(cmd))
+        self.logger.info("running-->"+' '.join(cmd)+"<-")
         if not self.dry_run :
             child =  subprocess.Popen(cmd, cwd=self.folder, stdout=subprocess.PIPE)
             output = child.communicate()[0]
             ret = child.returncode
-            if self.debug:
-                print('result: ',ret)
-                if self.debug > 1:
-                    print(self.debug,"output->" + output + "<-")
+            #if self.debug:
+            #    print('result: ',ret)
+            #    if self.debug > 1:
+            #        print(self.debug,"output->" + output + "<-")
+            self.logger.debug("output->" + output + "<-")
             if self.stop_on_error and ret:
-                print("ERROR:",ret,"Exiting")
+                #print("ERROR:",ret,"Exiting")
+                self.logger.error("ERROR: " + str(ret) + 'Exiting')
                 sys.exit()
             return (ret,output)
         else:
-            if self.debug: print("DRY RUN... nothing done")
+            #if self.debug: print("DRY RUN... nothing done")
+            self.logger.info("DRY RUN... nothing done")
             return(0,'')
 
     def init(self):
@@ -42,11 +47,13 @@ class git_repo:
         (ret,output) = self.run(cmd)
         git_root = os.path.abspath(output.strip())
 
-        print("in path ",self.folder," git rev_parse ret: ",ret, ' git top:', git_root)
+        #print("in path ",self.folder," git rev_parse ret: ",ret, ' git top:', git_root)
+        self.logger.info("in path "+self.folder+" git rev_parse ret: "+str(ret)+ ' git top:'+ git_root)
         if 0 != ret or git_root != self.folder:
             cmd = ['git', 'init']
             (ret,output) = self.run(cmd)
-            print("git init in ",">>" + self.folder + "<<",">>" + git_root + "<< ret= ",ret)
+            self.logger.info("git init in >>" + self.folder + "<< >>" + git_root + "<< ret= ", ret)
+            #print("git init in ",">>" + self.folder + "<<",">>" + git_root + "<< ret= ",ret)
 
     def get_remotes(self):
         cmd = ['git', 'remote']
@@ -60,7 +67,8 @@ class git_repo:
 
     def add_remote(self, url, name='origin', fetch_branches=[]):
         remotes=self.get_remotes()
-        if self.debug : print("remotes-->",remotes,"<<-")
+        #if self.debug : print("remotes-->",remotes,"<<-")
+        self.logger.debug("remotes-->"+str(remotes)+"<<-")
         if name not in self.get_remotes():
             cmd = ['git', 'remote', 'add']
             for branch in fetch_branches:
@@ -82,7 +90,8 @@ class git_repo:
             for branch in branches:
                 cmd.append( branch + ':' + prefix.format(name=name) + branches[branch])
         else:
-            print('Invalid branches type: either list or dict')
+            self.logger.error('Invalid branches type: either list or dict')
+
             return
 
         (ret,output) = self.run(cmd)
@@ -95,13 +104,13 @@ class git_repo:
     def sync_upstream(self, upstream='upstream', master='develop', options=['--ff-only']):
         cmd = [ 'git', 'pull'] + options  + [upstream, master]
         (ret,output) = self.run(cmd)
-        if ret : print("sync_upstream failed")
+        if ret : self.logger.error("sync_upstream failed")
 
     def merge(self, branch, comment='merged branch '):
-        if self.debug : print("merge-->",branch,"<<-")
+        self.logger.info("mergeing-->" + branch + '<<-')
         cmd = [ 'git', 'merge', '-m', '"' + comment  + branch + '"', branch]
         (ret,output) = self.run(cmd)
-        if ret : print("merge " + branch + "failed")
+        if ret : self.logger.error("merge " + branch + "failed")
 
 # ------ List the branches on the origin
 # And select only those that match our branch regexp
@@ -160,7 +169,7 @@ def get_branches(url, branch_pattern='.*?\s+refs/heads/(.*?)\s+', branch_format_
 
     #  print("checkout-->",checkout_branch)
     for b in fetch_branches:
-        print('{0} fetch-->'.format(url), b)
+        logging.getLogger(__name__).info('{0} fetch-->'.format(url), b)
 
     return fetch_branches
 
