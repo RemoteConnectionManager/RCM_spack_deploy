@@ -52,7 +52,7 @@ class git_repo:
         if 0 != ret or git_root != self.folder:
             cmd = ['git', 'init']
             (ret,output) = self.run(cmd)
-            self.logger.info("git init in >>" + self.folder + "<< >>" + git_root + "<< ret= ", ret)
+            self.logger.info("git init in >>" + self.folder + "<< >>" + git_root + "<< ret= ", str(ret))
             #print("git init in ",">>" + self.folder + "<<",">>" + git_root + "<< ret= ",ret)
 
     def get_remotes(self):
@@ -107,8 +107,9 @@ class git_repo:
         if ret : self.logger.error("sync_upstream failed")
 
     def merge(self, branch, comment='merged branch '):
+        if not comment : comment = 'merged branch ' + branch
         self.logger.info("mergeing-->" + branch + '<<-')
-        cmd = [ 'git', 'merge', '-m', '"' + comment  + branch + '"', branch]
+        cmd = [ 'git', 'merge', '-m', '"' + comment  + '"', branch]
         (ret,output) = self.run(cmd)
         if ret : self.logger.error("merge " + branch + "failed")
 
