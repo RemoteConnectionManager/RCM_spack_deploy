@@ -69,7 +69,8 @@ else:
     dest = os.path.join('.', repo_name)
 
 logdir=os.path.dirname(args.logfile)
-if not os.path.exists( logdir ): logdir=dest
+if not os.path.exists( args.logfile ): logdir=os.path.dirname(dest)
+logdir=os.path.abspath(logdir)
 
 LEVELS = {'debug': logging.DEBUG,
           'info': logging.INFO,
