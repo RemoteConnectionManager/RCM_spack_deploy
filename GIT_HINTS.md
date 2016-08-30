@@ -15,24 +15,24 @@ Spack based projects
 
 
 Some git hints:
+
     # show which branch contains a commit
     git branch --contains 86d2b2f4904f4fdbaf3e810db25a3c62799f321c
 
     #print the commit diff
     git show 86d2b2f4904f4fdbaf3e810db25a3c62799f321c
 
-    #################   suggestion for rebase  ##############
-    https://github.com/LLNL/spack/pull/1040/#issuecomment-225345722
+  * [suggestion for rebase](https://github.com/LLNL/spack/pull/1040/#issuecomment-225345722)
 
-#first try to pull --rebase from upstream
-git pull --rebase upstream develop
+    #first try to pull --rebase from upstream
+    git pull --rebase upstream develop
 
 
-################ rename a remote branch ############
-#from https://gist.github.com/lttlrck/9628955
-git branch -m pr/libxcb/pkgconfig old/libxcb/pkgconfig
-git push origin :pr/libxcb/pkgconfig
-git push --set-upstream origin old/libxcb/pkgconfig
+  * [rename a remote branch](https://gist.github.com/lttlrck/9628955)
+    
+    git branch -m pr/libxcb/pkgconfig old/libxcb/pkgconfig
+    git push origin :pr/libxcb/pkgconfig
+    git push --set-upstream origin old/libxcb/pkgconfig
 
 Hints on Git submodule:
   * [Tutorial and setup for submodules](https://medium.com/@porteneuve/mastering-git-submodules-34c65e940407#.qv37vr398)
@@ -95,7 +95,6 @@ Other git workflow, not using submodules, run git checkout and merge PR:
 
     
     
-T    
 
 
 

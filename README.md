@@ -1,6 +1,9 @@
 # RCM_spack_deploy
 deploy components and scripts for RCM
 
+  * [Git hints](https://github.com/RemoteConnectionManager/RCM_spack_deploy/blob/master/GIT_HINTS.md)
+  * [Deployment hints](https://github.com/RemoteConnectionManager/RCM_spack_deploy/blob/master/DEPLOY_HINTS.md)
+
 Try to take some inspiration from:
   * [icebin spack setup](https://github.com/citibeth/icebin)
   * [testing project](https://github.com/eschnett/spack-test)
