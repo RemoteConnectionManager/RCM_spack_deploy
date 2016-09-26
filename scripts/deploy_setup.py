@@ -87,7 +87,7 @@ logger.setLevel(logging.DEBUG)
 actual_logfile=os.path.join(logdir,os.path.basename(args.logfile))
 print("logfile in "+actual_logfile)
 
-fh = logging.FileHandler(os.path.join(logdir,os.path.basename(args.logfile)))
+fh = logging.FileHandler(os.path.join(actual_logfile))
 fh.setLevel(logging.DEBUG)
 
 # create console handler with a higher log level
