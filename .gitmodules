@@ -1,8 +1,8 @@
 [submodule "spack_clean"]
-	branch = clean/develop
 	path = deploy/spack_clean
 	url = https://github.com/RemoteConnectionManager/spack.git
+	branch = clean/develop
 [submodule "spack_develop"]
-	branch = develop
 	path = deploy/spack_develop
 	url = https://github.com/RemoteConnectionManager/spack.git
+	branch = develop
