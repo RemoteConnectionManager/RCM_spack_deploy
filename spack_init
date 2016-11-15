@@ -23,6 +23,8 @@ spack  config --scope site  get compilers
 cp ${ROOTPATH}/config/modules.yaml etc/spack
 
 #symbolic link to cache folder
+mkdir -p ${ROOTPATH}/cache
+rm -f var/spack/cache
 ln -s ${ROOTPATH}/cache var/spack
 
 #add our our package repo folder
