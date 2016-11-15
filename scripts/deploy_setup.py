@@ -34,7 +34,7 @@ parser.add_argument('--logfile', action='store',
 parser.add_argument('--upstream', action='store',
                     help='URL of the upstream git repo.', default='https://github.com/LLNL/spack.git')
 
-parser.add_argument('--branches', nargs='*', default=['develop'],
+parser.add_argument('--branches', nargs='*', default=['develop','clean/develop'],
                     help='Regular expressions of origin branches to fetch.  The first one specified will be checked out.')
 
 parser.add_argument('--master', action='store', default='develop',
@@ -46,16 +46,26 @@ parser.add_argument('--upstream_master', action='store', default='develop',
 parser.add_argument('--dry_run', action='store_true', default=False,
                     help='do not perform any action')
 
+parser.add_argument('--integration', action='store_true', default=False,
+                    help='do upstream integration')
+
 parser.add_argument('--prlist', nargs='*', default=[],
                     help='Regular expressions of upstream pr to fetch and merge.')
 
+print("argparse.SUPPRESS-->"+argparse.SUPPRESS+"<---------------")
 parser.add_argument('--dest', default=argparse.SUPPRESS,
                     help="Directory to clone into.  If ends in slash, place into that directory; otherwise, \
 place into subdirectory named after the URL")
+#parser.add_argument('--dest',
+#                    help="Directory to clone into.  If ends in slash, place into that directory; otherwise, \
+#place into subdirectory named after the URL")
 
 args = parser.parse_args()
 
-#print("-----args-------->", args)
+print("-----args-------->", args)
+print("this script-->"+__file__+"<--")
+root_dir=os.path.dirname(os.path.dirname(__file__))
+print("root_dir-->"+root_dir+"<--")
 
 # ------ Determine destination directory
 destRE = re.compile('.*/(.*?).git')
@@ -66,7 +76,9 @@ if 'dest' in args:
     if dest[-1] == '/':
         dest = os.path.join(dest[:-1], repo_name)
 else:
-    dest = os.path.join('.', repo_name)
+    dest = os.path.join(os.path.dirname(os.path.dirname(__file__)),'deploy', repo_name)
+
+print("dest-->"+dest+"<--")
 
 logdir=os.path.dirname(args.logfile)
 if not os.path.exists( args.logfile ): logdir=os.path.dirname(dest)
@@ -150,29 +162,31 @@ local_pr=util.trasf_match(upstream_branches,in_match='.*/([0-9]*)/(.*)',out_form
 
 dev_git.fetch(name='origin',branches=origin_branches)
 
-if len(origin_branches) > 0 :
-    upstream_clean = origin_branches[0]
-    print(upstream_clean)
-    dev_git.checkout(upstream_clean)
-    dev_git.sync_upstream()
-    dev_git.checkout(upstream_clean,newbranch=args.master)
+if args.integration:
+    if len(origin_branches) > 0 :
+        upstream_clean = origin_branches[0]
+        print(upstream_clean)
+        dev_git.checkout(upstream_clean)
+        dev_git.sync_upstream()
+        dev_git.checkout(upstream_clean,newbranch=args.master)
 
-    dev_git.sync_upstream()
+        dev_git.sync_upstream()
 
-    for b in origin_branches[1:] :
-        dev_git.checkout(b)
-        dev_git.sync_upstream(options=['--rebase'])
+        for b in origin_branches[1:] :
+            dev_git.checkout(b)
+            dev_git.sync_upstream(options=['--rebase'])
 
-    dev_git.fetch(name='upstream',branches=local_pr)
+        dev_git.fetch(name='upstream',branches=local_pr)
 
-    for n,branch in local_pr.items():
-        print("local_pr",n,branch)
-        dev_git.checkout(branch,newbranch=branch+'_update')
-        dev_git.merge(upstream_clean,comment='sync with upstream develop ')
-        dev_git.checkout(args.master)
-        dev_git.merge(branch+'_update',comment='merged '+branch)
+        for n,branch in local_pr.items():
+            print("local_pr",n,branch)
+            dev_git.checkout(branch,newbranch=branch+'_update')
+            dev_git.merge(upstream_clean,comment='sync with upstream develop ')
+            dev_git.checkout(args.master)
+            dev_git.merge(branch+'_update',comment='merged '+branch)
 
-    for branch in origin_branches[1:] :
-        dev_git.checkout(args.master)
-        dev_git.merge(branch,comment='merged '+branch)
-
+        for branch in origin_branches[1:] :
+            dev_git.checkout(args.master)
+            dev_git.merge(branch,comment='merged '+branch)
+else:
+    dev_git.checkout(args.master)
