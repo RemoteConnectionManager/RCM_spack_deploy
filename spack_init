@@ -12,12 +12,12 @@ ROOTPATH="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 #python scripts/deploy_setup.py --dest=deploy/spack_hope --debug=1  --branches clean/develop pr/modules/fix_delim pr/update/797 'wip/.*' virtualgl --prlist 1350
 
 source share/spack/setup-env.sh
-spack  config --site  get bad_section_name
+spack  config --scope site  get bad_section_name
 
 #add system compiler
 spack  compiler find --scope site    
 #print what has been found
-spack  config --site  get compilers
+spack  config --scope site  get compilers
 
 #add site specific module configuration
 cp ${ROOTPATH}/config/modules.yaml etc/spack
@@ -28,7 +28,7 @@ ln -s ${ROOTPATH}/cache var/spack
 #add our our package repo folder
 spack repo add ../../repo --scope site
 #print what has been added
-spack  config --site  get repos
+spack  config --scope site  get repos
 
 #list all available packages   
 spack list
