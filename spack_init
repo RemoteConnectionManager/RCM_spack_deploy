@@ -34,3 +34,7 @@ spack  config --scope site  get repos
 
 #list all available packages   
 spack list
+
+#make a view for rcm
+spack install rcm@develop xeyes xdpyinfo xconsole xcalc
+spack view symlink ${ROOTPATH}/deploy/rcm xeyes xdpyinfo xconsole xcalc turbovnc rcm
