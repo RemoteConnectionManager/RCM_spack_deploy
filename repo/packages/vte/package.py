@@ -27,11 +27,11 @@
 # next to all the things you'll want to change. Once you've handled
 # them, you can save this file and test your package like this:
 #
-#     spack install lxde-menu-cache
+#     spack install vte
 #
 # You can edit this file again by typing:
 #
-#     spack edit lxde-menu-cache
+#     spack edit vte
 #
 # See the Spack documentation for more information on packaging.
 # If you submit this package back to Spack as a pull request,
@@ -40,24 +40,33 @@
 from spack import *
 
 
-class LxdeMenuCache(AutotoolsPackage):
-    """LXDE PCManFM menucache component"""
+class Vte(AutotoolsPackage):
+    """The VTE package contains a termcap file implementation for terminal emulators"""
 
-    homepage = "https://wiki.lxde.org/en/PCManFM"
-    url      = "https://downloads.sourceforge.net/project/lxde/menu-cache/1.0/menu-cache-1.0.1.tar.xz"
-
-    version('1.0.1', 'a856ba860b16fdc8c69ee784bc4ade36')
+    homepage = "http://www.linuxfromscratch.org/blfs/view/svn/gnome/vte.html"
+    url      = "http://ftp.gnome.org/pub/gnome/sources/vte/0.28/vte-0.28.2.tar.xz"
+    version('0.28.2', '497f26e457308649e6ece32b3bb142ff')
 
     # FIXME: Add dependencies if required.
     # depends_on('m4', type='build')
     # depends_on('autoconf', type='build')
     # depends_on('automake', type='build')
     # depends_on('libtool', type='build')
-    #depends_on('lxde-common')
+    depends_on('binutils', type='build')
     depends_on('libtool', type='build')
     depends_on('pkg-config', type='build')
-#    depends_on('cairo')
-#    depends_on('gtkplus')
+    depends_on('gtkplus')
     depends_on('glib')
-    depends_on('lxde-libfm+extraonly')
+    #depends_on('pcre2')
+    #depends_on('libxml2')
+#    depends_on('libx11')
+#    depends_on('libice')
+#    depends_on('libxext')
+#    depends_on('libxfixes')
+#    depends_on('libxdamage')
+#    depends_on('libxrender')
+#    depends_on('libsm')
 
+#    def configure_args(self):
+#       args = []
+#       return args

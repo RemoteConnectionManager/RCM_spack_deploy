@@ -27,11 +27,11 @@
 # next to all the things you'll want to change. Once you've handled
 # them, you can save this file and test your package like this:
 #
-#     spack install lxde-menu-cache
+#     spack install lxde-lxterminal1
 #
 # You can edit this file again by typing:
 #
-#     spack edit lxde-menu-cache
+#     spack edit lxde-lxterminal1
 #
 # See the Spack documentation for more information on packaging.
 # If you submit this package back to Spack as a pull request,
@@ -40,24 +40,30 @@
 from spack import *
 
 
-class LxdeMenuCache(AutotoolsPackage):
-    """LXDE PCManFM menucache component"""
+class LxdeLxterminal(AutotoolsPackage):
+    """LXDE Terminal Emulator"""
 
-    homepage = "https://wiki.lxde.org/en/PCManFM"
-    url      = "https://downloads.sourceforge.net/project/lxde/menu-cache/1.0/menu-cache-1.0.1.tar.xz"
+    homepage = "https://wiki.lxde.org/en/LXTerminal"
+    url      = "https://downloads.sourceforge.net/project/lxde/LXTerminal%20%28terminal%20emulator%29/LXTerminal%200.2.0/lxterminal-0.2.0.tar.gz"
 
-    version('1.0.1', 'a856ba860b16fdc8c69ee784bc4ade36')
+    version('0.2.0', 'e80ad1b6e26212f3d43908c2ad87ba4d')
 
     # FIXME: Add dependencies if required.
     # depends_on('m4', type='build')
     # depends_on('autoconf', type='build')
     # depends_on('automake', type='build')
     # depends_on('libtool', type='build')
-    #depends_on('lxde-common')
     depends_on('libtool', type='build')
     depends_on('pkg-config', type='build')
-#    depends_on('cairo')
-#    depends_on('gtkplus')
+    depends_on('libx11')
+    depends_on('gtkplus')
     depends_on('glib')
-    depends_on('lxde-libfm+extraonly')
 
+    depends_on('lxde-menu-cache')
+    depends_on('vte')
+
+    def configure_args(self):
+       # FIXME: Add arguments other than --prefix
+       # FIXME: If not needed delete the function
+       args = []
+       return args

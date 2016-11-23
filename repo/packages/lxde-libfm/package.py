@@ -41,23 +41,32 @@ from spack import *
 
 
 class LxdeLibfm(AutotoolsPackage):
-    """FIXME: Put a proper description of your package here."""
+    """LXDE PCManFM libfm component"""
 
     # FIXME: Add a proper url for your package's homepage here.
-    homepage = "http://www.example.com"
+    homepage = "https://wiki.lxde.org/en/PCManFM"
     url      = "http://downloads.sourceforge.net/project/pcmanfm/PCManFM%20%2B%20Libfm%20%28tarball%20release%29/LibFM/libfm-1.2.4.tar.xz"
 
     version('1.2.4', '74997d75e7e87dc73398746fd373bf52')
 
+    variant('extraonly',default=False,
+            description="Needed to avoid circulare dep with menucache")
     # FIXME: Add dependencies if required.
     # depends_on('m4', type='build')
     # depends_on('autoconf', type='build')
     # depends_on('automake', type='build')
-    # depends_on('libtool', type='build')
-    depends_on('lxde-common')
+    depends_on('libtool', type='build')
+    depends_on('pkg-config', type='build')
+    depends_on('cairo')
+    depends_on('gtkplus')
+    depends_on('glib')
+    depends_on('lxde-menu-cache',when='~extraonly')
+    #depends_on('lxde-common')
 
     def configure_args(self):
        # FIXME: Add arguments other than --prefix
        # FIXME: If not needed delete the function
        args = []
+       if '+extraonly' in self.spec:
+           args.append('--with-extra-only')
        return args
