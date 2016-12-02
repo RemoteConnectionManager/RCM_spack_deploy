@@ -1,6 +1,15 @@
 # RCM_spack_deploy
 deploy components and scripts for RCM
 
+For contributing to upstream spack, update current feature branches that will likely become PR to upstream, eventually fetch and integrate other interesting branches and integrate everything in develop integration branch like:
+
+    cd RCM_spack_deploy
+    python scripts/deploy_setup.py --integration --dest=deploy/rcm_integration --debug=debug  --branches clean/develop     pr/.*  wip/.*
+    
+if everything goes well, push integration on origin
+
+    git push --all --force origin
+
 Hints on a workflow for contributing PR to upstream Spack
   * [suggested workflow by Denis Davydov](https://groups.google.com/forum/#!topic/spack/2Rs3BMLeTFk)
   * [Denis Davydov deali project hints](https://www.google.com/url?q=https%3A%2F%2Fgithub.com%2Fdealii%2Fdealii%2Fblob%2Fmaster%2FCONTRIBUTING.md&sa=D&sntz=1&usg=AFQjCNG8i5f6CuZd6S27C1a0kGWEvtpqDg)
