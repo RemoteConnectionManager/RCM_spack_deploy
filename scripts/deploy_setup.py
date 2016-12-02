@@ -52,7 +52,7 @@ parser.add_argument('--integration', action='store_true', default=False,
 parser.add_argument('--prlist', nargs='*', default=[],
                     help='Regular expressions of upstream pr to fetch and merge.')
 
-print("argparse.SUPPRESS-->"+argparse.SUPPRESS+"<---------------")
+#print("argparse.SUPPRESS-->"+argparse.SUPPRESS+"<---------------")
 parser.add_argument('--dest', default=argparse.SUPPRESS,
                     help="Directory to clone into.  If ends in slash, place into that directory; otherwise, \
 place into subdirectory named after the URL")
@@ -64,7 +64,7 @@ args = parser.parse_args()
 
 print("-----args-------->", args)
 print("this script-->"+__file__+"<--")
-root_dir=os.path.dirname(os.path.dirname(__file__))
+root_dir=os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
 print("root_dir-->"+root_dir+"<--")
 
 # ------ Determine destination directory
@@ -73,15 +73,18 @@ repo_name = destRE.match(args.origin).group(1)
 
 if 'dest' in args:
     dest = args.dest
+    if dest[0] != '/':
+        dest = os.path.join(root_dir,dest)
     if dest[-1] == '/':
         dest = os.path.join(dest[:-1], repo_name)
+
 else:
-    dest = os.path.join(os.path.dirname(os.path.dirname(__file__)),'deploy', repo_name)
+    dest = os.path.join(root_dir,'deploy', repo_name)
 
 print("dest-->"+dest+"<--")
 
 logdir=os.path.dirname(args.logfile)
-if not os.path.exists( args.logfile ): logdir=os.path.dirname(dest)
+if not os.path.exists( args.logfile ): logdir=dest
 logdir=os.path.abspath(logdir)
 
 LEVELS = {'debug': logging.DEBUG,
@@ -96,7 +99,7 @@ SHORTFORMAT = "%(message)s"
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
 # create file handler which logs even debug messages
-actual_logfile=os.path.join(logdir,os.path.basename(args.logfile))
+actual_logfile=os.path.join(os.path.dirname(logdir),os.path.basename(logdir)+'_'+os.path.basename(args.logfile))
 print("logfile in "+actual_logfile)
 
 fh = logging.FileHandler(os.path.join(actual_logfile))
@@ -165,7 +168,7 @@ dev_git.fetch(name='origin',branches=origin_branches)
 if args.integration:
     if len(origin_branches) > 0 :
         upstream_clean = origin_branches[0]
-        print(upstream_clean)
+        print("--------------------------------------"+upstream_clean+"-----------------------")
         dev_git.checkout(upstream_clean)
         dev_git.sync_upstream()
         dev_git.checkout(upstream_clean,newbranch=args.master)

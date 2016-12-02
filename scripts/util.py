@@ -9,6 +9,51 @@ import re
 import collections
 import logging
 
+import socket
+import platform
+
+def run(cmd,logger=None,stop_on_error=True,dry_run=False,folder='.'):
+    logger.info("running-->"+' '.join(cmd)+"<-")
+    if not dry_run :
+        myprocess = subprocess.Popen(cmd, cwd=folder,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
+        stdout,stderr = myprocess.communicate()
+        myprocess.wait()
+        ret = myprocess.returncode
+        if stop_on_error and ret:
+            #print("ERROR:",ret,"Exiting")
+            logger.error("ERROR CODE : " + str(ret) + '\n'+stderr+'\nExit...\n')
+            sys.exit()
+        return (ret,stdout,stderr)
+
+    else:
+        logger.info("DRY RUN... nothing done")
+        return (0, '','')
+
+class baseintrospect:
+    def __init__(self):
+        self.sysintro=dict()
+        self.sysintro['pyver']=platform.python_version()
+        self.sysintro['pyinterp']=sys.executable
+        self.sysintro['sysplatform']=platform.platform()
+        self.sysintro['commandline']=' '.join(sys.argv)
+        self.sysintro['workdir']=os.path.abspath('.')
+        self.sysintro['hostname']=socket.getfqdn()
+
+class commandintrospect(baseintrospect):
+    def __init__(self,commands=[]):
+	baseintrospect.__init__(self)
+        self.commands=dict()
+        for c in commands:
+            self.test(c)
+
+    def test(self,cmd,key=None):
+        (ret,o,e)=run(cmd.split())
+        if not e :
+            if not key : key=cmd
+            self.commands[key]=o
+
+
+
 class git_repo:
     def __init__(self, folder, logger=None,stop_on_error=True,dry_run=False):
         self.folder = os.path.abspath(folder)
@@ -18,27 +63,30 @@ class git_repo:
         #print("debug level-->",self.debug)
 
     def run(self,cmd):
-#        if self.debug:
-#            print("  ", ' '.join(cmd))
-        self.logger.info("running-->"+' '.join(cmd)+"<-")
-        if not self.dry_run :
-            child =  subprocess.Popen(cmd, cwd=self.folder, stdout=subprocess.PIPE)
-            output = child.communicate()[0]
-            ret = child.returncode
-            #if self.debug:
-            #    print('result: ',ret)
-            #    if self.debug > 1:
-            #        print(self.debug,"output->" + output + "<-")
-            self.logger.debug("output->" + output + "<-")
-            if self.stop_on_error and ret:
-                #print("ERROR:",ret,"Exiting")
-                self.logger.error("ERROR: " + str(ret) + 'Exiting')
-                sys.exit()
-            return (ret,output)
-        else:
-            #if self.debug: print("DRY RUN... nothing done")
-            self.logger.info("DRY RUN... nothing done")
-            return(0,'')
+        (ret,out,err)=run(cmd,logger=self.logger,dry_run=self.dry_run,stop_on_error=self.stop_on_error,folder=self.folder)
+        return (ret,out)
+#     def run(self,cmd):
+# #        if self.debug:
+# #            print("  ", ' '.join(cmd))
+#         self.logger.info("running-->"+' '.join(cmd)+"<-")
+#         if not self.dry_run :
+#             child =  subprocess.Popen(cmd, cwd=self.folder, stdout=subprocess.PIPE)
+#             output = child.communicate()[0]
+#             ret = child.returncode
+#             #if self.debug:
+#             #    print('result: ',ret)
+#             #    if self.debug > 1:
+#             #        print(self.debug,"output->" + output + "<-")
+#             self.logger.debug("output->" + output + "<-")
+#             if self.stop_on_error and ret:
+#                 #print("ERROR:",ret,"Exiting")
+#                 self.logger.error("ERROR: " + str(ret) + 'Exiting')
+#                 sys.exit()
+#             return (ret,output)
+#         else:
+#             #if self.debug: print("DRY RUN... nothing done")
+#             self.logger.info("DRY RUN... nothing done")
+#             return(0,'')
 
     def init(self):
         if not os.path.exists(self.folder):
@@ -52,7 +100,7 @@ class git_repo:
         if 0 != ret or git_root != self.folder:
             cmd = ['git', 'init']
             (ret,output) = self.run(cmd)
-            self.logger.info("git init in >>" + self.folder + "<< >>" + git_root + "<< ret= ", str(ret))
+            self.logger.info("git init in >>" + self.folder + "<< >>" + git_root + "<< ret= "+ str(ret))
             #print("git init in ",">>" + self.folder + "<<",">>" + git_root + "<< ret= ",ret)
 
     def get_remotes(self):
@@ -108,7 +156,7 @@ class git_repo:
 
     def merge(self, branch, comment='merged branch '):
         if not comment : comment = 'merged branch ' + branch
-        self.logger.info("mergeing-->" + branch + '<<-')
+        self.logger.info("merging-->" + branch + '<<-')
         cmd = [ 'git', 'merge', '-m', '"' + comment  + '"', branch]
         (ret,output) = self.run(cmd)
         if ret : self.logger.error("merge " + branch + "failed")
