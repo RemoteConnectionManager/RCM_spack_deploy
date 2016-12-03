@@ -49,6 +49,12 @@ parser.add_argument('--dry_run', action='store_true', default=False,
 parser.add_argument('--integration', action='store_true', default=False,
                     help='do upstream integration')
 
+parser.add_argument('--update', action='store_true', default=False,
+                    help='update existing checkout')
+
+parser.add_argument('--pull_flags', nargs='*', action='store', default=['ff-only'],
+                    help='flags to use when pull')
+
 parser.add_argument('--prlist', nargs='*', default=[],
                     help='Regular expressions of upstream pr to fetch and merge.')
 
@@ -146,50 +152,55 @@ for branch in args.branches:
     branchRE.append('(' + branch + ')')
 branchRE = re.compile('^(' + '|'.join(branchRE) + r')$')
 
-# --------- Fetch them
+dev_git = util.git_repo(dest,logger = logger,dry_run=args.dry_run)
+
 if not os.path.exists(dest):
     os.makedirs(dest)
 
-dev_git = util.git_repo(dest,logger = logger,dry_run=args.dry_run)
+    dev_git.init()
 
-dev_git.init()
-# cmd = ['git', 'init']
-# subprocess.Popen(cmd, cwd=dest).wait()
+    dev_git.get_remotes()
+    dev_git.add_remote(args.origin, name='origin', fetch_branches=origin_branches)
+    dev_git.add_remote(args.upstream, name='upstream')
 
-dev_git.get_remotes()
-dev_git.add_remote(args.origin, name='origin', fetch_branches=origin_branches)
-dev_git.add_remote(args.upstream, name='upstream')
+    local_pr=util.trasf_match(upstream_branches,in_match='.*/([0-9]*)/(.*)',out_format='pull/{name}/clean')
 
-local_pr=util.trasf_match(upstream_branches,in_match='.*/([0-9]*)/(.*)',out_format='pull/{name}/clean')
-#print(local_branches)
+    dev_git.fetch(name='origin',branches=origin_branches)
 
-dev_git.fetch(name='origin',branches=origin_branches)
+    if args.integration:
+        if len(origin_branches) > 0 :
+            upstream_clean = origin_branches[0]
+            print("--------------------------------------"+upstream_clean+"-----------------------")
+            dev_git.checkout(upstream_clean)
+            dev_git.sync_upstream()
+            dev_git.checkout(upstream_clean,newbranch=args.master)
 
-if args.integration:
-    if len(origin_branches) > 0 :
-        upstream_clean = origin_branches[0]
-        print("--------------------------------------"+upstream_clean+"-----------------------")
-        dev_git.checkout(upstream_clean)
-        dev_git.sync_upstream()
-        dev_git.checkout(upstream_clean,newbranch=args.master)
+            dev_git.sync_upstream()
 
-        dev_git.sync_upstream()
+            for b in origin_branches[1:] :
+                dev_git.checkout(b)
+                dev_git.sync_upstream(options=['--rebase'])
 
-        for b in origin_branches[1:] :
-            dev_git.checkout(b)
-            dev_git.sync_upstream(options=['--rebase'])
+            dev_git.fetch(name='upstream',branches=local_pr)
 
-        dev_git.fetch(name='upstream',branches=local_pr)
+            for n,branch in local_pr.items():
+                print("local_pr",n,branch)
+                dev_git.checkout(branch,newbranch=branch+'_update')
+                dev_git.merge(upstream_clean,comment='sync with upstream develop ')
+                dev_git.checkout(args.master)
+                dev_git.merge(branch+'_update',comment='merged '+branch)
 
-        for n,branch in local_pr.items():
-            print("local_pr",n,branch)
-            dev_git.checkout(branch,newbranch=branch+'_update')
-            dev_git.merge(upstream_clean,comment='sync with upstream develop ')
-            dev_git.checkout(args.master)
-            dev_git.merge(branch+'_update',comment='merged '+branch)
+            for branch in origin_branches[1:] :
+                dev_git.checkout(args.master)
+                dev_git.merge(branch,comment='merged '+branch)
+    else:
+        dev_git.checkout(args.master)
 
-        for branch in origin_branches[1:] :
-            dev_git.checkout(args.master)
-            dev_git.merge(branch,comment='merged '+branch)
 else:
-    dev_git.checkout(args.master)
+    if args.update:
+        pull_options=[]
+        for flag in args.pull_flags : pull_options.append('--'+flag)
+        for b in dev_git.get_local_branches():
+            dev_git.checkout(b)
+            dev_git.sync_upstream(upstream='origin', master=b,options=pull_options)
+

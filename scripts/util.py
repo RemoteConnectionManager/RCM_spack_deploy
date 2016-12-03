@@ -65,28 +65,6 @@ class git_repo:
     def run(self,cmd):
         (ret,out,err)=run(cmd,logger=self.logger,dry_run=self.dry_run,stop_on_error=self.stop_on_error,folder=self.folder)
         return (ret,out)
-#     def run(self,cmd):
-# #        if self.debug:
-# #            print("  ", ' '.join(cmd))
-#         self.logger.info("running-->"+' '.join(cmd)+"<-")
-#         if not self.dry_run :
-#             child =  subprocess.Popen(cmd, cwd=self.folder, stdout=subprocess.PIPE)
-#             output = child.communicate()[0]
-#             ret = child.returncode
-#             #if self.debug:
-#             #    print('result: ',ret)
-#             #    if self.debug > 1:
-#             #        print(self.debug,"output->" + output + "<-")
-#             self.logger.debug("output->" + output + "<-")
-#             if self.stop_on_error and ret:
-#                 #print("ERROR:",ret,"Exiting")
-#                 self.logger.error("ERROR: " + str(ret) + 'Exiting')
-#                 sys.exit()
-#             return (ret,output)
-#         else:
-#             #if self.debug: print("DRY RUN... nothing done")
-#             self.logger.info("DRY RUN... nothing done")
-#             return(0,'')
 
     def init(self):
         if not os.path.exists(self.folder):
@@ -160,6 +138,21 @@ class git_repo:
         cmd = [ 'git', 'merge', '-m', '"' + comment  + '"', branch]
         (ret,output) = self.run(cmd)
         if ret : self.logger.error("merge " + branch + "failed")
+
+    def get_local_branches(self):
+        cmd = [ 'git', 'branch']
+        (ret,output) = self.run(cmd)
+        if ret :
+            self.logger.error("git branch failed")
+            return []
+        branches = list()
+        for line in io.StringIO(output.decode()):
+            if line[0]=='*':
+                branches.insert(0,line[2:].strip())
+            else:
+                branches.append(line[2:].strip())
+        self.logger.debug("branches-->"+str(branches)+"<<-")
+        return branches
 
 # ------ List the branches on the origin
 # And select only those that match our branch regexp
