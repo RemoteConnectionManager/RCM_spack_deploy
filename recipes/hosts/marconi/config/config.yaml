@@ -1,0 +1,6 @@
+config:
+  build_stage:
+  - /dev/shm/lcalori0
+  - /scratch_local/lcalori0
+  - $tempdir
+
