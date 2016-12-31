@@ -55,7 +55,7 @@ class Vte(AutotoolsPackage):
     depends_on('binutils', type='build')
     depends_on('libtool', type='build')
     depends_on('pkg-config', type='build')
-    depends_on('gtkplus')
+    depends_on('gtkplus+X')
     depends_on('glib')
     #depends_on('pcre2')
     #depends_on('libxml2')

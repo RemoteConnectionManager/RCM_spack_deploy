@@ -56,7 +56,7 @@ class LxdeLxterminal(AutotoolsPackage):
     depends_on('libtool', type='build')
     depends_on('pkg-config', type='build')
     depends_on('libx11')
-    depends_on('gtkplus')
+    depends_on('gtkplus+X')
     depends_on('glib')
 
     depends_on('lxde-menu-cache')
