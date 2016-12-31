@@ -1,0 +1,20 @@
+#!/bin/bash
+
+#PBS -l select=1:ncpus=24:mem=40gb
+#PBS -l walltime=02:14:00
+
+#PBS -A cin_priorit
+
+#PBS -N BS -N build_gcc_4.8.5
+
+cd /marconi_scratch/userinternal/lcalori0/spack/RCM_spack_deploy/deploy/spack
+source ../../recipes/hosts/marconi/base_setup
+#${RCM_DEPLOY_ROOTPATH}/spack_init
+
+export LOGFILE=${RCM_DEPLOY_HOSTPATH}/build_rcm.${PBS_JOBID}.log
+
+spack install -v rcm   > ${LOGFILE}  2>&1
+spack install -v qt   > ${LOGFILE}  2>&1
+
+
+
