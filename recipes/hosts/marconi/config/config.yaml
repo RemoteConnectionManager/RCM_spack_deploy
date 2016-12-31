@@ -1,6 +1,10 @@
 config:
   build_stage:
-  - /dev/shm/lcalori0
-  - /scratch_local/lcalori0
+  - /dev/shm/$user
+  - /scratch_local/$user
   - $tempdir
+
+  source_cache: ${RCM_DEPLOY_ROOTPATH}/cache
+  install_tree: ${RCM_DEPLOY_ROOTPATH}/install
+
 
