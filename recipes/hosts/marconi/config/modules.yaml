@@ -9,7 +9,7 @@ modules:
     - tcl
   tcl:
     naming_scheme:  '${PACKAGE}/${VERSION}-${COMPILERNAME}-${COMPILERVER}'
-    whitelist: ['rcm','turbovnc', 'nasm', 'cmake','git','perl','libpthread-stubs','mesa','qt']
+    whitelist: ['rcm','turbovnc', 'nasm', 'cmake','git','perl','mesa','qt']
     blacklist: ['%gcc@4.8.5']
     hash_length: 2
     all:
