@@ -54,6 +54,10 @@ class Vte(AutotoolsPackage):
     # depends_on('libtool', type='build')
     depends_on('binutils', type='build')
     depends_on('libtool', type='build')
+    depends_on('intltool', type='build')
+    depends_on('perl-xml-parser',type='build')
+    depends_on('perl',type='build')
+
     depends_on('pkg-config', type='build')
     depends_on('gtkplus+X')
     depends_on('glib')

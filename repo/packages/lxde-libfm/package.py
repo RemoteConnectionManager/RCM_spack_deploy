@@ -56,6 +56,10 @@ class LxdeLibfm(AutotoolsPackage):
     # depends_on('autoconf', type='build')
     # depends_on('automake', type='build')
     depends_on('libtool', type='build')
+    depends_on('intltool', type='build')
+    depends_on('perl-xml-parser',type='build')
+    depends_on('perl',type='build')
+
     depends_on('pkg-config', type='build')
     depends_on('cairo')
     depends_on('gtkplus+X')
