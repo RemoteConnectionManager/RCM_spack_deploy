@@ -15,6 +15,6 @@ export LOGFILE=${RCM_DEPLOY_HOSTPATH}/build_rcm.${PBS_JOBID}.log
 
 spack install -v rcm   > ${LOGFILE}  2>&1
 spack install -v qt   >> ${LOGFILE}  2>&1
-
+spack install -v font-adobe-100dpi  >> ${LOGFILE}  2>&1
 
 
