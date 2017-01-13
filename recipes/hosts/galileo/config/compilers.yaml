@@ -1,0 +1,15 @@
+compilers:
+- compiler:
+    environment: {}
+    flags: {}
+    modules: []
+    operating_system: centos7
+    paths:
+      cc: /cineca/prod/compilers/gnu/4.9.2/none/bin/gcc
+      cxx: /cineca/prod/compilers/gnu/4.9.2/none/bin/g++
+      f77: /cineca/prod/compilers/gnu/4.9.2/none/bin/gfortran
+      fc: /cineca/prod/compilers/gnu/4.9.2/none/bin/gfortran
+    extra_rpaths:
+    - /cineca/prod/opt/compilers/gnu/4.9.2/none/lib64
+    spec: gcc@4.9.2
+
