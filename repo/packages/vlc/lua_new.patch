@@ -1,0 +1,10 @@
+--- modules/lua/vlc.h.orig	2015-02-02 20:42:29.000000000 +0100
++++ modules/lua/vlc.h	2017-01-18 01:12:52.751567207 +0100
+@@ -38,6 +38,7 @@
+ #include <vlc_stream.h>
+ #include <vlc_demux.h>
+ 
++#define LUA_COMPAT_APIINTCASTS
+ #define LUA_COMPAT_MODULE
+ #include <lua.h>        /* Low level lua C API */
+ #include <lauxlib.h>    /* Higher level C API */

@@ -1,7 +1,7 @@
 packages:
   qt:
     compiler: [gcc@4.8.2]
-    variants: +examples+mesa
+    variants: +examples
     version: [4.8.6, 5.7.0]
   mesa:
     compiler: [gcc@4.8.2]

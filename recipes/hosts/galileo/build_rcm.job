@@ -1,6 +1,6 @@
 #!/bin/bash
 
-#PBS -l select=1:ncpus=16:mem=40gb
+#PBS -l select=1:ncpus=4:mem=40gb
 #PBS -l walltime=02:14:00
 
 ###PBS -A cin_priorit
@@ -10,14 +10,16 @@
 #PBS -A cin_staff
 #PBS -N BS -N build_rcm
 
+cd ${PBS_O_WORKDIR}
 cd /gpfs/scratch/userinternal/lcalori0/spack/RCM_test/deploy/spack
 source ../../recipes/hosts/galileo/base_setup
 ${RCM_DEPLOY_ROOTPATH}/spack_init
 
 export LOGFILE=${RCM_DEPLOY_HOSTPATH}/build_rcm.${PBS_JOBID}.log
 
-spack install -v rcm   > ${LOGFILE}  2>&1
-spack install -v qt   >> ${LOGFILE}  2>&1
-spack install -v font-adobe-100dpi  >> ${LOGFILE}  2>&1
+#spack install -v rcm   > ${LOGFILE}  2>&1
+#spack install -v qt   >> ${LOGFILE}  2>&1
+#spack install -v font-adobe-100dpi  >> ${LOGFILE}  2>&1
+spack install --verbose vlc >> ${LOGFILE}  2>&1
 
 
