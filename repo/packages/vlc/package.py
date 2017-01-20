@@ -49,12 +49,16 @@ class Vlc(AutotoolsPackage):
 
     version('2.2.4', '55666c9898f658c7fcca12725bf7dd1b')
 
+    variant('lua',         default=False,  description='Use Lua plugin')
+
+    patch('lua_new.patch', when='@:2.2.4^lua@3.7:')
+
     # FIXME: Add dependencies if required.
     # depends_on('m4', type='build')
     # depends_on('autoconf', type='build')
     # depends_on('automake', type='build')
     # depends_on('libtool', type='build')
-    #depends_on('lua@5.2.4')
+    depends_on('lua', when='+lua')
     depends_on('libx11')
     depends_on('libxcb')
     depends_on('fontconfig')
@@ -64,7 +68,6 @@ class Vlc(AutotoolsPackage):
     depends_on('qt')
     depends_on('ffmpeg@2.8.10')
     depends_on('libgcrypt')
-
 
 
     def configure_args(self):
