@@ -1,0 +1,27 @@
+# -------------------------------------------------------------------------
+# This is the default spack module files generation configuration.
+#
+# Changes to this file will affect all users of this spack install,
+# although users can override these settings in their ~/.spack/modules.yaml.
+# -------------------------------------------------------------------------
+modules:
+  enable:
+    - tcl
+  tcl:
+    naming_scheme:  '${PACKAGE}/${VERSION}-${COMPILERNAME}-${COMPILERVER}'
+    whitelist: ['turbovnc', 'nasm', 'cmake','git','perl']
+#    verbose_autoload: False
+#    blacklist: ['%gcc@4.8.5']
+    hash_length: 2
+    all:
+      environment:
+        set:
+          '${PACKAGE}_HOME': '${PREFIX}'
+      conflict: ['${PACKAGE}']
+#      autoload: 'direct'  #it print on stderr and this hurts RCM
+    ^python:
+      autoload: 'direct'
+    rcm:
+      verbose_autoload: False
+      autoload: 'direct'  #it print on stderr and this hurts RCM
+

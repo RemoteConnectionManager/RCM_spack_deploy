@@ -1,0 +1,15 @@
+#! /bin/bash
+# Absolute path to this script. /home/user/bin/foo.sh
+
+echo "setting up spack work copy in ${RCM_DEPLOY_SPACKPATH} config in ${RCM_DEPLOY_HOSTPATH}/config root in ${RCM_DEPLOY_ROOTPATH}"
+
+for filename in ${RCM_DEPLOY_HOSTPATH}/config/*.yaml; do
+  config_file="${RCM_DEPLOY_SPACKPATH}/etc/spack/$(basename "$filename")"
+  echo "creating config ${config_file} from $filename"
+  envsubst < ${filename} '${RCM_DEPLOY_SPACKPATH} ${RCM_DEPLOY_HOSTPATH} ${RCM_DEPLOY_ROOTPATH} ${USER}' > ${config_file}
+done
+
+#symbolic link to cache folder
+mkdir -p ${RCM_DEPLOY_ROOTPATH}/cache
+rm -f ${RCM_DEPLOY_SPACKPATH}/var/spack/cache
+ln -s ${RCM_DEPLOY_ROOTPATH}/cache ${RCM_DEPLOY_SPACKPATH}/var/spack
