@@ -29,3 +29,7 @@ To initialize the spack copy
     #list all available packages   
     spack list
 
+    #hints from https://github.com/LLNL/spack/issues/2583#issuecomment-271857954
+    #fetch all the dependencies
+    spack mirror create -d ~/production/spack-mirror -D emacs
+    
