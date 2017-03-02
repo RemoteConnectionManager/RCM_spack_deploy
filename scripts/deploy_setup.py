@@ -58,6 +58,13 @@ parser.add_argument('--pull_flags', nargs='*', action='store', default=['ff-only
 parser.add_argument('--prlist', nargs='*', default=[],
                     help='Regular expressions of upstream pr to fetch and merge.')
 
+parser.add_argument('--cache', action='store', default='cache',
+                    help='folder where cache is')
+
+parser.add_argument('--config', action='store', default='',
+                    help='folder containing config information')
+
+
 #print("argparse.SUPPRESS-->"+argparse.SUPPRESS+"<---------------")
 parser.add_argument('--dest', default=argparse.SUPPRESS,
                     help="Directory to clone into.  If ends in slash, place into that directory; otherwise, \
@@ -68,10 +75,10 @@ place into subdirectory named after the URL")
 
 args = parser.parse_args()
 
-print("-----args-------->", args)
-print("this script-->"+__file__+"<--")
+#print("-----args-------->", args)
+#print("this script-->"+__file__+"<--")
 root_dir=os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-print("root_dir-->"+root_dir+"<--")
+#print("root_dir-->"+root_dir+"<--")
 
 # ------ Determine destination directory
 destRE = re.compile('.*/(.*?).git')
@@ -87,7 +94,7 @@ if 'dest' in args:
 else:
     dest = os.path.join(root_dir,'deploy', repo_name)
 
-print("dest-->"+dest+"<--")
+print("destination folder-->"+dest+"<--")
 
 logdir=os.path.dirname(args.logfile)
 if not os.path.exists( args.logfile ): logdir=dest
@@ -136,32 +143,31 @@ s = StringIO.StringIO()
 pprint.pprint(args, s)
 
 logger.info("lanciato con---->"+s.getvalue())
+logger.info("root_dir-->"+root_dir+"<--")
 
-origin_branches = util.get_branches(args.origin, branch_selection=args.branches)
 
-upstream_branches = util.get_branches(
-    args.upstream,
-    branch_pattern='.*?\s+refs/pull/([0-9]*?)/head\s+',
-    #branch_exclude_pattern='.*?\s+refs/pull/({branch})/merge\s+',
-    branch_format_string='pull/{branch}/head',
-    branch_selection=args.prlist)
 
-# ------ Construct the regular expression used to evaluate branches
-branchRE = list()
-for branch in args.branches:
-    branchRE.append('(' + branch + ')')
-branchRE = re.compile('^(' + '|'.join(branchRE) + r')$')
 
 dev_git = util.git_repo(dest,logger = logger,dry_run=args.dry_run)
 
 if not os.path.exists(dest):
+    logger.info("MISSING destintion_dir-->"+dest+"<-- ")
     os.makedirs(dest)
+
+    origin_branches = util.get_branches(args.origin, branch_selection=args.branches)
 
     dev_git.init()
 
     dev_git.get_remotes()
     dev_git.add_remote(args.origin, name='origin', fetch_branches=origin_branches)
     dev_git.add_remote(args.upstream, name='upstream')
+
+    upstream_branches = util.get_branches(
+        args.upstream,
+        branch_pattern='.*?\s+refs/pull/([0-9]*?)/head\s+',
+        # branch_exclude_pattern='.*?\s+refs/pull/({branch})/merge\s+',
+        branch_format_string='pull/{branch}/head',
+        branch_selection=args.prlist)
 
     local_pr=util.trasf_match(upstream_branches,in_match='.*/([0-9]*)/(.*)',out_format='pull/{name}/clean')
 
@@ -184,7 +190,7 @@ if not os.path.exists(dest):
             dev_git.fetch(name='upstream',branches=local_pr)
 
             for n,branch in local_pr.items():
-                print("local_pr",n,branch)
+                logger.info("local_pr "+ n+" "+branch)
                 dev_git.checkout(branch,newbranch=branch+'_update')
                 dev_git.merge(upstream_clean,comment='sync with upstream develop ')
                 dev_git.checkout(args.master)
@@ -197,10 +203,53 @@ if not os.path.exists(dest):
         dev_git.checkout(args.master)
 
 else:
+    logger.info("Folder ->"+dest+"<- already existing")
     if args.update:
+        logger.info("Updating Folder ->"+dest+"<-")
         pull_options=[]
         for flag in args.pull_flags : pull_options.append('--'+flag)
         for b in dev_git.get_local_branches():
             dev_git.checkout(b)
             dev_git.sync_upstream(upstream='origin', master=b,options=pull_options)
 
+
+cachedir=args.cache
+if not os.path.exists(cachedir):
+    cachedir=os.path.join(root_dir,cachedir)
+else:
+    cachedir=os.path.abspath(cachedir)
+if not os.path.exists(cachedir):
+    os.makedirs(cachedir)
+logger.info("cache_dir-->"+cachedir+"<--")
+if os.path.exists(os.path.join(dest, 'var', 'spack')):
+    deploy_cache=os.path.join(dest, 'var', 'spack','cache')
+    logger.info("deploy cache_dir-->"+deploy_cache+"<--")
+    if not os.path.exists(deploy_cache):
+        os.symlink(cachedir,deploy_cache)
+        logger.info("symlinked -->"+cachedir+"<-->"+deploy_cache)
+
+me=util.myintrospect()
+
+logger.info("config-->"+args.config+"<--")
+configpar=args.config
+config_path_list=[]
+configdir=os.path.abspath(os.path.join(configpar,'config'))
+if os.path.exists(configdir):
+    config_path_list=[configdir]+config_path_list
+    logger.info("config_dir-->"+configdir+"<-- ADDED")
+if not os.path.exists(configdir):
+    logger.info("config_dir-->"+configdir+"<-- NOT FOUND")
+    configdir=os.path.join(root_dir,configdir)
+    if not os.path.exists(configdir):
+        logger.info("config_dir-->"+configdir+"<-- NOT FOUND")
+        #logger.info("uuuconfig_dir-->"+configdir+"<--")
+        if not configpar:
+            configpar=me.sysintro['hostname']
+    configdir=os.path.join(root_dir,'recipes','hosts',configpar)
+        #logger.info("aaaconfig_dir-->"+configdir+"<--")
+else:
+    configdir=os.path.abspath(configdir)
+if os.path.exists(configdir):
+    logger.info("FOUND config_dir-->"+configdir+"<--")
+else:
+    logger.info("MISSING config_dir-->"+configdir+"<-- ")

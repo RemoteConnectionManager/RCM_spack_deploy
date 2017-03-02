@@ -13,6 +13,7 @@ import socket
 import platform
 
 def run(cmd,logger=None,stop_on_error=True,dry_run=False,folder='.'):
+    logger = logger or logging.getLogger(__name__)
     logger.info("running-->"+' '.join(cmd)+"<-")
     if not dry_run :
         myprocess = subprocess.Popen(cmd, cwd=folder,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
@@ -50,8 +51,35 @@ class commandintrospect(baseintrospect):
         (ret,o,e)=run(cmd.split())
         if not e :
             if not key : key=cmd
-            self.commands[key]=o
+            self.commands[key]=o.strip()
 
+class myintrospect(commandintrospect):
+    def __init__(self):
+
+        commandintrospect.__init__(self,['git --version'])
+
+        self.test('git config --get remote.origin.url',key='giturl')
+
+    #     (out,err)=run('svn info '+self.sysintro['workdir'])
+    #     for (cmd,match) in [("svnurl","URL: "),("svnauthor","Last Changed Author: ")]:
+    #         for line in out.splitlines():
+	 #        if match in line:
+		#     self.commands[cmd] = line[len(match):]
+		#     break
+    #
+    # def reproduce_string(self,comment=''):
+    #     out = comment+"module load ba\n"
+    #     try:
+    #         revision=int(self.commands['svnrevision'])
+    #     except :
+    #         print "WARNING svn not clean"
+    #         c=re.compile('(^[0-9]*)')
+    #         m=c.match(self.commands['svnrevision'])
+    #         revision=m.groups()[0]
+    #     out +=comment+"svn co "+self.commands['svnurl']+'@'+str(revision)+" my_common_source\n"
+    #     out +=comment+"cd my_common_source\n"
+    #     out +=comment+self.sysintro['pyinterp']+' '+self.sysintro['commandline']+'\n'
+    #     return out
 
 
 class git_repo:
