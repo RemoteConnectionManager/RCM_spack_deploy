@@ -54,11 +54,20 @@ class commandintrospect(baseintrospect):
             self.commands[key]=o.strip()
 
 class myintrospect(commandintrospect):
-    def __init__(self):
+    def __init__(self,tags={}):
 
         commandintrospect.__init__(self,['git --version'])
 
         self.test('git config --get remote.origin.url',key='giturl')
+        self.tags=tags
+
+    def platform_tag(self):
+        hostname=self.sysintro['hostname']
+        for k in self.tags:
+            m=re.search(k,hostname)
+            if m : return self.tags[k]
+        return(None)
+
 
     #     (out,err)=run('svn info '+self.sysintro['workdir'])
     #     for (cmd,match) in [("svnurl","URL: "),("svnauthor","Last Changed Author: ")]:

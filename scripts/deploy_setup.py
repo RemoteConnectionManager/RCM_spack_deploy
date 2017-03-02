@@ -228,28 +228,31 @@ if os.path.exists(os.path.join(dest, 'var', 'spack')):
         os.symlink(cachedir,deploy_cache)
         logger.info("symlinked -->"+cachedir+"<-->"+deploy_cache)
 
-me=util.myintrospect()
+me=util.myintrospect(tags={'calori': 'ws_mint', 'galileo':'galileo', 'marconi':'marconi' })
 
 logger.info("config-->"+args.config+"<--")
 configpar=args.config
 config_path_list=[]
 configdir=os.path.abspath(os.path.join(configpar,'config'))
 if os.path.exists(configdir):
-    config_path_list=[configdir]+config_path_list
-    logger.info("config_dir-->"+configdir+"<-- ADDED")
-if not os.path.exists(configdir):
-    logger.info("config_dir-->"+configdir+"<-- NOT FOUND")
-    configdir=os.path.join(root_dir,configdir)
-    if not os.path.exists(configdir):
-        logger.info("config_dir-->"+configdir+"<-- NOT FOUND")
-        #logger.info("uuuconfig_dir-->"+configdir+"<--")
-        if not configpar:
-            configpar=me.sysintro['hostname']
-    configdir=os.path.join(root_dir,'recipes','hosts',configpar)
-        #logger.info("aaaconfig_dir-->"+configdir+"<--")
-else:
-    configdir=os.path.abspath(configdir)
+    if not configdir in config_path_list:
+        config_path_list=[configdir]+config_path_list
+        logger.info("config_dir-->"+configdir+"<-- ADDED")
+
+configdir=os.path.join(root_dir,configpar,'config')
 if os.path.exists(configdir):
-    logger.info("FOUND config_dir-->"+configdir+"<--")
-else:
-    logger.info("MISSING config_dir-->"+configdir+"<-- ")
+    if not configdir in config_path_list:
+        config_path_list=[configdir]+config_path_list
+        logger.info("config_dir-->"+configdir+"<-- ADDED")
+
+if not configpar:
+    configpar=me.platform_tag()
+    if configpar:
+        configdir=os.path.join(root_dir,'recipes','hosts',configpar,'config')
+if os.path.exists(configdir):
+    if not configdir in config_path_list:
+        config_path_list=[configdir]+config_path_list
+        logger.info("config_dir-->"+configdir+"<-- ADDED")
+
+for p in config_path_list:
+    logger.info("config_dir-->"+p+"<-- ")
