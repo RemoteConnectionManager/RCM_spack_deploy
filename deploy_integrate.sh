@@ -1,6 +1,6 @@
 #!/bin/bash
 
-python scripts/deploy_setup.py --integration --clearconfig --dest=deploy/spack1 --debug=debug  --branches clean/develop     pr/.*  wip/.*  --prlist 1167 2622 2686 2694 2771 2902 2960 2980 3057 3133 3224 3250 $*
+python scripts/deploy_setup.py --integration --clearconfig --debug=debug  --branches clean/develop     pr/.*  wip/.*  --prlist 1167 2622 2686 2694 2771 2902 2960 2980 3057 3133 3224 $*
 
 
 #1167 register external package in db
@@ -11,8 +11,12 @@ python scripts/deploy_setup.py --integration --clearconfig --dest=deploy/spack1 
 #2902 #enable including tcl file into modules
 #2980 #fix intel compiler spack install petsc+mpi%intel ^intel-parallel-studio
 #3057 #Bootstrap environment modules in setup_env.sh
+#MERGED#3111 #fix in module parsing
 #3133 #Bundle Packages
-#3111 #fix in module parsing
+#3224 default to enable autoload
+
 
 ##########  would like to have   #######
 #2507 #simplify add external packages to packages.yaml
+
+#3250 fix modulecmd use, needed for parsing module on Marconi and Galileo
