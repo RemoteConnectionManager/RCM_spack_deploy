@@ -11,8 +11,10 @@ import io
 import re
 import argparse
 import logging
+import glob
 
 import util
+import mytemplate
 
 
 parser = argparse.ArgumentParser(description="""
@@ -63,6 +65,9 @@ parser.add_argument('--cache', action='store', default='cache',
 
 parser.add_argument('--config', action='store', default='',
                     help='folder containing config information')
+
+parser.add_argument('--clearconfig', action='store_true', default=False,
+                    help='clear existing c')
 
 
 #print("argparse.SUPPRESS-->"+argparse.SUPPRESS+"<---------------")
@@ -254,5 +259,41 @@ if os.path.exists(configdir):
         config_path_list=[configdir]+config_path_list
         logger.info("config_dir-->"+configdir+"<-- ADDED")
 
+########## apply config#########
+if args.clearconfig:
+    spack_config_dir=os.path.join(dest,'etc','spack')
+    logger.info("Clear config Folder ->"+spack_config_dir+"<-")
+    for f in glob.glob(spack_config_dir+ "/*.yaml"):
+        os.remove(f)
+
+
+subst=dict()
+subst["RCM_DEPLOY_ROOTPATH"] = root_dir
 for p in config_path_list:
     logger.info("config_dir-->"+p+"<-- ")
+    for f in glob.glob(p+ "/*.yaml"): # generator, search immediate subdirectories
+        outfile=os.path.basename(f)
+        target=os.path.join(dest,'etc','spack',outfile)
+        logger.info("config_file "+outfile+" -->"+f+"<-- ")
+        if not os.path.exists(target):
+            templ= mytemplate.stringtemplate(open(f).read())
+            out=templ.safe_substitute(subst)
+            logger.info("WRITING config_file "+outfile+" -->"+target+"<-- ")
+            open(target,"w").write(out)
+
+util.source(os.path.join(dest,'share','spack','setup-env.sh'))
+for p in config_path_list:
+    initfile=os.path.join(p,'config.sh')
+    if os.path.exists(initfile):
+        logger.info("parsing init file-->" + initfile + "<-- ")
+        f=open(initfile,'r')
+        for line in f:
+            if len(line)>0:
+                if not line[0] == '#':
+                    templ= mytemplate.stringtemplate(line)
+                    cmd=templ.safe_substitute(subst)
+                    (ret,out,err)=util.run(cmd.split(),logger=logger)
+                    logger.info("  " + out )
+
+
+

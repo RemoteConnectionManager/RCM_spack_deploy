@@ -8,6 +8,7 @@ import io
 import re
 import collections
 import logging
+import json
 
 import socket
 import platform
@@ -29,6 +30,14 @@ def run(cmd,logger=None,stop_on_error=True,dry_run=False,folder='.'):
     else:
         logger.info("DRY RUN... nothing done")
         return (0, '','')
+
+
+def source(sourcefile):
+    source = 'source '+ sourcefile
+    dump = sys.executable + ' -c "import os, json;print json.dumps(dict(os.environ))"'
+    pipe = subprocess.Popen(['/bin/bash', '-c', '%s && %s' %(source,dump)], stdout=subprocess.PIPE)
+    env = json.loads(pipe.stdout.read())
+    os.environ = env
 
 class baseintrospect:
     def __init__(self):

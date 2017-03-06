@@ -1,6 +1,6 @@
 #!/bin/bash
 
-python scripts/deploy_setup.py --integration --dest=deploy/spack1 --debug=debug  --branches clean/develop     pr/.*  wip/.*  --prlist 1167 2622 2686 2694 2771 2902 2960 2980 3057 3133 3224 3250 $*
+python scripts/deploy_setup.py --integration --clearconfig --dest=deploy/spack1 --debug=debug  --branches clean/develop     pr/.*  wip/.*  --prlist 1167 2622 2686 2694 2771 2902 2960 2980 3057 3133 3224 3250 $*
 
 
 #1167 register external package in db
