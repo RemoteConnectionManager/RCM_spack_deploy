@@ -63,6 +63,9 @@ parser.add_argument('--prlist', nargs='*', default=[],
 parser.add_argument('--cache', action='store', default='cache',
                     help='folder where cache is')
 
+parser.add_argument('--install', action='store', default='', 
+                    help='folder where install packages')
+
 parser.add_argument('--config', action='store', default='',
                     help='folder containing config information')
 
@@ -217,7 +220,7 @@ else:
             dev_git.checkout(b)
             dev_git.sync_upstream(upstream='origin', master=b,options=pull_options)
 
-
+########## cache handling ##############
 cachedir=args.cache
 if not os.path.exists(cachedir):
     cachedir=os.path.join(root_dir,cachedir)
@@ -232,6 +235,21 @@ if os.path.exists(os.path.join(dest, 'var', 'spack')):
     if not os.path.exists(deploy_cache):
         os.symlink(cachedir,deploy_cache)
         logger.info("symlinked -->"+cachedir+"<-->"+deploy_cache)
+
+########## install handling ##############
+if  args.install:
+    logger.info("find install in args-->"+args.install+"<--")
+    install = args.install
+    if not os.path.exists(install):
+        install = os.path.join(root_dir,args.install)
+        if not os.path.exists(install):
+            install = os.path.join(dest,args.install)
+else:
+    install = os.path.join(dest,'opt','spack')
+if not os.path.exists(install):
+    logger.info("creting install_dir-->"+install+"<--")
+    os.makedirs(install)
+logger.info("install_dir-->"+install+"<--")
 
 me=util.myintrospect(tags={'calori': 'ws_mint', 'galileo':'galileo', 'marconi':'marconi' })
 
@@ -269,6 +287,7 @@ if args.clearconfig:
 
 subst=dict()
 subst["RCM_DEPLOY_ROOTPATH"] = root_dir
+subst["RCM_DEPLOY_INSTALLPATH"] = install
 for p in config_path_list:
     logger.info("config_dir-->"+p+"<-- ")
     for f in glob.glob(p+ "/*.yaml"): # generator, search immediate subdirectories
