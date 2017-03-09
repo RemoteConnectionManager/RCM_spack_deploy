@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#PBS -l select=1:ncpus=24:mem=40gb
+#PBS -l walltime=02:14:00
+
+#PBS -A cin_priorit
+
+#PBS -N BS -N build_rcm
+#PBS -V
+
+export RCM_GIT_PATH=/marconi_scratch/userinternal/lcalori0/spack/RCM
+export RCM_DEPLOY_SPACKPATH=/marconi_scratch/userinternal/lcalori0/spack/RCM_test/deploy/spack5
+source ${RCM_DEPLOY_SPACKPATH}/share/spack/setup-env.sh
+export LOGFILE=${PBS_O_WORKDIR}/log_build.${PBS_JOBID}.log
+
+
+spack install -v --only dependencies rcm@develop+linksource   > ${LOGFILE}  2>&1
+spack diy --source-path ${RCM_GIT_PATH} rcm@develop+linksource >> ${LOGFILE}  2>&1
+#spack install -v qt   >> ${LOGFILE}  2>&1
+#spack install -v font-adobe-100dpi  >> ${LOGFILE}  2>&1
+
+

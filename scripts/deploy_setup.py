@@ -288,6 +288,7 @@ if args.clearconfig:
 subst=dict()
 subst["RCM_DEPLOY_ROOTPATH"] = root_dir
 subst["RCM_DEPLOY_INSTALLPATH"] = install
+subst["RCM_DEPLOY_SPACKPATH"] = dest
 for p in config_path_list:
     logger.info("config_dir-->"+p+"<-- ")
     for f in glob.glob(p+ "/*.yaml"): # generator, search immediate subdirectories
