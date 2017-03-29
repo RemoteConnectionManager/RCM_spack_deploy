@@ -3,6 +3,6 @@ config:
   - $tempdir
 
   source_cache: @{RCM_DEPLOY_ROOTPATH}/cache
-  install_tree: @{RCM_DEPLOY_ROOTPATH}/install
+  install_tree: @{RCM_DEPLOY_INSTALLPATH}
 
 
