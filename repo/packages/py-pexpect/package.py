@@ -35,6 +35,6 @@ class PyPexpect(PythonPackage):
     version('4.2.1', '3694410001a99dff83f0b500a1ca1c95')
 
     # FIXME: Add dependencies if required.
-    depends_on('py-setuptools', type=('build','run'))
+    depends_on('py-setuptools', type=('build','link'))
     depends_on('py-ptyprocess', type=('build','run'))
 

@@ -35,7 +35,7 @@ class PyParamiko(PythonPackage):
 
     version('2.1.2', '41a8ea0e8abb03a6bf59870670d4f46c')
 
-    depends_on('py-setuptools', type=('build', 'run'))
+    depends_on('py-setuptools', type=('build', 'link'))
     depends_on('py-pyasn1',        type=('build', 'run'))
-    depends_on('py-cryptography',  type=('build', 'run'))
+    depends_on('py-cryptography',  type=('build', 'link', 'run'))
 

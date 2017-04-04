@@ -26,7 +26,7 @@ PR_TEST="${PR_TEST} 2548" #concretization of build-only deps separately
 export PR_PROD="$PR_NEEDED $PR_CLIENT_NEEDED $PR_CLUSTER_NEEDED $PR_UTILS"
 export PR_ALL="$PR_TEST $PR_PROD"
 
-python scripts/deploy_setup.py --integration --clearconfig --debug=debug  --branches clean/develop     pr/.*  wip/.*  --prlist ${PR_PROD} $*
+python scripts/deploy_setup.py --integration --clearconfig --debug=debug  --branches clean/develop     pr/.*  wip/.* fix/pull/2548 --prlist ${PR_ALL} $*
 
 
 #python scripts/deploy_setup.py --integration --clearconfig --debug=debug  --branches clean/develop     pr/.*  wip/.*  --prlist  2507 2548 2622 2686 2694 2771 2902 2960 2980 3057 3133 3224 3208 3250 $*

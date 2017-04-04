@@ -34,8 +34,8 @@ class PyCryptography(PythonPackage):
 
     version('1.8.1', '9f28a9c141995cd2300d0976b4fac3fb')
 
-    depends_on('py-setuptools', type='build')
-    depends_on('py-cffi', type=('build', 'run'))
+    depends_on('py-setuptools', type=('build', 'link'))
+    depends_on('py-cffi', type=('build', 'link','run'))
     depends_on('openssl')
 
 

@@ -34,4 +34,4 @@ class PyPyasn1(PythonPackage):
 
     version('0.2.3', '79f98135071c8dd5c37b6c923c51be45')
 
-    depends_on('py-setuptools', type='build')
+    depends_on('py-setuptools', type=('build', 'link'))
