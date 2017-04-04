@@ -1,16 +1,10 @@
 packages:
   openssl:
     version: [1.0.2j]
-  qt:
-    variants: +examples+mesa
-    version: [4.8.6, 5.7.0]
-  mesa:
-    variants: +gallium
-  pango:
-    variants: +X
-  gtkplus:
-    variants: +X
-  cairo:
-    variants: +X
+  python:
+    variants: +tk
+  environment-modules:
+    variants: ~X
+
 
 
