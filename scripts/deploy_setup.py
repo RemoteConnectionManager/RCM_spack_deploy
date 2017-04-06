@@ -251,7 +251,7 @@ if not os.path.exists(install):
     os.makedirs(install)
 logger.info("install_dir-->"+install+"<--")
 
-me=util.myintrospect(tags={'calori': 'ws_mint', 'galileo':'galileo', 'marconi':'marconi' })
+me=util.myintrospect(tags={'calori': 'ws_mint', 'galileo':'galileo', 'marconi':'marconi', 'eni':'eni' })
 
 logger.info("config-->"+args.config+"<--")
 configpar=args.config
