@@ -17,7 +17,7 @@ PR_NEEDED="${PR_NEEDED} 2771" #include 2771 #2771 #add -d option to specify sour
 
 export PR_CLIENT_NEEDED="3057"  #Bootstrap environment modules in setup_env.sh
 #unstable#PR_CLIENT_NEEDED="${PR_CLIENT_NEEDED} 2548" #concretization of build-only deps separately
-PR_CLIENT_NEEDED="${PR_CLIENT_NEEDED} 4145" #concretization problems stopgap for py+tk, alternative to 2548
+#merged#PR_CLIENT_NEEDED="${PR_CLIENT_NEEDED} 4145" #concretization problems stopgap for py+tk, alternative to 2548
 #conflict#export PR_CLUSTER_NEEDED="3250" #fix modulecmd use, needed for parsing module on Marconi and Galileo
 
 export PR_CLIENT_PATCHES="fix/pull/#2548/py-flake8 pull/2548/updated"
