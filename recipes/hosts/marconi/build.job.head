@@ -1,0 +1,12 @@
+#!/bin/bash
+
+#PBS -l select=1:ncpus=24:mem=40gb
+#PBS -l walltime=02:14:00
+
+#PBS -A cin_priorit
+
+#PBS -N BS -N build_rcm
+#PBS -V
+
+
+

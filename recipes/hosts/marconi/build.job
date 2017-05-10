@@ -9,7 +9,7 @@
 #PBS -V
 
 export RCM_GIT_PATH=/marconi_scratch/userinternal/lcalori0/spack/RCM
-export RCM_DEPLOY_SPACKPATH=/marconi_scratch/userinternal/lcalori0/spack/RCM_test/deploy/spack5
+export RCM_DEPLOY_SPACKPATH=/marconi_scratch/userinternal/lcalori0/spack/RCM_test/deploy/spack6
 source ${RCM_DEPLOY_SPACKPATH}/share/spack/setup-env.sh
 export LOGFILE=${PBS_O_WORKDIR}/log_build.${PBS_JOBID}.log
 
