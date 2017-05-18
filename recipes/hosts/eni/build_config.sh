@@ -15,7 +15,7 @@ echo "ROOTPATH-->${RCM_DEPLOY_ROOTPATH}<--"
 echo "DESTPATH-->$(pwd)<--"
 echo "GITREPO-->${RCM_GIT_PATH}<--"
 
-export RCM_DEPLOY_COMMAND="python ${RCM_DEPLOY_ROOTPATH}/scripts/deploy_setup.py --integration --clearconfig --debug=debug  --branches clean/develop     pr/.*  wip/.* --prlist $PR_NEEDED $PR_CLUSTER_NEEDED $PR_UTILS --dest $(pwd)/spack1  --config ${RCM_DEPLOY_HOSTPATH} --install $(pwd)/install" 
+export RCM_DEPLOY_COMMAND="python ${RCM_DEPLOY_ROOTPATH}/scripts/deploy_setup.py --integration --clearconfig --debug=debug  --master integrate/server --branches clean/develop     pr/.*  wip/.* --prlist $PR_NEEDED $PR_CLUSTER_NEEDED $PR_UTILS --dest $(pwd)/spack2  --config ${RCM_DEPLOY_HOSTPATH} --install $(pwd)/install" 
 
 #spack install -v --only dependencies rcm@develop+linksource   > ${LOGFILE}  2>&1
 #spack diy --source-path ${RCM_GIT_PATH} rcm@develop+linksource >> ${LOGFILE}  2>&1
