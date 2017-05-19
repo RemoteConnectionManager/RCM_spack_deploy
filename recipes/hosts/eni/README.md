@@ -15,8 +15,9 @@ launch the config
 
     source ../../recipes/hosts/eni/build_config.sh
     $RCM_DEPLOY_COMMAND
-    cd spack/
+    cd spack2/
     source share/spack/setup-env.sh 
     spack install -v --only dependencies rcm@develop+linksource 
+    spack diy --source-path $RCM_GIT_PATH rcm@develop+linksource
 
 
