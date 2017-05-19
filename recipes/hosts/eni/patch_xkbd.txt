@@ -1,0 +1,9 @@
+cd /hpc/home/cibo19/spack/RCM_spack_deploy/deploy/rcm01/install/linux-rhel7-x86_64/gcc-4.8.5/xkeyboard-config-2.18-jhjq7uqm37rc5pypqev5duffjtuqwbzk/share/X11/xkb/rules
+ln -s base xorg
+ln -s base.lst xorg.lst
+ln -s base.xml xorg.xml
+
+
+cd /hpc/home/cibo19/spack/RCM_spack_deploy/deploy/rcm01/install/linux-rhel7-x86_64/gcc-4.8.5/xkbcomp-1.3.1-e5zslo5rokegi6zttqe3gd2v6eum3jfq/share
+
+ln -s /hpc/home/cibo19/spack/RCM_spack_deploy/deploy/rcm01/install/linux-rhel7-x86_64/gcc-4.8.5/xkeyboard-config-2.18-jhjq7uqm37rc5pypqev5duffjtuqwbzk/share/X11 .
