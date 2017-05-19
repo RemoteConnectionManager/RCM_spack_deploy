@@ -18,7 +18,7 @@ launch the config
     git clone https://github.com/RemoteConnectionManager/RCM.git $RCM_GIT_PATH
     cd spack/
     source share/spack/setup-env.sh 
-    spack diy --source-path $RCM_GIT_PATH rcm@develop+client +linksource -server
+    spack diy --source-path $RCM_GIT_PATH rcm@develop+client+linksource~server
     
 
 
