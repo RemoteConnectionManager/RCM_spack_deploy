@@ -23,7 +23,7 @@ launch the config
     cd spack3/
     source share/spack/setup-env.sh 
     spack install -v --only dependencies rcm@develop+linksource+virtualgl 
-    spack diy --source-path $RCM_GIT_PATH rcm@develop+linksource+virtualgl
+    spack diy --source-path $RCM_GIT_PATH rcm@develop+linksource+virtualgl configdir=${RCM_GIT_PATH}/config/eni/ssh
 
 P.S. this procedure require ability to download from internet all the needed source tarballs,
 in case of restriction, better define a  pre-filled cache folder
