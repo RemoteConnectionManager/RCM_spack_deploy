@@ -10,10 +10,10 @@ done
 export RCM_DEPLOY_HOSTPATH="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 source ${RCM_DEPLOY_HOSTPATH}/../../../setup.sh
 export RCM_GIT_PATH=${RCM_DEPLOY_ROOTPATH}/deploy/RCM
-echo "HOSTPATH-->${RCM_DEPLOY_HOSTPATH}<--"
 echo "ROOTPATH-->${RCM_DEPLOY_ROOTPATH}<--"
-echo "DESTPATH-->$(pwd)<--"
+echo "HOSTPATH-->${RCM_DEPLOY_HOSTPATH}<--"
 echo "GITREPO-->${RCM_GIT_PATH}<--"
+echo "DESTPATH-->$(pwd)<--"
 
 export RCM_DEPLOY_COMMAND="python ${RCM_DEPLOY_ROOTPATH}/scripts/deploy_setup.py --integration --clearconfig --debug=debug  --master integrate/server --branches clean/develop     pr/.*  wip/.* --prlist $PR_NEEDED $PR_CLUSTER_NEEDED $PR_UTILS --dest $(pwd)/spack3  --config ${RCM_DEPLOY_HOSTPATH} --install $(pwd)/install" 
 
