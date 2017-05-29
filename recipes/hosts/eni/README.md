@@ -22,8 +22,8 @@ launch the config
     $RCM_DEPLOY_COMMAND
     cd spack3/
     source share/spack/setup-env.sh 
-    spack install --only dependencies rcm@develop+linksource+virtualgl 
-    spack diy --source-path $RCM_GIT_PATH rcm@develop+linksource+virtualgl configdir=${RCM_DEPLOY_HOSTPATH}/config/rcm
+    spack install --only dependencies rcm@develop+linksource+virtualgl+server ^xkeyboard-config+xorg 
+    spack diy --source-path $RCM_GIT_PATH rcm@develop+linksource+virtualgl+server configdir=${RCM_GIT_PATH}/config/eni/ssh ^xkeyboard-config+xorg
 
 P.S. this procedure require ability to download from internet all the needed source tarballs,
 in case of restriction, better define a  pre-filled cache folder
