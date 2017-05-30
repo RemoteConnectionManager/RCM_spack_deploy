@@ -20,7 +20,8 @@ launch the config
     source share/spack/setup-env.sh 
     spack diy --source-path $RCM_GIT_PATH rcm@develop+client+linksource~server
     
-To run
+To start the client
+
     module load rcm
     rcm.sh
     
