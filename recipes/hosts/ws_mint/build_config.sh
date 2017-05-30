@@ -10,12 +10,14 @@ done
 export RCM_DEPLOY_HOSTPATH="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 source ${RCM_DEPLOY_HOSTPATH}/../../../setup.sh
 export RCM_GIT_PATH=${RCM_DEPLOY_ROOTPATH}/deploy/RCM
-echo "HOSTPATH-->${RCM_DEPLOY_HOSTPATH}<--"
 echo "ROOTPATH-->${RCM_DEPLOY_ROOTPATH}<--"
-echo "DESTPATH-->$(pwd)<--"
+echo "HOSTPATH-->${RCM_DEPLOY_HOSTPATH}<--"
 echo "GITREPO-->${RCM_GIT_PATH}<--"
+echo "DESTPATH-->$(pwd)<--"
 
-export RCM_DEPLOY_COMMAND="python ${RCM_DEPLOY_ROOTPATH}/scripts/deploy_setup.py --master integration/client --integration --clearconfig --debug=debug  --branches clean/develop     pr/.*  wip/.* --prlist $PR_NEEDED $PR_CLIENT_NEEDED $PR_UTILS --dest $(pwd)/spack  --config ${RCM_DEPLOY_HOSTPATH} --install $(pwd)/install" 
+export RCM_DEVEL_DEPLOY_COMMAND="python ${RCM_DEPLOY_ROOTPATH}/scripts/deploy_setup.py --integration --clearconfig --debug=debug  --master integrate/client --branches clean/develop     pr/.*  wip/.* --prlist $PR_NEEDED $PR_CLIENT_NEEDED $PR_UTILS --dest $(pwd)/spack_devel  --config ${RCM_DEPLOY_HOSTPATH} --install $(pwd)/install" 
+
+export RCM_DEPLOY_COMMAND="python ${RCM_DEPLOY_ROOTPATH}/scripts/deploy_setup.py  --clearconfig --debug=debug  --master integrate/client --branches integrate/client --dest $(pwd)/spack_test  --config ${RCM_DEPLOY_HOSTPATH} --install $(pwd)/install" 
 
 #spack install -v --only dependencies rcm@develop+linksource   > ${LOGFILE}  2>&1
 #spack diy --source-path ${RCM_GIT_PATH} rcm@develop+linksource >> ${LOGFILE}  2>&1
