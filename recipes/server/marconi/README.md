@@ -13,10 +13,16 @@ cd there
 
 launch the config
 
-    source ../../recipes/hosts/marconi/build_config.sh
+    source ../../recipes/server/marconi/build_config.sh spack_dev
+    # this set up commands for various steps
     $RCM_DEPLOY_COMMAND
-    cd spack/
-    source share/spack/setup-env.sh 
-    spack install -v --only dependencies rcm@develop+linksource 
+    $RCM_DEPLOY_DEVEL_COMMAND
+    # this is the command for spack development deploy
+    $RCM_DEPLOY_BUILD_COMMAND
+    # this is the command for build all dependencies
+    $RCM_DEPLOY_SPACK_SETUP_COMMAND
+    # this is the spack instance setup command
+    $RCM_DEPLOY_BUILD
+    # this is the command to buil just rcm in diy mode so to allow using git extracted source
 
 

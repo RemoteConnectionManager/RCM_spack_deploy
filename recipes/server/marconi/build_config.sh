@@ -8,8 +8,10 @@ while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
 s located
 done
 export RCM_DEPLOY_HOSTPATH="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
+#echo "PRIMA----- RCM_DEPLOY_HOSTPATH = ${RCM_DEPLOY_HOSTPATH}  RCM_DEPLOY_SPEC=${RCM_DEPLOY_SPEC}"
 source ${RCM_DEPLOY_HOSTPATH}/../setup.sh
-echo "ROOTPATH-->${RCM_DEPLOY_ROOTPATH}<--"
+#echo "DOPO----- RCM_DEPLOY_SPEC=${RCM_DEPLOY_SPEC}"
+#echo "ROOTPATH-->${RCM_DEPLOY_ROOTPATH}<--"
 export RCM_DEPLOY_SPEC="${RCM_DEPLOY_SPEC}+mesa"
 source ${RCM_DEPLOY_ROOTPATH}/setup_1.sh
 export RCM_DEPLOY_BUILD_COMMAND="qsub -v RCM_DEPLOY_BUILD_DEPS,RCM_DEPLOY_SPACK_SETUP_COMMAND ${RCM_DEPLOY_HOSTPATH}/build.job"

@@ -10,7 +10,7 @@ modules:
   tcl:
     naming_scheme:  '${PACKAGE}/${VERSION}-${COMPILERNAME}-${COMPILERVER}'
     #whitelist: ['turbovnc', 'nasm', 'cmake','git','perl','python']
-    whitelist: ['rcm', 'turbovnc', 'fluxbox', 'lxde-lxterminal', 'lxde-libfm', 'lxde-menu-cache', 'mesa']
+    whitelist: ['rcm', 'turbovnc', 'fluxbox', 'lxde-lxterminal', 'lxde-libfm', 'lxde-menu-cache', 'mesa', 'xauth', 'xkbcomp', 'xedit', 'xlsfonts', 'xdpyinfo', 'xfontsel']
     verbose_autoload: False
     blacklist: ['%gcc']
     hash_length: 2

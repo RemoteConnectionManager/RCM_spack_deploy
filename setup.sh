@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 # Absolute path to this script. /home/user/bin/foo.sh
 
 SOURCE="${BASH_SOURCE[0]}"
