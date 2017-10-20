@@ -225,7 +225,7 @@ def get_branches(url, branch_pattern='.*?\s+refs/heads/(.*?)\s+', branch_format_
             # if include : remote_branches.append(branch)
              remote_branches.append(branch)
     remote_branches.sort()
-
+    #print("remote_branches-->",str(remote_branches))
     #  print('#########-->' + url)
     #  for b in remote_branches:
     #    print("       -->",b)
@@ -233,6 +233,7 @@ def get_branches(url, branch_pattern='.*?\s+refs/heads/(.*?)\s+', branch_format_
     branchRE = dict()
     for p in branch_selection:
         # branchRE.append('(' + branch + ')')
+        #print("----------->"+p+"<----")
         branchRE[p] = re.compile('^(' + p + ')$')
     # branchRE = re.compile('^(' + '|'.join(branchRE) + r')$')
 
@@ -262,6 +263,8 @@ def get_branches(url, branch_pattern='.*?\s+refs/heads/(.*?)\s+', branch_format_
     return fetch_branches
 
 def trasf_match(in_list,in_match='(.*)',out_format='{name}'):
+    #not working#logging.getLogger(__name__).info("in_list-->"+str(in_list)+"<<-")
+    #not working#logging.getLogger(__name__).info("in_match-->"+str(in_match)+"<<-")
     out=collections.OrderedDict()
     in_RE = re.compile(in_match)
     for entry in in_list:
