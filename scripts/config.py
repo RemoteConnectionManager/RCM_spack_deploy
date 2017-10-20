@@ -274,6 +274,8 @@ if not os.path.exists(dest):
 
     local_pr=util.trasf_match(upstream_branches,in_match='.*/([0-9]*)/(.*)',out_format='pull/{name}/clean')
 
+    logger.info("upstream_branches->"+str(upstream_branches)+"<--")
+
     dev_git.fetch(name='origin',branches=origin_branches)
 
     if args.integration:
