@@ -15,6 +15,9 @@ import platform
 
 def run(cmd,logger=None,stop_on_error=True,dry_run=False,folder='.'):
     logger = logger or logging.getLogger(__name__)
+    if not cmd :
+        logger.warning("skipping empty command")
+        return (0, '','')
     logger.info("running-->"+' '.join(cmd)+"<-")
     if not dry_run :
         myprocess = subprocess.Popen(cmd, cwd=folder,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
@@ -33,11 +36,15 @@ def run(cmd,logger=None,stop_on_error=True,dry_run=False,folder='.'):
 
 
 def source(sourcefile):
-    source = 'source '+ sourcefile
-    dump = sys.executable + ' -c "import os, json;print json.dumps(dict(os.environ))"'
-    pipe = subprocess.Popen(['/bin/bash', '-c', '%s && %s' %(source,dump)], stdout=subprocess.PIPE)
-    env = json.loads(pipe.stdout.read())
-    os.environ = env
+    if os.path.exists(sourcefile) :
+        source = 'source '+ sourcefile
+        dump = sys.executable + ' -c "import os, json;print json.dumps(dict(os.environ))"'
+        pipe = subprocess.Popen(['/bin/bash', '-c', '%s && %s' %(source,dump)], stdout=subprocess.PIPE)
+        env = json.loads(pipe.stdout.read())
+        os.environ = env
+    else:
+        print("### NON EXISTING ",sourcefile)
+         
 
 class baseintrospect:
     def __init__(self):
