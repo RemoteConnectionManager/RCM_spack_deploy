@@ -375,7 +375,8 @@ if args.platformconfig :
                                           platform_match,
                                           configurations.get('config_dir','')))
     if os.path.exists(test) :
-        config_path_list=config_path_list + [test]
+        #config_path_list=config_path_list + [test]
+        config_path_list=[test] + config_path_list 
 
 logger.info(" config_path_list -->" + str(config_path_list) )
 
@@ -426,7 +427,7 @@ if os.path.exists(spack_config_dir) :
 
 
 util.source(os.path.join(dest,'share','spack','setup-env.sh'))
-for p in config_path_list:
+for p in reversed(config_path_list):
     initfile=os.path.join(p,'config.sh')
     if os.path.exists(initfile):
         logger.info("parsing init file-->" + initfile + "<-- ")
