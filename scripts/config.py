@@ -427,18 +427,19 @@ if os.path.exists(spack_config_dir) :
 
 
 util.source(os.path.join(dest,'share','spack','setup-env.sh'))
-for p in reversed(config_path_list):
-    initfile=os.path.join(p,'config.sh')
-    if os.path.exists(initfile):
-        logger.info("parsing init file-->" + initfile + "<-- ")
-        f=open(initfile,'r')
-        for line in f:
-            if len(line)>0:
-                if not line[0] == '#':
-                    templ= mytemplate.stringtemplate(line)
-                    cmd=templ.safe_substitute(subst)
-                    (ret,out,err)=util.run(cmd.split(),logger=logger)
-                    logger.info("  " + out )
+if args.runconfig :
+    for p in reversed(config_path_list):
+        initfile=os.path.join(p,'config.sh')
+        if os.path.exists(initfile):
+            logger.info("parsing init file-->" + initfile + "<-- ")
+            f=open(initfile,'r')
+            for line in f:
+                if len(line)>0:
+                    if not line[0] == '#':
+                        templ= mytemplate.stringtemplate(line)
+                        cmd=templ.safe_substitute(subst)
+                        (ret,out,err)=util.run(cmd.split(),logger=logger)
+                        logger.info("  " + out )
 
 
 
