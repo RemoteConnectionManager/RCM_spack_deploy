@@ -14,4 +14,5 @@ source ${RCM_DEPLOY_HOSTPATH}/../../../../get_root
 
 
 python ${RCM_DEPLOY_ROOTPATH}/scripts/config.py -c config config/shared_install config/rcm config/rcm/server/headless  --platformconfig --dest deploy/insitu/04/spack
+source ${RCM_DEPLOY_ROOTPATH}/deploy/insitu/04/spack/share/spack/setup-env.sh
 
