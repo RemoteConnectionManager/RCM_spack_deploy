@@ -13,5 +13,5 @@ export RCM_DEPLOY_HOSTPATH="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 source ${RCM_DEPLOY_HOSTPATH}/../../../../get_root
 
 
-python ${RCM_DEPLOY_ROOTPATH}/scripts/config.py -c config config/shared_install config/rcm config/rcm/server/headless  --platformconfig --dest deploy/insitu/03/spack
+python ${RCM_DEPLOY_ROOTPATH}/scripts/config.py -c config config/shared_install config/rcm config/rcm/server/headless  --platformconfig --dest deploy/insitu/04/spack
 
