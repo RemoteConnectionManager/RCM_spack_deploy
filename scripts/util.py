@@ -24,10 +24,11 @@ def run(cmd,logger=None,stop_on_error=True,dry_run=False,folder='.'):
         stdout,stderr = myprocess.communicate()
         myprocess.wait()
         ret = myprocess.returncode
-        if stop_on_error and ret:
+        if ret:
             #print("ERROR:",ret,"Exiting")
             logger.error("ERROR CODE : " + str(ret) + '\n'+stderr+'\nExit...\n')
-            sys.exit()
+            if stop_on_error :
+                sys.exit()
         return (ret,stdout,stderr)
 
     else:
@@ -64,10 +65,13 @@ class commandintrospect(baseintrospect):
             self.test(c)
 
     def test(self,cmd,key=None):
-        (ret,o,e)=run(cmd.split())
-        if not e :
-            if not key : key=cmd
-            self.commands[key]=o.strip()
+        try : 
+            (ret,o,e)=run(cmd.split(),stop_on_error=False)
+            if not e :
+                if not key : key=cmd
+                self.commands[key]=o.strip()
+        except :
+            pass
 
 class myintrospect(commandintrospect):
     def __init__(self,tags={}):
