@@ -365,6 +365,11 @@ for configdir in args.config_paths :
             logger.info(" found config dir -->" + test + "<-- ADDED")
             break
 
+subst=dict()
+subst["RCM_DEPLOY_ROOTPATH"] = root_dir
+subst["RCM_DEPLOY_INSTALLPATH"] = install_dir
+subst["RCM_DEPLOY_SPACKPATH"] = dest
+
 if args.platformconfig :
     platform_match=util.myintrospect(tags=conf['configurations']['host_tags']).platform_tag()
     logger.info(" platform -->" + platform_match)
@@ -375,6 +380,7 @@ if args.platformconfig :
                                           platform_match,
                                           configurations.get('config_dir','')))
     if os.path.exists(test) :
+        subst["RCM_DEPLOY_HOSTPATH"] = test
         #config_path_list=config_path_list + [test]
         config_path_list=[test] + config_path_list 
 
@@ -391,10 +397,6 @@ if os.path.exists(spack_config_dir) :
         for f in glob.glob(spack_config_dir+ "/*.yaml"):
             os.remove(f)
 
-    subst=dict()
-    subst["RCM_DEPLOY_ROOTPATH"] = root_dir
-    subst["RCM_DEPLOY_INSTALLPATH"] = install_dir
-    subst["RCM_DEPLOY_SPACKPATH"] = dest
     for f in configurations.get('spack_yaml_files',[]) :
         merge_files=[]
         for p in config_path_list:
