@@ -1,4 +1,5 @@
 #!/bin/bash
+RCM_DEPLOY_CURRENT_PATH=deploy/insitu/05/spack
 
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
@@ -13,6 +14,6 @@ export RCM_DEPLOY_HOSTPATH="$( cd -P "$( dirname "$SOURCE" )" && pwd )"
 source ${RCM_DEPLOY_HOSTPATH}/../../../../get_root
 
 
-python ${RCM_DEPLOY_ROOTPATH}/scripts/config.py -c config config/shared_install config/rcm config/rcm/server/headless  --platformconfig --dest deploy/insitu/04/spack
-source ${RCM_DEPLOY_ROOTPATH}/deploy/insitu/04/spack/share/spack/setup-env.sh
+python ${RCM_DEPLOY_ROOTPATH}/scripts/config.py -c config config/shared_install config/rcm config/rcm/server config/rcm/server/headless  --platformconfig --runconfig --dest ${RCM_DEPLOY_CURRENT_PATH=}
+source ${RCM_DEPLOY_ROOTPATH}/${RCM_DEPLOY_CURRENT_PATH=}/share/spack/setup-env.sh
 
