@@ -1,0 +1,39 @@
+#!/bin/bash
+echo ##########  I M here#########
+#/usr/bin/xclock -geometry 100x100-5+5 &
+#source /cineca/prod/environment/module/3.1.6/none/init/bash
+#module load profile/advanced autoload virtualgl 
+if xdpyinfo -d :0 > /dev/null ; then
+  module load virtualgl
+fi
+ 
+export KDEVARTMP=$TMPDIR
+
+shopt -s expand_aliases
+#vglrun -d :0.0 paraview  -geometry 10000x10000
+STARTKDE="$(type -p startkde)"
+exec /bin/xterm &
+if ! [ -x  $HOME/.kde/Autostart/xrdb_setup.sh ]; then
+  echo -e '#!/bin/bash \n xrdb /etc/X11/Xresources' > $HOME/.kde/Autostart/xrdb_setup.sh
+  chmod a+x  $HOME/.kde/Autostart/xrdb_setup.sh
+fi
+if ! [ -x  $HOME/.kde/share/apps/kscreen ]; then
+  mkdir -p .kde/share/apps/kscreen
+  echo '[ { "enabled" : true, "id" : "TurboVNC", "metadata" : { "name" : "TurboVNC" }, "mode" : { "refresh" : 60.0, "size" : { "
+height" : 100, "width" : 200 } }, "pos" : { "x" : 0, "y" : 0 }, "primary" : true, "rotation" : 1 } ]' > $HOME/.kde/share/apps/kscreen/d015c3411c0560adb93727a0a496bb63
+fi
+if [ -e $HOME/.kde/share/config/plasma-desktop-appletsrc ]; then
+  if ! [ -e $HOME/.kde/share/config/plasma-desktop-appletsrc.bak ]; then
+    sed -i.bak s/plugin\=desktop/plugin\=folderview/g .kde/share/config/plasma-desktop-appletsrc
+  fi
+fi
+#  xrandr --fb 1024x1024
+#exec "$STARTKDE" &
+#sleep 10
+#qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout 0 0 0
+#exec "$STARTKDE"&
+#sleep 10
+#sed -i.bak s/plugin\=desktop/plugin\=folderview/g .kde/share/config/plasma-desktop-appletsrc
+#else
+exec "$STARTKDE"
+#fi
