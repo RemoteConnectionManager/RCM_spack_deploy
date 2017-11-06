@@ -8,23 +8,14 @@ packages:
     modules:
       intelmpi@2017%intel@17.0.0: intelmpi/2017--binary
     buildable: False
-  cmake:
-    modules:
-      cmake@3.5.2: cmake/3.5.2
-    buildable: False
-  qt:
-    compiler: [gcc@4.8.2]
-    variants: +examples+mesa
-    version: [4.8.6, 5.7.0]
-  mesa:
-    compiler: [gcc@4.8.2]
-    variants: +gallium
-  pango:
-    variants: +X
-  gtkplus:
-    variants: +X
-  cairo:
-    variants: +X
+#  cmake:
+#    modules:
+#      cmake@3.5.2: cmake/3.5.2
+#    buildable: False
+#  qt:
+#    compiler: [gcc@4.8.2]
+#    variants: +examples+mesa
+#    version: [4.8.6, 5.7.0]
   all:
     compiler: [gcc@4.8.2, gcc@4.9.2]
     providers:
