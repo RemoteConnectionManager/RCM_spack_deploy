@@ -1,5 +1,5 @@
 #!/bin/bash
-RCM_DEPLOY_CURRENT_PATH=deploy/insitu/01/spack
+RCM_DEPLOY_CURRENT_PATH=deploy/insitu/02/spack
 
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
