@@ -9,8 +9,7 @@
 #PBS -V
 
 export LOGFILE=${PBS_O_WORKDIR}/log_build.${PBS_JOBID}.log
-source /marconi_work/cin_prc5wp62/spack/insitu/deploy/insitu/05/spack/share/spack/setup-env.sh
-spack install  --keep-stage --verbose qt   > ${LOGFILE}  2>&1
-spack install  --keep-stage --verbose paraview+qt+python   > ${LOGFILE}  2>&1
+source /marconi_work/cin_prc5wp62/spack/insitu/deploy/insitu/08/spack/share/spack/setup-env.sh
+spack install  --keep-stage --verbose paraview   > ${LOGFILE}  2>&1
 
 
