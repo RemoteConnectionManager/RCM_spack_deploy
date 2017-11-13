@@ -1,5 +1,11 @@
 #!/bin/bash
-RCM_DEPLOY_CURRENT_PATH=deploy/insitu/09/spack
+if [ "x$1" == "x" ]
+then
+  echo "Please specify deployment name folder like:"
+  echo "$0 dev"
+  exit 1
+fi
+RCM_DEPLOY_CURRENT_PATH=deploy/insitu/$1/spack
 
 SOURCE="${BASH_SOURCE[0]}"
 while [ -h "$SOURCE" ]; do # resolve $SOURCE until the file is no longer a symli
