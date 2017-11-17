@@ -372,7 +372,7 @@ subst["RCM_DEPLOY_SPACKPATH"] = dest
 
 if args.platformconfig :
     platform_match=util.myintrospect(tags=conf['configurations']['host_tags']).platform_tag()
-    logger.info(" platform -->" + platform_match)
+    logger.info(" platform -->" + str(platform_match) +"<--")
     if platform_match :
         test=os.path.abspath(os.path.join(root_dir,
                                           configurations.get('base_folder',''),
