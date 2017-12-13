@@ -31,6 +31,10 @@ import hiyapyco
 argfile_parser = argparse.ArgumentParser(add_help=False)
 argfile_parser.add_argument('-a','--args_file', default = os.path.join(root_dir,'config','args.yaml'))
 argfile_parser.add_argument('-c','--config_paths', nargs='*', default = [os.path.join(root_dir,'config')])
+argfile_parser.add_argument('--dest', default=argparse.SUPPRESS,
+                    help="Directory to clone spack instance into.  If ends in slash, place into that directory; otherwise, \
+place into subdirectory named according to the git URL")
+argfile_args=argfile_parser.parse_known_args()[0]
 
 parser = argparse.ArgumentParser(description="""
   Clone origin repository, opionally update the develop branch, integrate a list of PR and branches into a new branch
@@ -89,61 +93,6 @@ for a in conf_args:
       else: arguments['default'] = str(d)
 
   parser.add_argument('--'+a,**arguments)
-#  parser.add_argument('--'+a,
-#                      help=args[a]['help'],
-#                      action=args[a]['action'],
-#                      default=args[a]['default'])
-
-
-# parser.add_argument('-d', '--debug', action='store',
-#                     help='debug level: warning,error,debug',
-#                     default='info')
-# parser.add_argument('--origin', action='store',
-#                     help='URL of the origin git repo being cloned.',
-#                     default='https://github.com/RemoteConnectionManager/spack.git')
-# parser.add_argument('--logfile', action='store',
-#                     help='logfile to log into.',
-#                     default= os.path.splitext(sys.argv[0])[0]+'.log')
-# parser.add_argument('--upstream', action='store',
-#                     help='URL of the upstream git repo.', default='https://github.com/LLNL/spack.git')
-#
-# parser.add_argument('--branches', nargs='*', default=['develop','clean/develop'],
-#                     help='Regular expressions of origin branches to fetch.  The first one specified will be checked out.')
-#
-# parser.add_argument('--master', action='store', default='develop',
-#                     help='name of the branch that will be created.')
-#
-# parser.add_argument('--upstream_master', action='store', default='develop',
-#                     help='upstream branch to sync with.')
-#
-# parser.add_argument('--dry_run', action='store_true', default=False,
-#                     help='do not perform any action')
-#
-# parser.add_argument('--integration', action='store_true', default=False,
-#                     help='do upstream integration')
-#
-# parser.add_argument('--update', action='store_true', default=False,
-#                     help='update existing checkout')
-#
-# parser.add_argument('--pull_flags', nargs='*', action='store', default=['ff-only'],
-#                     help='flags to use when pull')
-#
-# parser.add_argument('--prlist', nargs='*', default=[],
-#                     help='Regular expressions of upstream pr to fetch and merge.')
-#
-# parser.add_argument('--cache', action='store', default='cache',
-#                     help='folder where cache is')
-#
-# parser.add_argument('--install', action='store', default='',
-#                     help='folder where install packages')
-#
-# parser.add_argument('--config', action='store', default='',
-#                     help='folder containing config information')
-#
-# parser.add_argument('--clearconfig', action='store_true', default=False,
-#                     help='clear existing c')
-
-
 #print("argparse.SUPPRESS-->"+argparse.SUPPRESS+"<---------------")
 parser.add_argument('--dest', default=argparse.SUPPRESS,
                     help="Directory to clone spack instance into.  If ends in slash, place into that directory; otherwise, \

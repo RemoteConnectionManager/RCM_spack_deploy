@@ -1,116 +1,15 @@
-#!/usr/bin/env python
-
-from __future__ import print_function
 import os
-import sys
+import logging
 import subprocess
 import io
 import re
 import collections
-import logging
-import json
 
-import socket
-import platform
-import errno
+from run import run
 
-def run(cmd,logger=None,stop_on_error=True,dry_run=False,folder='.'):
-    logger = logger or logging.getLogger(__name__)
-    if not cmd :
-        logger.warning("skipping empty command")
-        return (0, '','')
-    logger.info("running-->"+' '.join(cmd)+"<-")
-    if not dry_run :
-        myprocess = subprocess.Popen(cmd, cwd=folder,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
-        stdout,stderr = myprocess.communicate()
-        myprocess.wait()
-        ret = myprocess.returncode
-        if ret:
-            #print("ERROR:",ret,"Exiting")
-            logger.error("ERROR CODE : " + str(ret) + '\n'+stderr+'\nExit...\n')
-            if stop_on_error :
-                sys.exit()
-        return (ret,stdout,stderr)
-
-    else:
-        logger.info("DRY RUN... nothing done")
-        return (0, '','')
-
-
-def source(sourcefile):
-    if os.path.exists(sourcefile) :
-        source = 'source '+ sourcefile
-        dump = sys.executable + ' -c "import os, json;print json.dumps(dict(os.environ))"'
-        pipe = subprocess.Popen(['/bin/bash', '-c', '%s && %s' %(source,dump)], stdout=subprocess.PIPE)
-        env = json.loads(pipe.stdout.read())
-        os.environ = env
-    else:
-        print("### NON EXISTING ",sourcefile)
-         
-
-class baseintrospect:
-    def __init__(self):
-        self.sysintro=dict()
-        self.sysintro['pyver']=platform.python_version()
-        self.sysintro['pyinterp']=sys.executable
-        self.sysintro['sysplatform']=platform.platform()
-        self.sysintro['commandline']=' '.join(sys.argv)
-        self.sysintro['workdir']=os.path.abspath('.')
-        self.sysintro['hostname']=socket.getfqdn()
-
-class commandintrospect(baseintrospect):
-    def __init__(self,commands=[]):
-	baseintrospect.__init__(self)
-        self.commands=dict()
-        for c in commands:
-            self.test(c)
-
-    def test(self,cmd,key=None):
-        try : 
-            (ret,o,e)=run(cmd.split(),stop_on_error=False)
-            if not e :
-                if not key : key=cmd
-                self.commands[key]=o.strip()
-        except :
-            pass
-
-class myintrospect(commandintrospect):
-    def __init__(self,tags={}):
-
-        commandintrospect.__init__(self,['git --version'])
-
-        self.test('git config --get remote.origin.url',key='giturl')
-        self.tags=tags
-
-    def platform_tag(self):
-        hostname=self.sysintro['hostname']
-        for k in self.tags:
-            m=re.search(k,hostname)
-            if m : return self.tags[k]
-        return(None)
-
-
-    #     (out,err)=run('svn info '+self.sysintro['workdir'])
-    #     for (cmd,match) in [("svnurl","URL: "),("svnauthor","Last Changed Author: ")]:
-    #         for line in out.splitlines():
-	 #        if match in line:
-		#     self.commands[cmd] = line[len(match):]
-		#     break
-    #
-    # def reproduce_string(self,comment=''):
-    #     out = comment+"module load ba\n"
-    #     try:
-    #         revision=int(self.commands['svnrevision'])
-    #     except :
-    #         print "WARNING svn not clean"
-    #         c=re.compile('(^[0-9]*)')
-    #         m=c.match(self.commands['svnrevision'])
-    #         revision=m.groups()[0]
-    #     out +=comment+"svn co "+self.commands['svnurl']+'@'+str(revision)+" my_common_source\n"
-    #     out +=comment+"cd my_common_source\n"
-    #     out +=comment+self.sysintro['pyinterp']+' '+self.sysintro['commandline']+'\n'
-    #     return out
-
+print("###TOP######## "+__name__)
+logging.getLogger(__name__).setLevel(logging.ERROR)
+logging.info('logging of:'+ __name__ + " set to error")
 
 class git_repo:
     def __init__(self, folder, logger=None,stop_on_error=True,dry_run=False):
@@ -128,7 +27,7 @@ class git_repo:
         if not os.path.exists(self.folder):
             os.makedirs(self.folder)
         cmd = ['git', 'rev-parse', '--show-toplevel']
-        (ret,output) = self.run(cmd)
+        (ret,output,err) = run(cmd,logger=self.logger,folder=self.folder,stop_on_error=False)
         git_root = os.path.abspath(output.strip())
 
         #print("in path ",self.folder," git rev_parse ret: ",ret, ' git top:', git_root)
@@ -215,7 +114,9 @@ class git_repo:
 # ------ List the branches on the origin
 # And select only those that match our branch regexp
 def get_branches(url, branch_pattern='.*?\s+refs/heads/(.*?)\s+', branch_format_string='{branch}', branch_selection=[]):
+
     cmd = ['git', 'ls-remote', url]
+    logging.getLogger(__name__).info("execute-->"+str(cmd)+"<<-")
     output = subprocess.Popen(cmd, stdout=subprocess.PIPE).communicate()[0]
 
     headRE = re.compile(branch_pattern)
@@ -270,7 +171,7 @@ def get_branches(url, branch_pattern='.*?\s+refs/heads/(.*?)\s+', branch_format_
 
     #  print("checkout-->",checkout_branch)
     for b in fetch_branches:
-        logging.getLogger(__name__).info('{0} fetch-->'.format(url), b)
+        logging.getLogger(__name__).info('{0} fetch-->{1}'.format(url, b))
 
     return fetch_branches
 
@@ -287,5 +188,41 @@ def trasf_match(in_list,in_match='(.*)',out_format='{name}'):
                 out[entry] = out_format.format(name=name)
     return(out)
 
+#################
+if __name__ == '__main__':
+    import tempfile
+    import shutil
+    print("__file__:" + os.path.realpath(__file__))
+    #logging.basicConfig(format='%(levelname)s:%(message)s', level=logging.DEBUG)
+    #logging.debug('This message should appear on the console')
+    #logging.info('So should this')
+    #logging.warning('And this, too')
+    print("########### "+__name__)
+    ll = logging.getLogger('@@'+__name__)
+    ll.setLevel(logging.DEBUG)
+    for h in ll.handlers :
+        h.setLevel(logging.DEBUG)
+        formatter = logging.Formatter("%(levelname)s %(name)s[%(filename)s:%(lineno)s ] %(message)s")
+        h.setFormatter(formatter)
 
-
+    #for h in ll.handlers:
+    #    h.setFormatter("[%(filename)s:%(lineno)s - %(funcName)20s() %(asctime)s] %(message)s")
+    #    h.setLevel(logging.DEBUG)
+    #origin='https://github.com/RemoteConnectionManager/RCM_spack_deploy.git'
+    #branches=['master']
+    #origin='https://github.com/RemoteConnectionManager/spack.git'
+    #branches=['clean/develop']
+    for origin,branches in [
+        ('https://github.com/RemoteConnectionManager/spack.git',['clean/develop']),
+        ('https://github.com/RemoteConnectionManager/RCM_spack_deploy.git',['master'])
+                            ] :
+        dest=tempfile.mkdtemp()
+        ll.info("creating TEMP dir ->" + dest)
+        repo=git_repo(dest,logger=ll)
+        origin_branches = get_branches(origin, branch_selection=branches)
+        repo.init()
+        repo.add_remote(origin, name='origin', fetch_branches=origin_branches)
+        repo.fetch(name='origin',branches=origin_branches)
+        repo.checkout(origin_branches[0])
+        ll.info(os.listdir(dest))
+        shutil.rmtree(dest, ignore_errors=True)
