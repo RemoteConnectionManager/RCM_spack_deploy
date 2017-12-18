@@ -57,6 +57,8 @@ class Rstudio(Package):
     depends_on('libxslt', type='run')
     depends_on('r', type='run')
     depends_on('mesa', type='run')
+    depends_on('xkeyboard-config', type='run')
+    depends_on('font-util', type='run')
 
     @when('@:1.1.383.bin')
     def patch(self):
@@ -72,4 +74,10 @@ class Rstudio(Package):
     @when('@:1.1.383.bin')
     def install(self, spec, prefix):
         distutils.dir_util.copy_tree(".", prefix)
+
+    @when('@:1.1.383.bin')
+    def setup_environment(self, spack_env, run_env):
+        # The binary installer need QT_XKB_CONFIG_ROOT set to share/X11/xkb
+        run_env.set('QT_XKB_CONFIG_ROOT', join_path(self.spec['xkeyboard-config'].prefix.share, 'X11', 'xkb'))
+        run_env.set('XDG_DATA_HOME', self.spec['font-util'].prefix.share)
 
