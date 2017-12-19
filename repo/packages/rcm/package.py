@@ -42,6 +42,7 @@ from distutils.dir_util import copy_tree
 #from distutils.dir_util import mkpath
 import llnl.util.tty as tty
 import os
+import shutil
 
 
 def file_ok(x):
@@ -59,7 +60,7 @@ class Rcm(Package):
     homepage = "https://wiki.u-gov.it/confluence/pages/viewpage.action?pageId=68391634"
     url      = "https://github.com/RemoteConnectionManager/RCM/archive/0.0.1.tar.gz"
 
-    version('0.0.1', '658770296b4a1ccb5af28c9aa1545f7d')
+    version('v0.0.2', 'a9ee0ddfa533701a3a538011f9c2349c')
     version('develop', git='https://github.com/RemoteConnectionManager/RCM.git')
 
     variant('linksource', default=False, description='link to source instead of copying scripts')
@@ -105,26 +106,43 @@ class Rcm(Package):
         # Sublime text comes as a pre-compiled binary.
         #print("sono qui!!!! in "+os.path.abspath('server')+'<--->'+prefix.bin)
 #        mkpath(prefix.bin)
+        rcm_source=os.path.abspath(self.stage.source_path)
+        tty.warn('source->'+rcm_source)
+        tty.warn('stage->'+self.stage.path)
+
         if '+server' in self.spec:
             mkdirp(prefix.bin)
-            server_source=os.path.abspath(self.stage.source_path)
             configdir = spec.variants['configdir'].value
             if not configdir :
-                configdir = os.path.join(server_source,
+                configdir = os.path.join(rcm_source,
                 'config/generic/ssh')
             if '+linksource' in self.spec:
-                tty.warn('linking to source->'+server_source)
-                os.symlink(os.path.join(server_source,'server'),
+                if os.path.abspath(os.path.dirname(rcm_source)) == os.path.abspath(self.stage.path):
+                    dest=os.path.join(os.path.abspath(self.prefix),'src')
+                    tty.warn('copy RCM source tree in prefix: '+rcm_source + ' -->'+dest)
+                    shutil.copytree(rcm_source,dest)
+                    rcm_source=dest
+                tty.warn('linking to source->'+rcm_source)
+                os.symlink(os.path.join(rcm_source,'server'),
                            os.path.join(prefix.bin,'server'))
                 os.symlink(configdir, os.path.join(prefix.bin,'config'))
             else:
                 copy_tree('server', os.path.join(prefix.bin,'server'),verbose=1)
                 copy_tree(configdir, os.path.join(prefix.bin,'config'),verbose=1)
         if '+client' in self.spec:
+            rcm_client_dir=os.path.join(os.path.abspath(self.stage.source_path),'client')
             mkdirp(prefix.bin)
+            for f in ['rcm_client_tk.py','rcm_client.py','rcm_protocol_client.py','rcm_utils.py','d3des.py'] :
+                rcm_source_file=os.path.join(rcm_client_dir,f)
+                rcm_target_file=os.path.join(prefix.bin,f)
+                if '+linksource' in self.spec:
+                    tty.warn('linking file :'+rcm_source_file+' -->'+rcm_target_file)
+                    os.symlink(rcm_source_file, rcm_target_file)
+                else:
+                    copy_file(rcm_client_file, rcm_target_file, verbose=1)
             rcm_batch_file=os.path.join(prefix.bin,"rcm.sh")
             with open(rcm_batch_file, "w") as text_file:
-                text_file.write("python %s" % os.path.join(os.path.abspath(self.stage.source_path),'client','rcm_client_tk.py'))
+                text_file.write("python %s" % os.path.join(prefix.bin,'rcm_client_tk.py'))
                 mode = os.stat(rcm_batch_file).st_mode
                 mode |= (mode & 0o444) >> 2
                 os.chmod(rcm_batch_file, mode)
