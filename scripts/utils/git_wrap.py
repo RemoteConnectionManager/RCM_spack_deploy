@@ -8,8 +8,7 @@ import collections
 from run import run
 
 print("###TOP######## "+__name__)
-logging.getLogger(__name__).setLevel(logging.ERROR)
-logging.info('logging of:'+ __name__ + " set to error")
+logging.getLogger(__name__).info('in module:'+ __name__ + " info")
 
 class git_repo:
     def __init__(self, folder, logger=None,stop_on_error=True,dry_run=False):
@@ -197,32 +196,28 @@ if __name__ == '__main__':
     #logging.debug('This message should appear on the console')
     #logging.info('So should this')
     #logging.warning('And this, too')
-    print("########### "+__name__)
-    ll = logging.getLogger('@@'+__name__)
-    ll.setLevel(logging.DEBUG)
-    for h in ll.handlers :
-        h.setLevel(logging.DEBUG)
-        formatter = logging.Formatter("%(levelname)s %(name)s[%(filename)s:%(lineno)s ] %(message)s")
-        h.setFormatter(formatter)
+    logger = logging.getLogger(__name__)
+    handler = logging.StreamHandler()
+    formatter = logging.Formatter("%(levelname)-5s %(name)s[%(filename)s:%(lineno)s ] %(message)s")
 
-    #for h in ll.handlers:
-    #    h.setFormatter("[%(filename)s:%(lineno)s - %(funcName)20s() %(asctime)s] %(message)s")
-    #    h.setLevel(logging.DEBUG)
-    #origin='https://github.com/RemoteConnectionManager/RCM_spack_deploy.git'
-    #branches=['master']
-    #origin='https://github.com/RemoteConnectionManager/spack.git'
-    #branches=['clean/develop']
+#    ff = logging.Formatter(
+#        'pippo%(asctime)s %(name)-12s %(levelname)-8s %(message)s')
+    handler.setFormatter(formatter)
+    logger.addHandler(handler)
+    logger.setLevel(logging.DEBUG)
+
+
     for origin,branches in [
         ('https://github.com/RemoteConnectionManager/spack.git',['clean/develop']),
-        ('https://github.com/RemoteConnectionManager/RCM_spack_deploy.git',['master'])
+#is not working        ('https://github.com/RemoteConnectionManager/RCM_spack_deploy.git',['master'])
                             ] :
         dest=tempfile.mkdtemp()
-        ll.info("creating TEMP dir ->" + dest)
-        repo=git_repo(dest,logger=ll)
+        logger.info("creating TEMP dir ->" + dest)
+        repo=git_repo(dest,logger=logger)
         origin_branches = get_branches(origin, branch_selection=branches)
         repo.init()
         repo.add_remote(origin, name='origin', fetch_branches=origin_branches)
         repo.fetch(name='origin',branches=origin_branches)
         repo.checkout(origin_branches[0])
-        ll.info(os.listdir(dest))
+        logger.info(os.listdir(dest))
         shutil.rmtree(dest, ignore_errors=True)
