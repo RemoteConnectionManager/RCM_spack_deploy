@@ -13,32 +13,51 @@ import argparse
 import logging
 import glob
 
-import utils
-#import mytemplate
-
-
-templ = utils.stringtemplate('pp')
+LEVELS = {'debug': logging.DEBUG,
+          'info': logging.INFO,
+          'warning': logging.WARNING,
+          'error': logging.ERROR,
+          'critical': logging.CRITICAL}
+LONGFORMAT = "[%(filename)s:%(lineno)s - %(funcName)20s() %(asctime)s] %(message)s"
+SHORTFORMAT = "#%(levelname)-5s %(name)s[#%(message)s"
+# create formatters
+long_formatter = logging.Formatter(LONGFORMAT)
+short_formatter = logging.Formatter(SHORTFORMAT)
+handler = logging.StreamHandler()
+handler.setFormatter(short_formatter)
+handler.setLevel(logging.DEBUG)
+logger = logging.getLogger(__name__)
+logger.addHandler(handler)
+logger.setLevel(logging.DEBUG)
 
 #this means that the additional components are inside extrenal folder, side to current script
 basepath = os.path.dirname(os.path.realpath(__file__))
 #sys.path.insert(0, os.path.join(basepath,'external'))
-print("basepath-->"+basepath+"<--")
+logger.info("basepath-->"+basepath+"<--")
 root_dir=os.path.abspath(os.path.dirname(basepath))
-print("root_dir-->"+root_dir+"<--")
-
-#print(sys.path)
-from external import hiyapyco
-
+logger.info("root_dir-->"+root_dir+"<--")
 
 
 argfile_parser = argparse.ArgumentParser(add_help=False)
 argfile_parser.add_argument('-a','--args_file', default = os.path.join(root_dir,'config','args.yaml'))
 argfile_parser.add_argument('-c','--config_paths', nargs='*', default = [os.path.join(root_dir,'config')])
-argfile_parser.add_argument('-d','--debug', nargs='*', default = 'error')
+argfile_parser.add_argument('-d','--debug', default = 'error')
 argfile_parser.add_argument('--dest', default=argparse.SUPPRESS,
                     help="Directory to clone spack instance into.  If ends in slash, place into that directory; otherwise, \
 place into subdirectory named according to the git URL")
 argfile_args=argfile_parser.parse_known_args()[0]
+
+loglevel=LEVELS.get(argfile_args.debug, logging.INFO)
+for l in [logger,logging.getLogger('utils.git_wrap')] :
+    l.setLevel(loglevel)
+    l.addHandler(handler)
+
+#print(sys.path)
+import utils
+from external import hiyapyco
+
+
+
 
 parser = argparse.ArgumentParser(description="""
   Clone origin repository, opionally update the develop branch, integrate a list of PR and branches into a new branch
