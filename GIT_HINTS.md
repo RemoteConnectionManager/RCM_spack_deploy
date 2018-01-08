@@ -103,7 +103,7 @@ Other git workflow, not using submodules, run git checkout and merge PR:
 
 
     
-![alternative text](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/RemoteConnectionManager/RCM_spack_deploy/utils_and_link_refactor/use-cases.puml?ttt=1)
+![alternative text](http://www.plantuml.com/plantuml/proxy?src=https://raw.githubusercontent.com/RemoteConnectionManager/RCM_spack_deploy/utils_and_link_refactor/use-cases.puml?ttt=2)
 
 
 
