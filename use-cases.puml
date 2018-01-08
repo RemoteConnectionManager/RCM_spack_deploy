@@ -1,5 +1,5 @@
 @startuml
-title Use cases
+title Casi di uso
 skinparam style strictuml
 left to right direction
 actor Instructor as I
