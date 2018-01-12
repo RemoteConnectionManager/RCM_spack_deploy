@@ -429,7 +429,7 @@ if args.runconfig :
                     if not line[0] == '#':
                         templ= utils.stringtemplate(line)
                         cmd=templ.safe_substitute(subst)
-                        (ret,out,err)=utils.run(cmd.split(),mylogger=mylogger)
+                        (ret,out,err)=utils.run(cmd.split(),logger=mylogger)
                         mylogger.info("  " + out )
 
 
