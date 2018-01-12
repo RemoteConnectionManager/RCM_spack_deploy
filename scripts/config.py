@@ -240,7 +240,7 @@ mylogger.info("root_dir-->"+root_dir+"<--")
 
 
 
-dev_git = utils.git_repo(dest,mylogger = mylogger,dry_run=args.dry_run)
+dev_git = utils.git_repo(dest,logger = mylogger,dry_run=args.dry_run)
 
 if not os.path.exists(dest):
     mylogger.info("MISSING destintion_dir-->"+dest+"<-- ")
