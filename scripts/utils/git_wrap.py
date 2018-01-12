@@ -7,8 +7,8 @@ import collections
 
 from run import run
 
-print("###TOP######## "+__name__)
-logging.getLogger(__name__).info('in module:'+ __name__ + " info")
+#print("###TOP######## "+__name__)
+logging.getLogger(__name__).debug('in module:'+ __name__ + " info")
 
 class git_repo:
     def __init__(self, folder, logger=None,stop_on_error=True,dry_run=False):

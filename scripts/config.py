@@ -19,23 +19,29 @@ LEVELS = {'debug': logging.DEBUG,
           'error': logging.ERROR,
           'critical': logging.CRITICAL}
 LONGFORMAT = "[%(filename)s:%(lineno)s - %(funcName)20s() %(asctime)s] %(message)s"
-SHORTFORMAT = "#%(levelname)-5s %(name)s[#%(message)s"
+BASEFORMAT = "[%(levelname)-5s %(name)s # %(pathname)s:%(lineno)s] %(message)s"
+SHORTFORMAT = "#uuu%(levelname)-5s %(name)s[#%(message)s"
+
+logging.basicConfig(format=BASEFORMAT, level=logging.DEBUG)
+
 # create formatters
 long_formatter = logging.Formatter(LONGFORMAT)
 short_formatter = logging.Formatter(SHORTFORMAT)
 handler = logging.StreamHandler()
 handler.setFormatter(short_formatter)
 handler.setLevel(logging.DEBUG)
-logger = logging.getLogger(__name__)
-logger.addHandler(handler)
-logger.setLevel(logging.DEBUG)
+#mylogger = logging.getLogger(__name__)
+mylogger = logging.getLogger(__name__)
+
+#mylogger.addHandler(handler)
+#mylogger.setLevel(logging.DEBUG)
 
 #this means that the additional components are inside extrenal folder, side to current script
 basepath = os.path.dirname(os.path.realpath(__file__))
 #sys.path.insert(0, os.path.join(basepath,'external'))
-logger.info("basepath-->"+basepath+"<--")
+logging.info("basepath-->"+basepath+"<--")
 root_dir=os.path.abspath(os.path.dirname(basepath))
-logger.info("root_dir-->"+root_dir+"<--")
+logging.info("root_dir-->"+root_dir+"<--")
 
 
 argfile_parser = argparse.ArgumentParser(add_help=False)
@@ -48,14 +54,20 @@ place into subdirectory named according to the git URL")
 argfile_args=argfile_parser.parse_known_args()[0]
 
 loglevel=LEVELS.get(argfile_args.debug, logging.INFO)
-for l in [logger,logging.getLogger('utils.git_wrap')] :
+
+mylogger.debug("before mylog setlevel")
+for l in [mylogger,logging.getLogger('utils.git_wrap'),logging.getLogger('external.hiyapyco')] :
     l.setLevel(loglevel)
     l.addHandler(handler)
+    l.propagate = False
 
+for l in [logging.getLogger('external.hiyapyco')]: l.setLevel(logging.INFO)
+mylogger.debug("after mylog setlevel")
 #print(sys.path)
-import utils
 from external import hiyapyco
+import utils
 
+mylogger.debug("after import")
 
 
 
@@ -73,7 +85,7 @@ parser.add_argument('--logfile', action='store',
                     default= os.path.splitext(sys.argv[0])[0]+'.log')
 listpaths=[]
 for c in argfile_parser.parse_known_args()[0].config_paths:
-    print("config folder:",c)
+    mylogger.debug("config folder:"+c)
     if c[0] != '/' : c=os.path.abspath(os.path.join(root_dir,c))
     default_file=os.path.join(c,'defaults.yaml')
     if os.path.exists(default_file)  :  listpaths.append(default_file)
@@ -81,7 +93,8 @@ for c in argfile_parser.parse_known_args()[0].config_paths:
 argsfile=argfile_parser.parse_known_args()[0].args_file
 if not os.path.exists(argsfile) : argsfile = os.path.join(root_dir,'config','args.yaml')
 if os.path.exists(argsfile) : listpaths.append(argsfile)
-print("conf files-->",listpaths)
+mylogger.debug("conf files-->"+str(listpaths))
+mylogger.debug("---prima-------################------------")
 conf = hiyapyco.load(
 #        *[os.path.join(argfile_parser.parse_known_args()[0].config_paths,'defaults.yaml'),
 #        argfile_parser.parse_known_args()[0].args_file],
@@ -90,13 +103,17 @@ conf = hiyapyco.load(
         method=hiyapyco.METHOD_MERGE,
         failonmissingfiles=False
         )
+#for h in mylogger.handlers : mylogger.removeHandler(h)
+
+
+mylogger.debug("---dopo-------################------------")
 defaults=conf['defaults']
 for d in defaults:
-    print("default :",d,defaults[d])
+    mylogger.debug("default :"+d+' --> '+str(defaults[d]))
 
 configurations=conf['configurations']
 for d in configurations :
-    print("configuration :",d,type(configurations[d]).__name__,configurations[d])
+    mylogger.debug("configuration : " + d + " - " + type(configurations[d]).__name__ + "<-->" + str(configurations[d]))
 
 conf_args=conf['args']
 for a in conf_args:
@@ -130,7 +147,7 @@ args = parser.parse_args()
 #pprint.PrettyPrinter(indent=20).pprint(conf)
 #print("--------------\n",args)
 for k, v in args.__dict__.iteritems():
-    print("arg "+k+" type: "+type(v).__name__+" -->",v) # Works!
+    mylogger.debug("arg "+k+" type: "+type(v).__name__+" -->"+str(v)) # Works!
 #exit()
 
 #print("-----args-------->", args)
@@ -150,7 +167,7 @@ if 'dest' in args:
 else:
     dest = os.path.join(root_dir,'deploy', repo_name)
 
-print("##############destination folder-->"+dest+"<--")
+mylogger.debug("##############destination folder-->"+dest+"<--")
 
 
 logdir=os.path.dirname(args.logfile)
@@ -176,8 +193,8 @@ for h in ll.handlers :
     h.setLevel(loglevel)
     #ll.removeHandler(h)
 
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.DEBUG)
+mylogger = logging.getLogger(__name__)
+mylogger.setLevel(logging.DEBUG)
 # create file handler which logs even debug messages
 actual_logfile=os.path.abspath(os.path.join(os.path.dirname(logdir),os.path.basename(logdir)+'_'+os.path.basename(args.logfile)))
 print("logfile in "+actual_logfile)
@@ -188,7 +205,7 @@ if not os.path.exists(actual_logdir) : os.makedirs(actual_logdir)
 fh = logging.FileHandler(os.path.join(actual_logfile))
 fh.setLevel(logging.DEBUG)
 fh.setFormatter(long_formatter)
-logger.addHandler(fh)
+mylogger.addHandler(fh)
 
 # # create console handler with a higher log level
 # ch = logging.StreamHandler()
@@ -200,12 +217,12 @@ logger.addHandler(fh)
 # ch.setFormatter(short_formatter)
 # fh.setFormatter(long_formatter)
 #
-# # add the handlers to logger
-# for h in logger.handlers :
+# # add the handlers to mylogger
+# for h in mylogger.handlers :
 #     print("removing handler:",h)
-#     logger.removeHandler(h)
-# logger.addHandler(ch)
-# logger.addHandler(fh)
+#     mylogger.removeHandler(h)
+# mylogger.addHandler(ch)
+# mylogger.addHandler(fh)
 
 #logging.basicConfig(filename=os.path.join(logdir,os.path.basename(args.logfile)))
 
@@ -217,16 +234,16 @@ logger.addHandler(fh)
 s = StringIO.StringIO()
 pprint.pprint(args, s)
 
-logger.info("lanciato con---->"+s.getvalue())
-logger.info("root_dir-->"+root_dir+"<--")
+mylogger.info("lanciato con---->"+s.getvalue())
+mylogger.info("root_dir-->"+root_dir+"<--")
 
 
 
 
-dev_git = utils.git_repo(dest,logger = logger,dry_run=args.dry_run)
+dev_git = utils.git_repo(dest,mylogger = mylogger,dry_run=args.dry_run)
 
 if not os.path.exists(dest):
-    logger.info("MISSING destintion_dir-->"+dest+"<-- ")
+    mylogger.info("MISSING destintion_dir-->"+dest+"<-- ")
     os.makedirs(dest)
 
     origin_branches = utils.get_branches(args.origin, branch_selection=args.branches)
@@ -246,7 +263,7 @@ if not os.path.exists(dest):
 
     local_pr=utils.trasf_match(upstream_branches,in_match='.*/([0-9]*)/(.*)',out_format='pull/{name}/clean')
 
-    logger.info("upstream_branches->"+str(upstream_branches)+"<--")
+    mylogger.info("upstream_branches->"+str(upstream_branches)+"<--")
 
     dev_git.fetch(name='origin',branches=origin_branches)
 
@@ -267,7 +284,7 @@ if not os.path.exists(dest):
             dev_git.fetch(name='upstream',branches=local_pr)
 
             for n,branch in local_pr.items():
-                logger.info("local_pr "+ n+" "+branch)
+                mylogger.info("local_pr "+ n+" "+branch)
                 dev_git.checkout(branch,newbranch=branch+'_update')
                 dev_git.merge(upstream_clean,comment='sync with upstream develop ')
                 dev_git.checkout(args.master)
@@ -280,9 +297,9 @@ if not os.path.exists(dest):
         dev_git.checkout(args.master)
 
 else:
-    logger.info("Folder ->"+dest+"<- already existing, skipping git stuff")
+    mylogger.info("Folder ->"+dest+"<- already existing, skipping git stuff")
     if args.__dict__.get('do_update',False):
-        logger.info("Updating Folder ->"+dest+"<-")
+        mylogger.info("Updating Folder ->"+dest+"<-")
         pull_options=[]
         for flag in args.pull_flags : pull_options.append('--'+flag)
         for b in dev_git.get_local_branches():
@@ -291,12 +308,12 @@ else:
 
 ########## cache handling ##############
 cachedir=args.cache
-logger.info("input cache_dir-->"+cachedir+"<--")
+mylogger.info("input cache_dir-->"+cachedir+"<--")
 if not os.path.exists(cachedir):
     cachedir=os.path.abspath(os.path.join(root_dir,cachedir))
 else:
     cachedir=os.path.abspath(cachedir)
-logger.info("actual cache_dir-->"+cachedir+"<--")
+mylogger.info("actual cache_dir-->"+cachedir+"<--")
 try:
     os.makedirs(cachedir)
 except OSError:
@@ -306,14 +323,14 @@ except OSError:
 #    os.makedirs(cachedir)
 if os.path.exists(os.path.join(dest, 'var', 'spack')):
     deploy_cache=os.path.join(dest, 'var', 'spack','cache')
-    logger.info("deploy cache_dir-->"+deploy_cache+"<--")
+    mylogger.info("deploy cache_dir-->"+deploy_cache+"<--")
     if not os.path.exists(deploy_cache):
         os.symlink(cachedir,deploy_cache)
-        logger.info("symlinked -->"+cachedir+"<-->"+deploy_cache)
+        mylogger.info("symlinked -->"+cachedir+"<-->"+deploy_cache)
 
 ########## install folder handling ##############
 if  args.install:
-    logger.info("find install in args-->"+args.install+"<--")
+    mylogger.info("find install in args-->"+args.install+"<--")
     install_dir = args.install
     if not os.path.exists(install_dir):
         install_dir = os.path.join(dest,args.install)
@@ -321,20 +338,20 @@ else:
     install_dir = os.path.join(dest,'opt','spack')
 install_dir=os.path.abspath(install_dir)
 if not os.path.exists(install_dir):
-    logger.info("creting install_dir-->"+install_dir+"<--")
+    mylogger.info("creting install_dir-->"+install_dir+"<--")
     os.makedirs(install_dir)
-logger.info("install_dir-->"+install_dir+"<--")
+mylogger.info("install_dir-->"+install_dir+"<--")
 
 #me=util.myintrospect(tags={'calori': 'ws_mint', 'galileo':'galileo', 'marconi':'marconi', 'eni':'eni' })
 
 ######## config path handling #################
 config_path_list=[]
 for configdir in args.config_paths :
-    logger.info(" check input config dir -->"+configdir+"<--")
+    mylogger.info(" check input config dir -->"+configdir+"<--")
     for test in [ os.path.abspath(configdir), os.path.abspath(os.path.join(root_dir,configdir)), ] :
         if os.path.exists(test):
             config_path_list=[test]+config_path_list
-            logger.info(" found config dir -->" + test + "<-- ADDED")
+            mylogger.info(" found config dir -->" + test + "<-- ADDED")
             break
 
 subst=dict()
@@ -344,7 +361,7 @@ subst["RCM_DEPLOY_SPACKPATH"] = dest
 
 if args.platformconfig :
     platform_match=utils.myintrospect(tags=conf['configurations']['host_tags']).platform_tag()
-    logger.info(" platform -->" + str(platform_match) +"<--")
+    mylogger.info(" platform -->" + str(platform_match) +"<--")
     if platform_match :
         test=os.path.abspath(os.path.join(root_dir,
                                           configurations.get('base_folder',''),
@@ -356,7 +373,7 @@ if args.platformconfig :
         #config_path_list=config_path_list + [test]
         config_path_list=[test] + config_path_list 
 
-logger.info(" config_path_list -->" + str(config_path_list) )
+mylogger.info(" config_path_list -->" + str(config_path_list) )
 
 
 ########## merge, interpolate and write spack config files#########
@@ -365,7 +382,7 @@ logger.info(" config_path_list -->" + str(config_path_list) )
 spack_config_dir=os.path.abspath(os.path.join(dest,'etc','spack'))
 if os.path.exists(spack_config_dir) :
     if args.clearconfig:
-        logger.info("Clear config Folder ->"+spack_config_dir+"<-")
+        mylogger.info("Clear config Folder ->"+spack_config_dir+"<-")
         for f in glob.glob(spack_config_dir+ "/*.yaml"):
             os.remove(f)
 
@@ -376,7 +393,7 @@ if os.path.exists(spack_config_dir) :
             if os.path.exists(test): merge_files = merge_files +[test]
 
         if merge_files :
-            logger.info("configuring "+ f + " with files: "+str(merge_files))
+            mylogger.info("configuring "+ f + " with files: "+str(merge_files))
             merged_f = hiyapyco.load(
                 *merge_files,
                 interpolate=True,
@@ -384,19 +401,19 @@ if os.path.exists(spack_config_dir) :
                 failonmissingfiles=True
             )
 
-            logger.info("merged "+f+" yaml-->"+str(merged_f)+"<--")
+            mylogger.info("merged "+f+" yaml-->"+str(merged_f)+"<--")
 
             outfile = os.path.basename(f)
             target = os.path.join(spack_config_dir, outfile)
-            logger.info(" output config_file " + outfile + "<-- ")
+            mylogger.info(" output config_file " + outfile + "<-- ")
             if not os.path.exists(target):
                 out=hiyapyco.dump(merged_f, default_flow_style=False)
                 templ = utils.stringtemplate(out)
                 out = utils.stringtemplate(out).safe_substitute(subst)
-                logger.info("WRITING config_file " + outfile + " -->" + target + "<-- ")
+                mylogger.info("WRITING config_file " + outfile + " -->" + target + "<-- ")
                 open(target, "w").write(out)
         else :
-            logger.info("no template file for "+ f + " : skipping ")
+            mylogger.info("no template file for "+ f + " : skipping ")
 
 
 
@@ -405,15 +422,15 @@ if args.runconfig :
     for p in reversed(config_path_list):
         initfile=os.path.join(p,'config.sh')
         if os.path.exists(initfile):
-            logger.info("parsing init file-->" + initfile + "<-- ")
+            mylogger.info("parsing init file-->" + initfile + "<-- ")
             f=open(initfile,'r')
             for line in f:
                 if len(line)>0:
                     if not line[0] == '#':
                         templ= utils.stringtemplate(line)
                         cmd=templ.safe_substitute(subst)
-                        (ret,out,err)=utils.run(cmd.split(),logger=logger)
-                        logger.info("  " + out )
+                        (ret,out,err)=utils.run(cmd.split(),mylogger=mylogger)
+                        mylogger.info("  " + out )
 
 
 
