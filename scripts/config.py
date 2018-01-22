@@ -13,67 +13,74 @@ import argparse
 import logging
 import glob
 
-LEVELS = {'debug': logging.DEBUG,
-          'info': logging.INFO,
-          'warning': logging.WARNING,
-          'error': logging.ERROR,
-          'critical': logging.CRITICAL}
-LONGFORMAT = "[%(filename)s:%(lineno)s - %(funcName)20s() %(asctime)s] %(message)s"
-BASEFORMAT = "[%(levelname)-5s %(name)s # %(pathname)s:%(lineno)s] %(message)s"
-SHORTFORMAT = "#uuu%(levelname)-5s %(name)s[#%(message)s"
+import utils
 
-logging.basicConfig(format=BASEFORMAT, level=logging.DEBUG)
 
-# create formatters
-long_formatter = logging.Formatter(LONGFORMAT)
-short_formatter = logging.Formatter(SHORTFORMAT)
-handler = logging.StreamHandler()
-handler.setFormatter(short_formatter)
-handler.setLevel(logging.DEBUG)
-#mylogger = logging.getLogger(__name__)
-mylogger = logging.getLogger(__name__)
+# LEVELS = {'debug': logging.DEBUG,
+#           'info': logging.INFO,
+#           'warning': logging.WARNING,
+#           'error': logging.ERROR,
+#           'critical': logging.CRITICAL}
+# LONGFORMAT = "[%(filename)s:%(lineno)s - %(funcName)20s() %(asctime)s] %(message)s"
+# BASEFORMAT = "[%(levelname)-5s %(name)s # %(pathname)s:%(lineno)s] %(message)s"
+# SHORTFORMAT = "#uuu%(levelname)-5s %(name)s[#%(message)s"
+#
+# logging.basicConfig(format=BASEFORMAT, level=logging.DEBUG)
+#
+# # create formatters
+# long_formatter = logging.Formatter(LONGFORMAT)
+# short_formatter = logging.Formatter(SHORTFORMAT)
+# handler = logging.StreamHandler()
+# handler.setFormatter(short_formatter)
+# handler.setLevel(logging.DEBUG)
+# #mylogger = logging.getLogger(__name__)
+# mylogger = logging.getLogger(__name__)
+#
+# #mylogger.addHandler(handler)
+# #mylogger.setLevel(logging.DEBUG)
+#
+# #this means that the additional components are inside extrenal folder, side to current script
 
-#mylogger.addHandler(handler)
-#mylogger.setLevel(logging.DEBUG)
+ls=utils.log_setup()
+logging.debug("__file__:" + os.path.realpath(__file__))
+ls.set_args()
 
-#this means that the additional components are inside extrenal folder, side to current script
 basepath = os.path.dirname(os.path.realpath(__file__))
-#sys.path.insert(0, os.path.join(basepath,'external'))
 logging.info("basepath-->"+basepath+"<--")
 root_dir=os.path.abspath(os.path.dirname(basepath))
 logging.info("root_dir-->"+root_dir+"<--")
 
 
-argfile_parser = argparse.ArgumentParser(add_help=False)
-argfile_parser.add_argument('-a','--args_file', default = os.path.join(root_dir,'config','args.yaml'))
-argfile_parser.add_argument('-c','--config_paths', nargs='*', default = [os.path.join(root_dir,'config')])
-argfile_parser.add_argument('-d','--debug', default = 'error')
-argfile_parser.add_argument('--dest', default=argparse.SUPPRESS,
-                    help="Directory to clone spack instance into.  If ends in slash, place into that directory; otherwise, \
-place into subdirectory named according to the git URL")
-argfile_args=argfile_parser.parse_known_args()[0]
-
-loglevel=LEVELS.get(argfile_args.debug, logging.INFO)
-
-mylogger.debug("before mylog setlevel")
-for l in [mylogger,logging.getLogger('utils.git_wrap'),logging.getLogger('external.hiyapyco')] :
-    l.setLevel(loglevel)
-    l.addHandler(handler)
-    l.propagate = False
-
-for l in [logging.getLogger('external.hiyapyco')]: l.setLevel(logging.INFO)
-mylogger.debug("after mylog setlevel")
-#print(sys.path)
-from external import hiyapyco
-import utils
-
-mylogger.debug("after import")
+# argfile_parser = argparse.ArgumentParser(add_help=False)
+# argfile_parser.add_argument('-a','--args_file', default = os.path.join(root_dir,'config','args.yaml'))
+# argfile_parser.add_argument('-c','--config_paths', nargs='*', default = [os.path.join(root_dir,'config')])
+# argfile_parser.add_argument('-d','--debug', default = 'error')
+# argfile_parser.add_argument('--dest', default=argparse.SUPPRESS,
+#                     help="Directory to clone spack instance into.  If ends in slash, place into that directory; otherwise, \
+# place into subdirectory named according to the git URL")
+# argfile_args=argfile_parser.parse_known_args()[0]
+#
+# loglevel=LEVELS.get(argfile_args.debug, logging.INFO)
+#
+# mylogger.debug("before mylog setlevel")
+# for l in [mylogger,logging.getLogger('utils.git_wrap'),logging.getLogger('external.hiyapyco')] :
+#     l.setLevel(loglevel)
+#     l.addHandler(handler)
+#     l.propagate = False
+#
+# for l in [logging.getLogger('external.hiyapyco')]: l.setLevel(logging.INFO)
+# mylogger.debug("after mylog setlevel")
+# #print(sys.path)
+# from external import hiyapyco
+# import utils
+#
+# mylogger.debug("after import")
 
 
 
 parser = argparse.ArgumentParser(description="""
   Clone origin repository, opionally update the develop branch, integrate a list of PR and branches into a new branch
-  usage examples: 
+  usage examples:
    python {scriptname} --prlist 579 984 943 946 1042 797 --branches clean/develop 'pr/(.*)'
    python {scriptname} --debug=1 --dest=../deploy/spack2 --prlist   797 -branches clean/develop 'pr/fix.*' 'pr/.*' 'wip/.*'
 """.format(scriptname=sys.argv[0]), formatter_class=argparse.RawTextHelpFormatter)
@@ -83,6 +90,13 @@ parser.add_argument('-c','--config_paths', nargs='*', default = [os.path.join(ro
 parser.add_argument('--logfile', action='store',
                     help='logfile to log into.',
                     default= os.path.splitext(sys.argv[0])[0]+'.log')
+
+
+argfile_parser = argparse.ArgumentParser(add_help=False)
+argfile_parser.add_argument('-a','--args_file', default = os.path.join(root_dir,'config','args.yaml'))
+argfile_parser.add_argument('-c','--config_paths', nargs='*', default = [os.path.join(root_dir,'config')])
+
+mylogger = logging.getLogger(__name__)
 listpaths=[]
 for c in argfile_parser.parse_known_args()[0].config_paths:
     mylogger.debug("config folder:"+c)
@@ -95,12 +109,12 @@ if not os.path.exists(argsfile) : argsfile = os.path.join(root_dir,'config','arg
 if os.path.exists(argsfile) : listpaths.append(argsfile)
 mylogger.debug("conf files-->"+str(listpaths))
 mylogger.debug("---prima-------################------------")
-conf = hiyapyco.load(
+conf = utils.hiyapyco.load(
 #        *[os.path.join(argfile_parser.parse_known_args()[0].config_paths,'defaults.yaml'),
 #        argfile_parser.parse_known_args()[0].args_file],
         *listpaths,
         interpolate=True,
-        method=hiyapyco.METHOD_MERGE,
+        method=utils.hiyapyco.METHOD_MERGE,
         failonmissingfiles=False
         )
 #for h in mylogger.handlers : mylogger.removeHandler(h)
@@ -394,10 +408,10 @@ if os.path.exists(spack_config_dir) :
 
         if merge_files :
             mylogger.info("configuring "+ f + " with files: "+str(merge_files))
-            merged_f = hiyapyco.load(
+            merged_f = utils.hiyapyco.load(
                 *merge_files,
                 interpolate=True,
-                method=hiyapyco.METHOD_MERGE,
+                method=utils.hiyapyco.METHOD_MERGE,
                 failonmissingfiles=True
             )
 
@@ -407,7 +421,7 @@ if os.path.exists(spack_config_dir) :
             target = os.path.join(spack_config_dir, outfile)
             mylogger.info(" output config_file " + outfile + "<-- ")
             if not os.path.exists(target):
-                out=hiyapyco.dump(merged_f, default_flow_style=False)
+                out=utils.hiyapyco.dump(merged_f, default_flow_style=False)
                 templ = utils.stringtemplate(out)
                 out = utils.stringtemplate(out).safe_substitute(subst)
                 mylogger.info("WRITING config_file " + outfile + " -->" + target + "<-- ")

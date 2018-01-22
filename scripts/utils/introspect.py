@@ -32,12 +32,14 @@ class commandintrospect(baseintrospect):
 
     def test(self,cmd,key=None):
         try :
+            logging.getLogger(__name__).debug("introspect command-->"+cmd+"<<-")
             (ret,o,e)=run(cmd.split(),stop_on_error=False)
             if not e :
                 if not key : key=cmd
                 self.commands[key]=o.strip()
         except :
-            print("failed: "+cmd)
+            logging.getLogger(__name__).exception("introspection failed: "+cmd)
+            #print("failed: "+cmd)
             pass
 
 class myintrospect(commandintrospect):
