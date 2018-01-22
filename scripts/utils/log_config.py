@@ -5,7 +5,7 @@ import logging.config
 import argparse
 import os
 
-from external1 import hiyapyco
+from external import hiyapyco
 
 
 class log_setup:
