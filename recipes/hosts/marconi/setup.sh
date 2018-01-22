@@ -23,7 +23,7 @@ then
   fi  
   if [ "$1" == "dev_all" ]
   then
-    export CONFIG_DIRS="$CONFIG_DIRS config/openmpi_scheduler config/openfoam config/meteo config/rcm/develop"
+    export CONFIG_DIRS="$CONFIG_DIRS config/openmpi_scheduler config/openfoam config/meteo config/rstudio config/rcm/develop"
   fi  
 
 python ${RCM_DEPLOY_ROOTPATH}/scripts/config.py -c $CONFIG_DIRS  --platformconfig --runconfig --dest ${RCM_DEPLOY_CURRENT_PATH}
