@@ -1,21 +1,17 @@
 packages:
   openmpi:
+    version:
+    - 3.0.0
     modules:
       openmpi@1.8.4%gcc@4.9.2: openmpi/1.8.4--gnu--4.9.2
       openmpi@1.8.4%intel@2015: openmpi/1.8.4--intel--cs-xe-2015--binary
-    buildable: False
+#to_check    buildable: False
+#to_check    variants:
+#to_check    - schedulers=tm
   intelmpi:
     modules:
       intelmpi@2017%intel@17.0.0: intelmpi/2017--binary
     buildable: False
-#  cmake:
-#    modules:
-#      cmake@3.5.2: cmake/3.5.2
-#    buildable: False
-#  qt:
-#    compiler: [gcc@4.8.2]
-#    variants: +examples+mesa
-#    version: [4.8.6, 5.7.0]
   all:
     compiler: [gcc@4.8.2, gcc@4.9.2]
     providers:
