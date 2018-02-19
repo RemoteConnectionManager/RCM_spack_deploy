@@ -1,0 +1,12 @@
+
+defaults:
+  origin :
+    branches :
+      - 'packages/fluxbox'
+      - 'packages/lxde-lxterminal'
+
+
+
+
+
+

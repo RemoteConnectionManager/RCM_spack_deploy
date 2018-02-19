@@ -57,11 +57,12 @@ class log_setup:
         )
         logging.getLogger(__name__).debug("---dopo-------################------------")
         log_configs=conf.get('logging_configs',{})
+        if not log_configs.get('version',None) : log_configs['version']=1
         for d in log_configs :
             logging.getLogger(__name__).debug("logging_conf : " + d + " - " + type(log_configs[d]).__name__ + "<-->" + str(log_configs[d]))
 
         logging.config.dictConfig(log_configs)
-        defaults=conf['defaults']
+        defaults=conf.get('defaults',{'debug':'info'})
 
 
 #################

@@ -4,6 +4,8 @@ modules:
     - xauth
     - xkbcomp
     - xedit
+    - emacs
+    - image-magick
     - xlsfonts
     - xdpyinfo
     - xfontsel

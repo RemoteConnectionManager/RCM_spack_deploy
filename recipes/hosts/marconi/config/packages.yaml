@@ -1,4 +1,8 @@
 packages:
+  openmpi:
+    variants:
+    - fabrics=psm2
+packages:
   all:
     compiler: [gcc@4.8.5, gcc@6.1.0]
 
