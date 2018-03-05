@@ -15,32 +15,6 @@ import glob
 
 import utils
 
-
-# LEVELS = {'debug': logging.DEBUG,
-#           'info': logging.INFO,
-#           'warning': logging.WARNING,
-#           'error': logging.ERROR,
-#           'critical': logging.CRITICAL}
-# LONGFORMAT = "[%(filename)s:%(lineno)s - %(funcName)20s() %(asctime)s] %(message)s"
-# BASEFORMAT = "[%(levelname)-5s %(name)s # %(pathname)s:%(lineno)s] %(message)s"
-# SHORTFORMAT = "#uuu%(levelname)-5s %(name)s[#%(message)s"
-#
-# logging.basicConfig(format=BASEFORMAT, level=logging.DEBUG)
-#
-# # create formatters
-# long_formatter = logging.Formatter(LONGFORMAT)
-# short_formatter = logging.Formatter(SHORTFORMAT)
-# handler = logging.StreamHandler()
-# handler.setFormatter(short_formatter)
-# handler.setLevel(logging.DEBUG)
-# #mylogger = logging.getLogger(__name__)
-# mylogger = logging.getLogger(__name__)
-#
-# #mylogger.addHandler(handler)
-# #mylogger.setLevel(logging.DEBUG)
-#
-# #this means that the additional components are inside extrenal folder, side to current script
-
 ls=utils.log_setup()
 logging.debug("__file__:" + os.path.realpath(__file__))
 ls.set_args()
