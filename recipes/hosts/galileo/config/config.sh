@@ -4,7 +4,7 @@ spack find -l curl
 spack spec -l curl
 spack install curl
 spack module refresh -y
-module load curl
+#module command do not work here#module load curl
 spack  install --only dependencies rcm@develop
 spack  install py-flake8
 spack  install git
