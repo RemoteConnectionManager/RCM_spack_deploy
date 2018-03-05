@@ -1,14 +1,14 @@
-#!/bin/bash
+#!/bin/sh
 
-
-
-
-module  load autoload virtual-gl
 unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+
+# This works around pointer disappearance issues under GNOME 3
+if [ -x /usr/bin/dconf ]; then
+  dconf write /org/gnome/settings-daemon/plugins/cursor/active false
+fi
+
 OS=`uname -s`
-# Uncomment the following line if you experience keyboard mapping problems
-# with Gnome.
-#export XKL_XMODMAP_DISABLE=1
 if [ $OS = 'Linux' ]; then
   case "$WINDOWMANAGER" in
     *gnome*)
@@ -19,41 +19,76 @@ if [ $OS = 'Linux' ]; then
       ;;
   esac
 fi
-if [ -f /usr/bin/gnome-session ]; then
-  for SESSION in "gnome-fallback" "ubuntu-2d" "2d-gnome" "gnome-classic"; do
-    if [ -f /usr/share/gnome-session/sessions/$SESSION.session ]; then
+
+if [ "$TVNC_3DWM" = "1" ]; then
+  if [ -z "$SSH_AGENT_PID" -a -x /usr/bin/ssh-agent ]; then
+    TVNC_SSHAGENT=/usr/bin/ssh-agent
+  fi
+  if [ -z "$TVNC_VGLRUN" ]; then
+    TVNC_VGLRUN="vglrun +wm"
+  fi
+  # This is necessary to make Unity work on Ubuntu 16, and on Ubuntu 14, it
+  # ensures that the proper compiz profile is set up.  Otherwise, if you forget
+  # to specify -3dwm, compiz will automatically disable its OpenGL plugin,
+  # requiring you to reset the compiz plugin state before Unity will work
+  # again.
+  if [ -f /usr/share/gnome-session/sessions/ubuntu.session ]; then
+    SESSION=ubuntu
+    DESKTOP_SESSION=$SESSION; export DESKTOP_SESSION
+    GDMSESSION=$SESSION; export GDMSESSION
+    SESSIONTYPE=gnome-session; export SESSIONTYPE
+    XDG_CURRENT_DESKTOP=Unity; export XDG_CURRENT_DESKTOP
+    XDG_SESSION_TYPE=x11; export XDG_SESSION_TYPE
+    STARTUP="/usr/bin/gnome-session --session=$SESSION"; export STARTUP
+  fi
+else
+  if [ -f /usr/bin/mate-session ]; then
+    DESKTOP_SESSION=mate; export DESKTOP_SESSION
+    STARTUP="/usr/bin/mate-session"; export STARTUP
+  elif [ -f /usr/bin/gnome-session ]; then
+    for SESSION in "gnome-fallback" "ubuntu-2d" "2d-gnome"; do
+      if [ -f /usr/share/gnome-session/sessions/$SESSION.session ]; then
+        DESKTOP_SESSION=$SESSION; export DESKTOP_SESSION
+        GDMSESSION=$SESSION; export GDMSESSION
+        SESSIONTYPE=gnome-session; export SESSIONTYPE
+        XDG_CURRENT_DESKTOP=$SESSION; export XDG_CURRENT_DESKTOP
+        STARTUP="/usr/bin/gnome-session --session=$SESSION"; export STARTUP
+        # Ubuntu 14 runs gnome-session-check-accelerated, even though the
+        # gnome-fallback session doesn't need OpenGL, so we set an atom to make
+        # gnome-session-check-accelerated think it has already been run.
+        xprop -root -f _GNOME_SESSION_ACCELERATED 32c -set _GNOME_SESSION_ACCELERATED 1
+      fi
+    done
+    # Launch GNOME 2D (Metacity) session under Ubuntu 16
+    if [ -f /usr/share/gnome-session/sessions/gnome-flashback-metacity.session ]; then
+      SESSION=gnome-flashback-metacity
       DESKTOP_SESSION=$SESSION; export DESKTOP_SESSION
       GDMSESSION=$SESSION; export GDMSESSION
-      STARTUP="vglrun -d :0.0 /usr/bin/gnome-session --session=$SESSION"; export STARTUP
-      #STARTUP="vglrun -d :0.0  -c proxy /usr/bin/gnome-session --session=$SESSION"; export STARTUP
-      #STARTUP="/usr/bin/gnome-session --session=$SESSION"; export STARTUP
-      echo "_____________${STARTUP}__________"
+      SESSIONTYPE=gnome-session; export SESSIONTYPE
+      XDG_CURRENT_DESKTOP="GNOME-Flashback:Unity"; export XDG_CURRENT_DESKTOP
+      XDG_SESSION_DESKTOP=$SESSION; export XDG_SESSION_DESKTOP
+      STARTUP="/usr/bin/gnome-session --session=$SESSION --disable-acceleration-check"; export STARTUP
     fi
-  done
+  fi
 fi
+
 if [ -x /etc/X11/xinit/xinitrc ]; then
-      echo "_1___________${STARTUP}__________"
-  exec vglrun /etc/X11/xinit/xinitrc
+  exec $TVNC_SSHAGENT $TVNC_VGLRUN /etc/X11/xinit/xinitrc
 fi
 if [ -f /etc/X11/xinit/xinitrc ]; then
-      echo "_2___________${STARTUP}__________"
-  exec sh /etc/X11/xinit/xinitrc
+  exec $TVNC_SSHAGENT $TVNC_VGLRUN sh /etc/X11/xinit/xinitrc
 fi
 if [ -x $HOME/.xinitrc ]; then
-      echo "_3___________${STARTUP}__________"
-  exec $HOME/.xinitrc
+  exec $TVNC_SSHAGENT $TVNC_VGLRUN $HOME/.xinitrc
 fi
 if [ -f $HOME/.xinitrc ]; then
-      echo "_4___________${STARTUP}__________"
-  exec sh $HOME/.xinitrc
+  exec $TVNC_SSHAGENT $TVNC_VGLRUN sh $HOME/.xinitrc
 fi
 if [ -x /usr/local/lib/X11/xinit/xinitrc ]; then
-      echo "_5___________${STARTUP}__________"
-  exec /usr/local/lib/X11/xinit/xinitrc
+  exec $TVNC_SSHAGENT $TVNC_VGLRUN /usr/local/lib/X11/xinit/xinitrc
 fi
 if [ -f /usr/local/lib/X11/xinit/xinitrc ]; then
-      echo "_6___________${STARTUP}__________"
-  exec sh /usr/local/lib/X11/xinit/xinitrc
+  exec $TVNC_SSHAGENT $TVNC_VGLRUN sh /usr/local/lib/X11/xinit/xinitrc
 fi
 if [ $OS = 'SunOS' -a -f $HOME/.dt/sessions/lastsession ]; then
   if [ -x `cat $HOME/.dt/sessions/lastsession` ]; then
@@ -76,7 +111,7 @@ else
           fvwm2
         } || {
           which twm && {
-            xrdb $HOME/.Xresources
+            if [ -f $HOME/.Xresources ]; then xrdb $HOME/.Xresources; fi
             xsetroot -solid grey
             xterm -geometry 80x24+10+10 -ls -title "$VNCDESKTOP Desktop" &
             twm
