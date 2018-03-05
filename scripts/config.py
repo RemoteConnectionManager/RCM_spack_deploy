@@ -439,6 +439,7 @@ if args.runconfig :
             mylogger.info("parsing init file-->" + initfile + "<-- ")
             f=open(initfile,'r')
             for line in f:
+                line=line.lstrip()
                 if len(line)>0:
                     if not line[0] == '#':
                         templ= utils.stringtemplate(line)

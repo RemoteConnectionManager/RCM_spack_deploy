@@ -25,7 +25,7 @@ then
   then
     export CONFIG_DIRS="$CONFIG_DIRS config/openmpi_scheduler config/openfoam config/meteo config/rstudio config/rcm/develop"
   fi  
-  if [ "$1" == "dev_all2" ]
+  if [ "$1" == "dev_all3" ]
   then
     export CONFIG_DIRS="$CONFIG_DIRS config/openfoam config/meteo config/rstudio config/rcm/develop"
   fi  
