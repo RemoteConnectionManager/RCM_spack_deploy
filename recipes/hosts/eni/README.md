@@ -6,6 +6,7 @@ First step: clone this repo:
     cd <folder name>
 
 link here a pre-filled cache of all downloaded artifact
+
     ln -s /hpc/home/cibo19/spack/cache .
     source recipes/hosts/eni/setup.sh prod
 
