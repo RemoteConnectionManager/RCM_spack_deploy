@@ -10,7 +10,7 @@ spack find -l curl
 spack spec -l curl
 spack install curl
  #module command do not work here#module load curl
-spack  install --only dependencies rcm@develop
+#spack  install --only dependencies rcm@develop
 spack  install py-flake8
 spack  install git
 spack  install paraview
