@@ -7,6 +7,6 @@ First step: clone this repo:
 
 link here a pre-filled cache of all downloaded artifact
 
-    ln -s /hpc/home/cibo19/spack/cache .
-    source recipes/hosts/eni/setup.sh prod
+    ln -s ../cache .
+    source recipes/hosts/galileo/setup.sh prod
 
