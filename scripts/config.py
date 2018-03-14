@@ -282,6 +282,7 @@ if not os.path.exists(dest):
                 dev_git.checkout(args.master)
                 dev_git.merge(branch,comment='merged '+branch)
     else:
+        dev_git.fetch(name='origin',branches=[args.master])
         dev_git.checkout(args.master)
 
 else:
