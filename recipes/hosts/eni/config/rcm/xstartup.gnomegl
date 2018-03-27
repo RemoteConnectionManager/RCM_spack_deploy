@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 unset SESSION_MANAGER
 unset DBUS_SESSION_BUS_ADDRESS
@@ -71,6 +71,7 @@ else
     fi
   fi
 fi
+module unuse $(module show rcm 2>&1 | python -c "import sys,os; print os.path.dirname(os.path.dirname(sys.stdin.read().split()[1]))")
 
 if [ -x /etc/X11/xinit/xinitrc ]; then
   exec $TVNC_SSHAGENT $TVNC_VGLRUN /etc/X11/xinit/xinitrc
