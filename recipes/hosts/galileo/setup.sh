@@ -21,6 +21,10 @@ then
   then
     export CONFIG_DIRS="$CONFIG_DIRS config/rcm/develop" 
   fi  
+  if [ "$1" == "refactoring" ]
+  then
+    export CONFIG_DIRS="$CONFIG_DIRS config/rcm/refactoring" 
+  fi  
   if [ "$1" == "prod" ]
   then
     export CONFIG_DIRS="$CONFIG_DIRS config/rcm/production"
