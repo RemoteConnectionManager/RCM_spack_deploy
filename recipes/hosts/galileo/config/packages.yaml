@@ -1,7 +1,7 @@
 packages:
   openmpi:
     variants:
-    - schedulers=tm,slurm
+    - schedulers=slurm
     - +pmi
     version:
     - 3.0.0
