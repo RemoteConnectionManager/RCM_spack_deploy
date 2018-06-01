@@ -9,5 +9,6 @@ spack  install --only dependencies rcm@develop
 spack  install py-flake8
 spack  install git
 spack  install paraview
+spack  install openfoam-com
 spack  install rstudio
 
