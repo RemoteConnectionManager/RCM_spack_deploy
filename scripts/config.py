@@ -359,8 +359,8 @@ if args.platformconfig :
                                           configurations.get('config_dir','')))
     if os.path.exists(test) :
         subst["RCM_DEPLOY_HOSTPATH"] = test
-        #config_path_list=config_path_list + [test]
-        config_path_list=[test] + config_path_list 
+        config_path_list=config_path_list + [test]
+        #config_path_list=[test] + config_path_list 
 
 mylogger.info(" config_path_list -->" + str(config_path_list) )
 
@@ -421,6 +421,21 @@ if args.runconfig :
                         cmd=templ.safe_substitute(subst)
                         (ret,out,err)=utils.run(cmd.split(),logger=mylogger)
                         mylogger.info("  " + out )
+
+    for p in reversed(config_path_list):
+        initfile=os.path.join(p,'install.sh')
+        if os.path.exists(initfile):
+            mylogger.info("parsing init file-->" + initfile + "<-- ")
+            f=open(initfile,'r')
+            for line in f:
+                line=line.lstrip()
+                if len(line)>0:
+                    if not line[0] == '#':
+                        templ= utils.stringtemplate(line)
+                        cmd=templ.safe_substitute(subst)
+                        (ret,out,err)=utils.run(cmd.split(),logger=mylogger)
+                        mylogger.info("  " + out )
+
 
 
 
