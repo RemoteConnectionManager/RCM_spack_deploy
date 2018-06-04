@@ -1,0 +1,16 @@
+#!/bin/bash
+echo ##########  I M here udocker#########
+shopt -s expand_aliases
+module load xhost
+xhost +
+#FLUXBOX=$(which fluxbox)
+LXTERMINAL=$(which lxterminal)
+module purge
+exec ${LXTERMINAL}&
+mkdir /tmp/rcm$USER
+#/marconi_work/cin_prc5wp62/udocker/udocker   --repo=/marconi_work/cin_prc5wp62/udocker/repo run --env="DISPLAY=$DISPLAY" --user="$USER" --volume="/tmp/rcm$USER:/tmp"  prova_xfce 
+#/marconi_work/cin_prc5wp62/udocker/udocker   --repo=/marconi_work/cin_prc5wp62/udocker/repo run --env="DISPLAY=$DISPLAY" --user="$USER" --volume="/tmp/rcm$USER:/tmp"  prova_xfce_customized 
+#/marconi_work/cin_prc5wp62/udocker/udocker   --repo=/marconi_work/cin_prc5wp62/udocker/repo run --env="DISPLAY=$DISPLAY" --user="$USER" --volume="/tmp/rcm$USER:/tmp" --volume="$HOME:/headless" --volume="/marconi/prod:/cineca/prod" --volume="/marconi_work:/marconi_work"  prova_simone /usr/bin/startxfce4 --replace
+/marconi_work/cin_prc5wp62/udocker/udocker   --repo=/marconi_work/cin_prc5wp62/udocker/repo run --env="DISPLAY=$DISPLAY" --user="$USER" --volume="/tmp/rcm$USER:/tmp" --volume="/marconi/prod:/cineca/prod" --volume="/marconi_work:/marconi_work"  prova_simone /usr/bin/startxfce4 --replace
+##orig/marconi_work/cin_prc5wp62/udocker/udocker   --repo=/marconi_work/cin_prc5wp62/udocker/repo run --env="DISPLAY=$DISPLAY" --user="$USER" --workdir="$HOME" --bindhome --volume="/tmp/rcm$USER:/tmp"  prova_xfce 
+

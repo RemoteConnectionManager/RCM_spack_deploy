@@ -1,0 +1,26 @@
+#!/bin/bash
+echo ##########  I M here udocker#########
+shopt -s expand_aliases
+module load xhost
+xhost +
+#FLUXBOX=$(which fluxbox)
+LXTERMINAL=$(which lxterminal)
+module purge
+exec ${LXTERMINAL}&
+mkdir -p /tmp/$USER/rcm/tmp
+export CINECA_HOME=$HOME
+#singul_overlay#mkdir -p /tmp/$USER/rcm/headless
+#singul_overlay#rm -r /tmp/$USER/rcm/headless
+#singul_overlay#singularity exec -B "/tmp/$USER/rcm/tmp:/tmp"  -B "/tmp/$USER/rcm:/headless_copy" /marconi_work/cin_prc5wp62/singularity/prova_simone.img cp -r /headless /headless_copy 
+#/marconi_work/cin_prc5wp62/udocker/udocker   --repo=/marconi_work/cin_prc5wp62/udocker/repo run --env="DISPLAY=$DISPLAY" --user="$USER" --volume="/tmp/rcm$USER:/tmp"  prova_xfce 
+#singularity run -B /marconi_work/cin_prc5wp62/singularity/headless/headless/:/headless -B "/tmp/rcm$USER:/tmp"  /marconi_work/cin_prc5wp62/singularity/prova_simone.img 
+#singularity exec -B /marconi_work/cin_prc5wp62/singularity/headless/headless/:/headless -B "/tmp/rcm$USER:/tmp"  /marconi_work/cin_prc5wp62/singularity/prova_simone.img /usr/bin/startxfce4 --replace
+#singularity exec -B "/tmp/$USER/rcm/tmp:/tmp"  -B "/tmp/$USER/rcm/headless:/headless" /marconi_work/cin_prc5wp62/singularity/prova_simone.img /usr/bin/startxfce4 --replace
+#singularity exec  --overlay /marconi_work/cin_prc5wp62/singularity/void.img /marconi_work/cin_prc5wp62/singularity/prova_simone.img /usr/bin/startxfce4 --replace
+#exec ${LXTERMINAL}
+##orig/marconi_work/cin_prc5wp62/udocker/udocker   --repo=/marconi_work/cin_prc5wp62/udocker/repo run --env="DISPLAY=$DISPLAY" --user="$USER" --workdir="$HOME" --bindhome --volume="/tmp/rcm$USER:/tmp"  prova_xfce 
+#singularity exec -B "/tmp/$USER/rcm/tmp:/tmp" -B /marconi_work/cin_prc5wp62/singularity/headless/headless/:/headless   /marconi_work/cin_prc5wp62/prova_simone_module_permission.simg /usr/bin/startxfce4 --replace
+#ok#singularity exec -B "/tmp/$USER/rcm/tmp:/tmp" -B "$HOME/.rcm/singularity/wm/prova_simone_unionfs:/headless" -B "/marconi/prod:/cineca/prod" -B "/marconi_work:/marconi_work" /marconi_work/cin_prc5wp62/prova_simone_unionfs.simg /usr/bin/startxfce4 --replace
+#ok#singularity exec -B "/tmp/$USER/rcm/tmp:/tmp" -B "$HOME/.rcm/singularity/wm/ubuntu-xfce-base:/headless" -B "/marconi/prod:/cineca/prod" -B "/marconi_work:/marconi_work" /marconi_work/cin_prc5wp62/ubuntu-xfce-base.simg /usr/bin/startxfce4 --replace
+singularity exec -B "/tmp/$USER/rcm/tmp:/tmp" -B "$HOME/.rcm/singularity/wm/ubuntu-xfce-base:/headless" -B "/marconi/prod:/cineca/prod" -B "/marconi_work:/marconi_work" /marconi_work/cin_prc5wp62/ubuntu-xfce-base.simg /headless/wm_startup.sh 
+#singularity exec -B "/tmp/$USER/rcm/tmp:/tmp" /marconi_work/cin_prc5wp62/prova_simone_module_permission.simg /usr/bin/startxfce4 --replace
