@@ -1,6 +1,11 @@
 packages:
   mesa:
-    variants: +llvm
+    version:
+      - 17.3.3
+    variants:
+      - +llvm
+      - +swrender
+      - +hwrender
 
   rcm:
     variants:
@@ -8,5 +13,5 @@ packages:
 
   qt:
     version:
-    - 4.8.6
+    - 5.10.0
  
