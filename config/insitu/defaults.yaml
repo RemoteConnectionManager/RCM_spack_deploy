@@ -7,6 +7,9 @@ defaults:
   origin :
     master : 'integrate/insitu'
     branches :
+      - 'packages/mesa-headless-opengl'
+      - 'pr/fix-qt5-opengl'
+      - 'packages/qt5-headless-opengl'
       - 'packages/qt5-dbus'
       - 'packages/qt5-virtualgl'
       - 'packages/update_paraview'
