@@ -7,6 +7,8 @@ defaults:
   origin :
     branches :
       - 'pr/fix-qt5-opengl'
+      - 'packages/mesa-headless-opengl'
+      - 'packages/qt5-headless-opengl'
     master : 'integrate/insitu'
 
 
