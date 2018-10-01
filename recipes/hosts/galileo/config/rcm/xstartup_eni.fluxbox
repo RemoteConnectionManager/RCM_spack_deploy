@@ -1,0 +1,14 @@
+#!/bin/bash
+echo ##########  I M here#########
+#/usr/bin/xclock -geometry 100x100-5+5 &
+#source /cineca/prod/environment/module/3.1.6/none/init/bash
+#module load profile/advanced autoload virtualgl fluxbox 
+shopt -s expand_aliases
+module load /cineca/prod/modulefiles/advanced/tools/fluxbox/1.3.7
+
+#vglrun -d :0.0 paraview  -geometry 10000x10000
+#STARTKDE="$(type -p startkde)"
+#exec "$STARTKDE"
+exec /bin/xterm &
+fluxbox
+

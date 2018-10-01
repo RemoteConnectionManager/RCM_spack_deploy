@@ -1,5 +1,13 @@
 packages:
+  all:
+    providers:
+      pkgconfig:
+      - pkg-config
+  mesa:
+    variants: +llvm
   paraview:
+    version:
+     - 5.5.1
     variants:
      -  +opengl2
      -  +mpi
@@ -7,11 +15,24 @@ packages:
      -  +qt
      -  +hdf5
      -  +examples
+     -  +netcdf
+     -  +expat
   catalyst:
+    version:
+     - 5.5.1
     variants:
     - +essentials
     - +extras
     - +python
     - +rendering
+  py-pillow:
+    version:
+    - 3.2.0
+# to check... paraview with gcc7.3 needs 2.6.1, pined also to satisfy openfoam
+  flex:
+    version:
+    - 2.6.1
+
+
 
 

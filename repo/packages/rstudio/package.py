@@ -56,7 +56,7 @@ class Rstudio(Package):
     # FIXME: Add dependencies if required.
     depends_on('libxslt', type='run')
     depends_on('r', type='run')
-    depends_on('mesa', type='run')
+    depends_on('gl', type='run')
     depends_on('xkeyboard-config', type='run')
     depends_on('font-util', type='run')
 

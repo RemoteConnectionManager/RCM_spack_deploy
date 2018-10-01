@@ -1,4 +1,9 @@
 packages:
+  openmpi:
+    variants:
+    - fabrics=psm2
+    - schedulers=tm,slurm
+packages:
   all:
     compiler: [gcc@4.8.5, gcc@6.1.0]
 

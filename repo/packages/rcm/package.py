@@ -61,7 +61,10 @@ class Rcm(Package):
     url      = "https://github.com/RemoteConnectionManager/RCM/archive/0.0.1.tar.gz"
 
     version('v0.0.2', 'a9ee0ddfa533701a3a538011f9c2349c')
-    version('develop', git='https://github.com/RemoteConnectionManager/RCM.git')
+    version('v0.0.3', 'a9ee0ddfa533701a3a538011f9c2349c')
+    version('v0.0.4', '215537f33ce5e17c67ec901334404c79')
+    version('develop', git='https://github.com/RemoteConnectionManager/RCM.git', tag='dev')
+    version('refactoring', git='https://github.com/RemoteConnectionManager/RCM.git', branch='refactoring')
 
     variant('linksource', default=False, description='link to source instead of copying scripts')
     variant('client', default=False, description='install client part')
@@ -81,7 +84,7 @@ class Rcm(Package):
     # FIXME: Add dependencies if required.
     depends_on('xkeyboard-config+xorg',  when='+server', type='run')
     # depends_on('turbovnc+x11deps ^xkeyboard-config+xorg', when='+server', type='run')
-    depends_on('turbovnc+x11deps', when='+server', type='run')
+    depends_on('turbovnc+x11deps+server', when='+server', type='run')
     depends_on('turbovnc+x11deps+java~server', when='+client platform=linux', type='run')
     depends_on('turbovnc+java~x11deps~server', when='+client platform=darwin', type='run')
     depends_on('lxde-lxterminal', when='+server', type='run')
@@ -100,6 +103,7 @@ class Rcm(Package):
     
     depends_on('python+tk', when='+client', type='run')
     depends_on('py-paramiko', when='+client', type='run')
+    depends_on('py-packaging', when='+client', type='run')
     depends_on('py-pycrypto', when='+client', type='run')
     depends_on('py-pexpect', when='+client', type='run')
     depends_on('py-pyinstaller', when='+client', type='run')
@@ -123,6 +127,8 @@ class Rcm(Package):
                     tty.warn('copy RCM source tree in prefix: '+rcm_source + ' -->'+dest)
                     shutil.copytree(rcm_source,dest)
                     rcm_source=dest
+                if '@refactoring' in self.spec:
+                    rcm_source=os.path.join(rcm_source,'rcm')
                 tty.warn('linking to source->'+rcm_source)
                 os.symlink(os.path.join(rcm_source,'server'),
                            os.path.join(prefix.bin,'server'))
@@ -140,7 +146,7 @@ class Rcm(Package):
                     tty.warn('linking file :'+rcm_source_file+' -->'+rcm_target_file)
                     os.symlink(rcm_source_file, rcm_target_file)
                 else:
-                    copy_file(rcm_client_file, rcm_target_file, verbose=1)
+                    shutil.copyfile(rcm_source_file, rcm_target_file)
             rcm_batch_file=os.path.join(prefix.bin,"rcm.sh")
             with open(rcm_batch_file, "w") as text_file:
                 text_file.write("python %s" % os.path.join(prefix.bin,'rcm_client_tk.py'))

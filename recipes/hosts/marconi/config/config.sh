@@ -4,4 +4,4 @@
 #spack install git
 #spack find
 #spack module  rm -y
-spack module refresh -y
+#spack module refresh -y

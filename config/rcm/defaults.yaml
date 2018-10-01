@@ -5,12 +5,12 @@ defaults:
   integration : 'True'
   clearconfig : 'True'
   origin :
-    master : 'integrate/develop'
+    master : 'integrate/rcm'
     branches :
       - 'pr/turbovnc'
       - 'pr/pyinstaller'
-      - 'pr/fix/glib_dtrace_pythonhome'
-      - 'pr/fix-qt5-opengl'
+#fixed with merged 7493#      - 'pr/fix/glib_dtrace_pythonhome'
+      - 'packages/qt5-dbus'
 #merged      - 'pr/fix/bdftopcf'
 #merged      - 'pr/fix/xinput'
 

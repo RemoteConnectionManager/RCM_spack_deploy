@@ -1,0 +1,12 @@
+# this is specific defaults docker based build 
+
+defaults:
+  origin :
+    master : 'dev/docker'
+    branches :
+#to rebase      - 'pr/pull/5871/share_cache_install'
+      - 'pr/fix/envmodule_multiarch'
+  upstream :
+    prs :
+      - '7204'
+

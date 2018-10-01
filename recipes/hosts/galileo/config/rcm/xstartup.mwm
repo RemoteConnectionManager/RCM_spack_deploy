@@ -1,0 +1,12 @@
+#!/bin/bash
+#echo ##########  I M here#########
+#/usr/bin/xclock -geometry 100x100-5+5 &
+#source /cineca/prod/environment/module/3.1.6/none/init/bash
+#module load profile/advanced autoload virtualgl 
+module load /cineca/prod/modulefiles/advanced/tools/virtualgl/2.3.90
+shopt -s expand_aliases
+#vglrun -d :0.0 paraview  -geometry 10000x10000
+#STARTKDE="$(type -p startkde)"
+#exec "$STARTKDE"
+exec /bin/xterm &
+exec /usr/bin/mwm

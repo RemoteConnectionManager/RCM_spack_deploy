@@ -1,0 +1,23 @@
+#!/bin/bash
+echo ##########  I M here#########
+#/usr/bin/xclock -geometry 100x100-5+5 &
+source /developers/devenv/prod/opt/environment/module/3.1.6/none/init/bash
+module load autoload virtual-gl
+shopt -s expand_aliases
+#vglrun -d :0.0 paraview  -geometry 10000x10000
+STARTKDE="$(type -p startkde)"
+exec /bin/xterm &
+if ! [ -x  $HOME/.kde/share/apps/kscreen ]; then
+  mkdir -p .kde/share/apps/kscreen
+  echo '[ { "enabled" : true, "id" : "TurboVNC", "metadata" : { "name" : "TurboVNC" }, "mode" : { "refresh" : 60.0, "size" : { "
+height" : 100, "width" : 200 } }, "pos" : { "x" : 0, "y" : 0 }, "primary" : true, "rotation" : 1 } ]' > .kde/share/apps/kscreen/d015c3411c0560adb93727a0a496bb63
+#  xrandr --fb 1024x1024
+#exec "$STARTKDE" &
+#sleep 10
+#qdbus org.kde.ksmserver /KSMServer org.kde.KSMServerInterface.logout 0 0 0
+exec "$STARTKDE"&
+sleep 10
+sed -i.bak s/plugin\=desktop/plugin\=folderview/g .kde/share/config/plasma-desktop-appletsrc
+else
+exec "$STARTKDE"
+fi
