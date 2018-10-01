@@ -25,6 +25,10 @@ then
   then
     export CONFIG_DIRS="$CONFIG_DIRS config/openmpi_scheduler config/openfoam config/meteo config/rstudio config/rcm/develop"
   fi  
+  if [ "$1" == "dev_all_test1" ]
+  then
+    export CONFIG_DIRS="$CONFIG_DIRS config/openmpi_scheduler config/openfoam config/meteo config/rstudio config/rcm/develop"
+  fi  
 
 python ${RCM_DEPLOY_ROOTPATH}/scripts/config.py -c $CONFIG_DIRS  --platformconfig --runconfig --dest ${RCM_DEPLOY_CURRENT_PATH}
 source ${RCM_DEPLOY_ROOTPATH}/${RCM_DEPLOY_CURRENT_PATH}/share/spack/setup-env.sh
