@@ -409,9 +409,13 @@ if os.path.exists(spack_config_dir) :
 utils.source(os.path.join(dest,'share','spack','setup-env.sh'))
 if args.runconfig :
     for p in reversed(config_path_list):
-        initfile=os.path.join(p,'config.sh')
+        initfile=os.path.abspath(os.path.join(p,'config.sh'))
         if os.path.exists(initfile):
-            mylogger.info("parsing init file-->" + initfile + "<-- ")
+            mylogger.info("executing init file-->" + initfile + "<-- ")
+
+#            mylogger.info("parsing init file-->" + initfile + "<-- ")
+##            (ret,out,err)=utils.run(['/bin/bash', initfile], logger=mylogger)
+##            mylogger.info("  " + out )
             f=open(initfile,'r')
             for line in f:
                 line=line.lstrip()
@@ -419,7 +423,8 @@ if args.runconfig :
                     if not line[0] == '#':
                         templ= utils.stringtemplate(line)
                         cmd=templ.safe_substitute(subst)
-                        (ret,out,err)=utils.run(cmd.split(),logger=mylogger)
+#                        (ret,out,err)=utils.run(cmd.split(),logger=mylogger)
+                        (ret,out,err)=utils.run(['/bin/bash', '-c', cmd], logger=mylogger)
                         mylogger.info("  " + out )
 
     for p in reversed(config_path_list):

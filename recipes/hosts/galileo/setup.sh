@@ -30,6 +30,11 @@ then
     RCM_DEPLOY_CURRENT_PATH=deploy/$(hostname -f | cut -f2 -d'.')_new/$1/spack
     export CONFIG_DIRS="$CONFIG_DIRS config/openfoam config/rcm/refactoring" 
   fi  
+  if [ "$1" == "insitu01" ]
+  then
+    RCM_DEPLOY_CURRENT_PATH=deploy/$(hostname -f | cut -f2 -d'.')_dev00/$1/spack
+    export CONFIG_DIRS="$CONFIG_DIRS config/openfoam config/rcm/refactoring" 
+  fi  
   if [ "$1" == "prod" ]
   then
     export CONFIG_DIRS="$CONFIG_DIRS config/rcm/production"

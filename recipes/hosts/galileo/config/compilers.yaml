@@ -1,19 +1,6 @@
 compilers:
 - compiler:
     environment: {}
-    extra_rpaths:
-    - /cineca/prod/opt/compilers/gnu/4.9.2/none/lib64
-    flags: {}
-    modules: []
-    operating_system: centos7
-    paths:
-      cc: /cineca/prod/compilers/gnu/4.9.2/none/bin/gcc
-      cxx: /cineca/prod/compilers/gnu/4.9.2/none/bin/g++
-      f77: /cineca/prod/compilers/gnu/4.9.2/none/bin/gfortran
-      fc: /cineca/prod/compilers/gnu/4.9.2/none/bin/gfortran
-    spec: gcc@4.9.2
-- compiler:
-    environment: {}
     extra_rpaths: 
     - /cineca/prod/compilers/intel/pe-xe-2017/binary/lib/intel64
     flags: {}

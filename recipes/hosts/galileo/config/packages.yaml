@@ -15,9 +15,9 @@ packages:
     buildable: False
   opengl:
     paths:
-      opengl@4.5.0: /galileo/home/userinternal/lcalori0/spack/prefix_gl_devel
+      opengl@4.5.0: /cineca/prod/spack/v001/prefix_gl_devel
   all:
-    compiler: [gcc@4.8.2, gcc@4.9.2]
+    compiler: [gcc@7.3.0, gcc@4.8.2]
     providers:
       mpi: [openmpi, intelmpi]
       
