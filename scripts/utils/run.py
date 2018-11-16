@@ -32,9 +32,9 @@ def source(sourcefile,logger=None):
     if os.path.exists(sourcefile) :
         source = 'source '+ sourcefile
         logger.info("spurcing-->"+ source+ "<-")
-        dump = sys.executable + ' -c "import os, json;print json.dumps(dict(os.environ))"'
+        dump = sys.executable + ' -c "import os, json; print(json.dumps(dict(os.environ)))"'
         pipe = subprocess.Popen(['/bin/bash', '-c', '%s && %s' %(source,dump)], stdout=subprocess.PIPE)
-        env = json.loads(pipe.stdout.read())
+        env = json.loads(pipe.stdout.read().decode('utf-8'))
         os.environ = env
     else:
         logger.warning("### NON EXISTING "+ sourcefile)
