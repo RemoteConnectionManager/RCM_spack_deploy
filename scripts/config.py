@@ -2,7 +2,11 @@
 
 
 from __future__ import print_function
-import pprint, StringIO
+import pprint
+try:
+    import StringIO
+except ImportError:
+    import io as StringIO
 
 import os
 import sys
@@ -134,7 +138,7 @@ args = parser.parse_args()
 
 #pprint.PrettyPrinter(indent=20).pprint(conf)
 #print("--------------\n",args)
-for k, v in args.__dict__.iteritems():
+for k, v in args.__dict__.items():
     mylogger.debug("arg "+k+" type: "+type(v).__name__+" -->"+str(v)) # Works!
 #exit()
 
