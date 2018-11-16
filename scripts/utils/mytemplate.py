@@ -27,7 +27,7 @@ class filetemplate(stringtemplate):
             s=file.read()
             stringtemplate.__init__(self,s)
         else:
-            print "file", file,"not found"
+            print("file " + file + " not found")
             return None
 
 
@@ -56,34 +56,34 @@ if __name__ == '__main__':
 
 
     """
-    print "---original--"
-    print download
-    print "-----------subst-----------"
+    print("---original--")
+    print(download)
+    print("-----------subst-----------")
     out=stringtemplate(download).safe_substitute(d)
-    print out
+    print(out)
     m=stringtemplate().templ_match(out)
     if m:
-        print "----unmatched----"
-        print m.group()
+        print("----unmatched----")
+        print(m.group())
     else:
-        print "----------------------"
+        print("----------------------")
 
     bad=filetemplate("non_existing_file")
-    print "----",bad
+    print("----",bad)
 
     exit()
     r= stringtemplate().pattern
-    print r.pattern
+    print(r.pattern)
     dd=dict()
     for i in d:
       dd[i]=d[i]
       mi=r.search(download)  
       if mi :
-        print "matched input at pos ",mi.start()
+        print("matched input at pos ",mi.start())
         t=stringtemplate(download)
         out=t.safe_substitute(dd)
-        print out  
+        print(out )
         mo=r.search(out)  
         if mo :
-            print "matched output at pos ",mo.start()
-            print mo.groupdict()
+            print("matched output at pos ",mo.start())
+            print(mo.groupdict())
