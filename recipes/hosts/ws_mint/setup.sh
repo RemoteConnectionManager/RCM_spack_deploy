@@ -17,6 +17,11 @@ echo "-->$CONFIG_DIRS<--"
 if [ "x$1" != "x" ]
 then
   RCM_DEPLOY_CURRENT_PATH=deploy/rcm_client/$1/spack
+  if [ "$1" == "rcm_client_01" ]
+  then
+    RCM_DEPLOY_CURRENT_PATH=deploy/$(hostname -f | cut -f2 -d'.')_dev00/$1/spack
+    export CONFIG_DIRS="$CONFIG_DIRS config/rcm/client config/rcm/client/linux config/rcm/refactoring" 
+  fi 
   if [ "$1" == "dev" ]
   then
     export CONFIG_DIRS="$CONFIG_DIRS config/rcm/client config/rcm/client/linux config/rcm/develop" 
