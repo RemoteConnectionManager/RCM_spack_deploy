@@ -17,6 +17,9 @@ import argparse
 import logging
 import glob
 
+root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+sys.path.append(os.path.join(root_path, 'lib'))
+
 import utils
 
 ls=utils.log_setup()
