@@ -7,7 +7,7 @@ import platform
 import socket
 import logging
 
-from run import run
+from .run import run
 
 logging.getLogger(__name__).setLevel(logging.DEBUG)
 
@@ -25,7 +25,7 @@ class baseintrospect:
 
 class commandintrospect(baseintrospect):
     def __init__(self,commands=[]):
-	baseintrospect.__init__(self)
+        baseintrospect.__init__(self)
         self.commands=dict()
         for c in commands:
             self.test(c)

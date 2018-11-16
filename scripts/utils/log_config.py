@@ -5,8 +5,8 @@ import logging.config
 import argparse
 import os
 
-from external import hiyapyco
-from introspect import myintrospect
+from .external import hiyapyco
+from .introspect import myintrospect
 
 class base_config:
 

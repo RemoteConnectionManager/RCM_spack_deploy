@@ -5,7 +5,7 @@ import io
 import re
 import collections
 
-from run import run
+from .run import run
 
 #print("###TOP######## "+__name__)
 logging.getLogger(__name__).debug('in module:'+ __name__ + " info")
@@ -30,11 +30,11 @@ class git_repo:
         git_root = os.path.abspath(output.strip())
 
         #print("in path ",self.folder," git rev_parse ret: ",ret, ' git top:', git_root)
-        self.logger.info("in path "+self.folder+" git rev_parse ret: "+str(ret)+ ' git top:'+ git_root)
+        self.logger.info("in path " + self.folder + " git rev_parse ret: " + str(int(ret)) + ' git top:'+ git_root.decode('utf-8'))
         if 0 != ret or git_root != self.folder:
             cmd = ['git', 'init']
             (ret,output) = self.run(cmd)
-            self.logger.info("git init in >>" + self.folder + "<< >>" + git_root + "<< ret= "+ str(ret))
+            self.logger.info("git init in >>" + self.folder + "<< >>" + git_root.decode('utf-8') + "<< ret= "+ str(int(ret)))
             #print("git init in ",">>" + self.folder + "<<",">>" + git_root + "<< ret= ",ret)
 
     def get_remotes(self):
