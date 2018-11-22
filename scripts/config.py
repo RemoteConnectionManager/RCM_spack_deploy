@@ -17,8 +17,10 @@ import argparse
 import logging
 import glob
 
-root_path = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.append(os.path.join(root_path, 'lib'))
+
+lib_path = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'lib')
+if not lib_path in sys.path:
+    sys.path.append(lib_path)
 
 import utils
 
