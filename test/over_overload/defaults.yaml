@@ -1,0 +1,15 @@
+defaults:
+  upstream :
+    prs : 
+     - 9999999
+  runconfig: 'True'
+  origin:
+    branches:
+     - integration
+  integration : 'False'
+
+logging_configs:
+  loggers:
+    cascade_yaml_config:
+      level: INFO
+
