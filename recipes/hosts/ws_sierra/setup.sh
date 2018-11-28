@@ -19,15 +19,11 @@ then
   RCM_DEPLOY_CURRENT_PATH=deploy/rcm_client/$1/spack
   if [ "$1" == "dev" ]
   then
-    export CONFIG_DIRS="$CONFIG_DIRS config/rcm/client config/rcm/client/linux config/rcm/develop" 
+    export CONFIG_DIRS="$CONFIG_DIRS config/rcm/client config/rcm/client/darwin config/rcm/develop" 
   fi  
   if [ "$1" == "prod" ]
   then
-    export CONFIG_DIRS="$CONFIG_DIRS config/rcm/client config/rcm/client/linux config/rcm/production" 
-  fi  
-  if [ "$1" == "dev_docker" ]
-  then
-    export CONFIG_DIRS="$CONFIG_DIRS config/rcm/server config/rcm/server/headless config/insitu config/openmpi_scheduler config/openfoam config/meteo config/rstudio config/rcm/develop config/shared_install/docker"
+    export CONFIG_DIRS="$CONFIG_DIRS config/rcm/client config/rcm/client/darwin config/rcm/production" 
   fi  
 python ${RCM_DEPLOY_ROOTPATH}/scripts/config.py -c $CONFIG_DIRS  --platformconfig --runconfig --dest ${RCM_DEPLOY_CURRENT_PATH}
 source ${RCM_DEPLOY_ROOTPATH}/${RCM_DEPLOY_CURRENT_PATH}/share/spack/setup-env.sh

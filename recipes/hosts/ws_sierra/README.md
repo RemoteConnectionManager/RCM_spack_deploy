@@ -1,22 +1,18 @@
-# Deploy status on   MAC OSX sierra, client side
+# Deploy RCM  client development  (tested on mint )
 
-go to deploy and clone RCM git there
+Prerequisites: git, python
 
-    cd deploy
-    git clone https://github.com/RemoteConnectionManager/RCM.git
+Create new base folder
+    
+    mkdir <base_folder>
+    cd <base_folder>
+    
+Clone RCM source and deploy repo:
 
-create a folder under deploy where put spack and install and logs
-cd there
-
-    mkdir rcm00
-    cd rcm00
-
-launch the config
-
-    source ../../recipes/hosts/ws_sierra/build_config.sh
-    $RCM_DEPLOY_COMMAND
-    cd spack/
-    source share/spack/setup-env.sh 
-    spack install -v --only dependencies rcm@develop+linksource 
-
+    git clone -b dev  https://github.com/RemoteConnectionManager/RCM_spack_deploy.git 
+    git clone -b dev  https://github.com/RemoteConnectionManager/RCM.git
+    mkdir cache
+    cd RCM_spack_deploy
+    ln -s ../cache .
+    source recipes/hosts/ws_sierra/setup.sh dev
 

@@ -1,10 +1,15 @@
 packages:
-  openssl:
-    version: [1.0.2j]
   python:
-    variants: +tk
+    variants:
+    - +tk
+    - +shared
+
   environment-modules:
     variants: ~X
 
+  jdk:
+    paths:
+      jdk@8u141-b15: /Users/luigicalori/java/Contents/Home
+    buildable: False
 
 
