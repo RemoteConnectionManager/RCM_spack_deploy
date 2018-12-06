@@ -1,7 +1,7 @@
 defaults:
   upstream :
     prs : 
-     - 8772
+     - '8772'
   runconfig: 'True'
   integration: 'True'
 logging_configs:
