@@ -1,9 +1,12 @@
 config:
   plugin_folders:
     - 'plugins/git_workspace'
+    - 'plugins/spack_workspace'
 
 
 defaults:
+  origin :
+    url : 'https://github.com/RemoteConnectionManager/spack.git'
   upstream :
     prs : 
      - '8772'
