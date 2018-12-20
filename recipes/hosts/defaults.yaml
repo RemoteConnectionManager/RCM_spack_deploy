@@ -1,0 +1,7 @@
+config:
+  host_tags :
+    galileo : 'galileo'
+    eni : 'eni'
+    calori : 'ws_mint'
+    marconi : 'marconi'
+    davide : 'davide'
