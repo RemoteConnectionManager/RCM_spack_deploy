@@ -1,0 +1,10 @@
+config:
+  plugin_folders:
+    - 'plugins/git_workspace'
+    - 'plugins/spack_workspace'
+
+  config_folders:
+    - shared_install
+    - rcm
+    - rcm/server
+    - insitu
