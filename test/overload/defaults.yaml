@@ -12,6 +12,7 @@ defaults:
      - '8772'
   runconfig: 'True'
   integration: 'True'
+  cache: '../../cache'
 
 logging_configs:
   loggers:
