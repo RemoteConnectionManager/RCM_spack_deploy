@@ -12,6 +12,8 @@ defaults:
      - '8772'
   runconfig: 'True'
   integration: 'True'
+  upstream_update: 'True'
+  rebase_update: 'True'
   cache: '../../cache'
 
 logging_configs:
