@@ -6,12 +6,11 @@ First step: clone this repo:
     git clone  https://github.com/RemoteConnectionManager/RCM_spack_deploy.git <folder name>
 
     
-Then run setup script: for development do
+Short story:
 
     cd <folder name>
-    deploy_integrate.sh
-    
-    python <folder name>/scripts/deploy_setup.py  
+    bin/spack-deploy   --workdir deploy/base_spack_devel/ gitmanager deploy 
+    bin/spack-deploy   --workdir deploy/base_spack_devel/ spackmanager config_setup
 
 More info can be found in:
 
