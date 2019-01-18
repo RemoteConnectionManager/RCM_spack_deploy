@@ -6,6 +6,6 @@ config:
   config_folders:
 #    - 'test/overload/defaults.yaml'
     - 'spack/devel'
-    - 'rcm'
-    - 'rcm/server'
+#    - 'rcm'
+#    - 'rcm/server'
 #    - insitu
