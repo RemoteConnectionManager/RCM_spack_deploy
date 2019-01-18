@@ -1,0 +1,12 @@
+config:
+  plugin_folders:
+    - 'plugins/git_workspace'
+    - 'plugins/spack_workspace'
+
+  config_folders:
+#    - 'test/overload/defaults.yaml'
+    - 'spack/devel'
+    - 'spack/devel/chained'
+    - 'rcm'
+    - 'rcm/server'
+    - insitu
