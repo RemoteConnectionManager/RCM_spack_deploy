@@ -1,21 +1,36 @@
 packages:
+
+  slurm:
+    paths:
+      slurm@17.11.7 : /usr/ 
+    buildable : False
+
   openmpi:
     variants:
-    - fabrics=psm
+    - fabrics=verbs,psm
+    - +legacylaunchers
     - schedulers=slurm
     - +pmi
     version:
-    - 3.0.1
-#to_check    buildable: False
-#to_check    variants:
-#to_check    - schedulers=tm
-  intelmpi:
+    - 3.1.3
+
+# from Eric setup
+  intel-mpi:
     modules:
-      intelmpi@2017%intel@17.0.0: intelmpi/2017--binary
-    buildable: False
+      intel-mpi@2018.2.199%gcc@7.3.0 arch=linux-centos7-x86_64: intelmpi/2018--binary
+      buildable: False
+  
+  intel-mkl:
+    modules:
+      intel-mkl@2018.2.199%gcc@7.3.0 arch=linux-centos7-x86_64: mkl/2018--binary
+      buildable: False  
+
+
+# opengl hack.... check version
   opengl:
     paths:
       opengl@4.5.0: /cineca/prod/spack/v001/prefix_gl_devel
+
   all:
     compiler: [gcc@7.3.0, gcc@4.8.2]
     providers:
