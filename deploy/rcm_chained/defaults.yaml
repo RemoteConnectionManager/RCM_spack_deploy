@@ -9,4 +9,4 @@ config:
     - 'spack/devel/chained'
     - 'rcm'
     - 'rcm/server'
-    - insitu
+#    - insitu
