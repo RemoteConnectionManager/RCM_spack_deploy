@@ -7,6 +7,7 @@ config:
 #    - 'test/overload/defaults.yaml'
     - 'spack/devel'
     - 'spack/devel/chained'
+    - '../deploy/base_spack_devel/config'
     - 'rcm'
     - 'rcm/server'
 #    - insitu
