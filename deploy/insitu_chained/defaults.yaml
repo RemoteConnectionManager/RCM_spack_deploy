@@ -1,0 +1,13 @@
+config:
+  plugin_folders:
+    - 'plugins/git_workspace'
+    - 'plugins/spack_workspace'
+
+  config_folders:
+#    - 'test/overload/defaults.yaml'
+    - 'spack/devel'
+    - 'spack/devel/chained'
+    - '/cineca/prod/spack/v002/RCM_spack_deploy/deploy/base_spack_devel/config'
+    - 'rcm'
+    - 'rcm/server'
+    - 'insitu'
