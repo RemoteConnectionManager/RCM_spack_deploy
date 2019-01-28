@@ -3,7 +3,7 @@ packages:
   openssl:
     paths:
       openssl@1.0.2g: /usr
-    buildable: False
+#    buildable: False
 
   slurm:
     paths:
