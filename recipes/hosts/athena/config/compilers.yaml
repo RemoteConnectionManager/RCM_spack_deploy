@@ -1,0 +1,16 @@
+compilers:
+- compiler:
+    environment: {}
+    extra_rpaths:
+    - /athena/prod/opt/compilers/gnu/7.3/none/lib64
+    flags: {}
+    modules: []
+    operating_system: centos7
+    paths:
+      cc: /athena/prod/opt/compilers/gnu/7.3/none/bin/gcc
+      cxx: /athena/prod/opt/compilers/gnu/7.3/none/bin/g++
+      f77: /athena/prod/opt/compilers/gnu/7.3/none/bin/gfortran
+      fc: /athena/prod/opt/compilers/gnu/7.3/none/bin/gfortran
+    spec: gcc@7.3.0
+    target: x86_64
+

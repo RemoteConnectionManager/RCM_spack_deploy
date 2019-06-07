@@ -1,0 +1,10 @@
+packages:
+# this is the system installed openssl version
+  openssl:
+    paths:
+      openssl@1.0.2k: /usr
+
+  all:
+    compiler: [gcc@4.8.5]
+
+
