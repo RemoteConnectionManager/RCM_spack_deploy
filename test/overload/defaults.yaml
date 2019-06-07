@@ -7,9 +7,9 @@ config:
 defaults:
   origin :
     url : 'https://github.com/RemoteConnectionManager/spack.git'
-  upstream :
-    prs : 
-     - '8772'
+#  upstream :
+#    prs : 
+#     - '8772'
   runconfig: 'True'
   integration: 'True'
   upstream_update: 'True'
