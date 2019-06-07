@@ -1,4 +1,0 @@
-packages:
-  cmake:
-    paths:
-       cmake@3.13.3: /gpfs/work/DATA/spack/v002/RCM_spack_deploy/deploy/base_spack_devel/install/linux-centos7-x86_64/gcc-4.8.2/cmake-3.13.3-coiranydzpj24rcthbtrybacm2b5t3rn
