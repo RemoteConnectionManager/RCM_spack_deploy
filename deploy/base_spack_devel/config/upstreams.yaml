@@ -1,6 +1,6 @@
 upstreams:
   base:
-    install_tree: @{RCM_DEPLOY_ROOTPATH}/deploy/base_spack_devel/install
+    install_tree: "@{RCM_DEPLOY_ROOTPATH}/deploy/base_spack_devel/install"
     modules:
-      tcl:  @{RCM_DEPLOY_ROOTPATH}/deploy/base_spack_devel/spack/share/spack/modules
+      tcl:  "@{RCM_DEPLOY_ROOTPATH}/deploy/base_spack_devel/spack/share/spack/modules"
 
