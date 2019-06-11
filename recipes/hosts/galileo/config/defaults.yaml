@@ -1,2 +1,0 @@
-defaults:
-  git_dest_dir : '{{ "/scratch_local/" + env["USER"] + "/spack/temp_deploy/" }}'
