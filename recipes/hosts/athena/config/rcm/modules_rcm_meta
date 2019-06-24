@@ -1,0 +1,18 @@
+#%Module1.0
+## Module file created by spack (https://github.com/LLNL/spack) on 2017-05-19 17:05:45.959007
+##
+## rcm@develop%gcc@4.8.5~client+linksource~mesa+server arch=linux-rhel7-x86_64 /e6sdm3s
+##
+module-whatis "rcm meta module"
+
+proc ModulesHelp { } {
+puts stderr "Hides module use of spack installed rcm"
+puts stderr "/athena/home/usereni/cibo19/spack/RCM_spack_deploy/deploy/base_spack_devel/spack/share/spack/modules/linux-centos7-x86_64 /athena/home/usereni/cibo19/spack/RCM_spack_deploy/deploy/rcm_chained/modules/linux-centos7-x86_64"
+
+}
+
+
+module use --append  /athena/home/usereni/cibo19/spack/RCM_spack_deploy/deploy/base_spack_devel/spack/share/spack/modules/linux-centos7-x86_64
+module use --append  /athena/home/usereni/cibo19/spack/RCM_spack_deploy/deploy/rcm_chained/modules/linux-centos7-x86_64
+
+module load rcm/v0.0.5-gcc-4.8.5-6b

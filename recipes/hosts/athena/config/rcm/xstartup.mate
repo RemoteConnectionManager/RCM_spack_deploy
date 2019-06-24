@@ -1,0 +1,103 @@
+#!/bin/bash
+
+unset SESSION_MANAGER
+unset DBUS_SESSION_BUS_ADDRESS
+LXTERMINAL=$(which lxterminal)
+module purge
+for moduledir in  $(module help rcm 2>&1 | python -c "import sys,os; print sys.stdin.read().split('\n')[4]"); do
+  echo "####### module unuse $moduledir"
+  module unuse $moduledir
+done
+#module unuse $(module show rcm 2>&1 | python -c "import sys,os; print os.path.dirname(os.path.dirname(sys.stdin.read().split()[1]))")
+#exec ${LXTERMINAL}&
+
+exec /usr/bin/mate-session
+
+# This works around pointer disappearance issues under GNOME 3
+if [ -x /usr/bin/dconf ]; then
+  dconf write /org/gnome/settings-daemon/plugins/cursor/active false
+fi
+
+OS=`uname -s`
+if [ $OS = 'Linux' ]; then
+  case "$WINDOWMANAGER" in
+    *gnome*)
+      if [ -e /etc/SuSE-release ]; then
+        PATH=$PATH:/opt/gnome/bin
+        export PATH
+      fi
+      ;;
+  esac
+fi
+
+if [ "$TVNC_3DWM" = "1" ]; then
+  if [ -z "$SSH_AGENT_PID" -a -x /usr/bin/ssh-agent ]; then
+    TVNC_SSHAGENT=/usr/bin/ssh-agent
+  fi
+  if [ -z "$TVNC_VGLRUN" ]; then
+    TVNC_VGLRUN="vglrun +wm"
+  fi
+  if [ -f /usr/bin/mate-session ]; then
+    DESKTOP_SESSION=mate; export DESKTOP_SESSION
+    export TVNC_WM=mate-session
+    STARTUP="/usr/bin/mate-session"; export STARTUP
+  fi
+else
+  if [ -f /usr/bin/mate-session ]; then
+    DESKTOP_SESSION=mate; export DESKTOP_SESSION
+    STARTUP="/usr/bin/mate-session"; export STARTUP
+  fi
+fi
+module unuse $(module show rcm 2>&1 | python -c "import sys,os; print os.path.dirname(os.path.dirname(sys.stdin.read().split()[1]))")
+
+if [ -x /etc/X11/xinit/xinitrc ]; then
+  exec $TVNC_SSHAGENT $TVNC_VGLRUN /etc/X11/xinit/xinitrc
+fi
+if [ -f /etc/X11/xinit/xinitrc ]; then
+  exec $TVNC_SSHAGENT $TVNC_VGLRUN sh /etc/X11/xinit/xinitrc
+fi
+if [ -x $HOME/.xinitrc ]; then
+  exec $TVNC_SSHAGENT $TVNC_VGLRUN $HOME/.xinitrc
+fi
+if [ -f $HOME/.xinitrc ]; then
+  exec $TVNC_SSHAGENT $TVNC_VGLRUN sh $HOME/.xinitrc
+fi
+if [ -x /usr/local/lib/X11/xinit/xinitrc ]; then
+  exec $TVNC_SSHAGENT $TVNC_VGLRUN /usr/local/lib/X11/xinit/xinitrc
+fi
+if [ -f /usr/local/lib/X11/xinit/xinitrc ]; then
+  exec $TVNC_SSHAGENT $TVNC_VGLRUN sh /usr/local/lib/X11/xinit/xinitrc
+fi
+if [ $OS = 'SunOS' -a -f $HOME/.dt/sessions/lastsession ]; then
+  if [ -x `cat $HOME/.dt/sessions/lastsession` ]; then
+    exec `cat $HOME/.dt/sessions/lastsession`
+  fi
+fi
+if [ -f /usr/dt/config/Xsession.jds ]; then
+  exec /usr/dt/config/Xsession.jds
+else
+  if [ -f /usr/dt/config/Xinitrc.jds ]; then
+    exec /usr/dt/config/Xinitrc.jds
+  else
+    if [ -f /usr/dt/bin/Xsession ]; then
+      exec /usr/dt/bin/Xsession
+    else
+      if [ -x /opt/sfw/bin/fvwm2 ]; then
+        /opt/sfw/bin/fvwm2
+      else
+        which fvwm2 && {
+          fvwm2
+        } || {
+          which twm && {
+            if [ -f $HOME/.Xresources ]; then xrdb $HOME/.Xresources; fi
+            xsetroot -solid grey
+            xterm -geometry 80x24+10+10 -ls -title "$VNCDESKTOP Desktop" &
+            twm
+          } || {
+            echo No window manager found!
+          }
+        }
+      fi
+    fi
+  fi
+fi

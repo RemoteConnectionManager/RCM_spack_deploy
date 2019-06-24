@@ -16,7 +16,12 @@ shopt -s expand_aliases
 FLUXBOX=$(which fluxbox)
 LXTERMINAL=$(which lxterminal)
 module purge
-module unuse $(module show rcm 2>&1 | python -c "import sys,os; print os.path.dirname(os.path.dirname(sys.stdin.read().split()[1]))")
+for moduledir in  $(module help rcm 2>&1 | python -c "import sys,os; print sys.stdin.read().split('\n')[4]"); do
+  echo "####### module unuse $moduledir"
+  module unuse $moduledir
+done
+
+#module unuse $(module show rcm 2>&1 | python -c "import sys,os; print os.path.dirname(os.path.dirname(sys.stdin.read().split()[1]))")
 exec ${LXTERMINAL}&
 #pcmanfm --desktop &
 ${FLUXBOX}
