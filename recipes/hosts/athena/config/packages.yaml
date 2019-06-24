@@ -4,6 +4,19 @@ packages:
     paths:
       openssl@1.0.2k: /usr
 
+  opengl:
+    paths:
+      opengl@4.6.0: /usr
+    buildable: False
+
+  rcm:
+    variants:
+      - +virtualgl
+
+  qt:
+    version:
+     - 5.10.0
+    
   all:
     compiler: [gcc@4.8.5]
 
