@@ -1,6 +1,20 @@
 compilers:
 - compiler:
     environment: {}
+    extra_rpaths:
+    - /cineca/prod/opt/compilers/gnu/6.1.0/none/lib64
+    flags: {}
+    modules: []
+    operating_system: centos7
+    paths:
+      cc: /cineca/prod/opt/compilers/gnu/6.1.0/none/bin/gcc
+      cxx: /cineca/prod/opt/compilers/gnu/6.1.0/none/bin/g++
+      f77: /cineca/prod/opt/compilers/gnu/6.1.0/none/bin/gfortran
+      fc: /cineca/prod/opt/compilers/gnu/6.1.0/none/bin/gfortran
+    spec: gcc@6.1.0
+    target: x86_64
+- compiler:
+    environment: {}
     extra_rpaths: 
     - /cineca/prod/compilers/intel/pe-xe-2017/binary/lib/intel64
     flags: {}
@@ -13,3 +27,24 @@ compilers:
       fc: /galileo/prod/compilers/intel/pe-xe-2017/binary/bin/ifort
     spec: intel@17.0.0
     target: x86_64
+- compiler:
+    environment:
+      set:
+         INTEL_LICENSE_FILE: /cineca/prod/opt/compilers/intel/pe-xe-2018/binary/server.lic
+         INSPECTOR_2018_DIR: /cineca/prod/opt/compilers/intel/pe-xe-2018/binary/inspector
+         ITAC_2018_DIR: /cineca/prod/opt/compilers/intel/pe-xe-2018/binary/itac_latest
+    extra_rpaths:
+    - /cineca/prod/opt/compilers/intel/pe-xe-2018/binary/itac_latest/lib
+    - /cineca/prod/opt/compilers/intel/pe-xe-2018/binary/inspector/lib64
+    - /cineca/prod/opt/compilers/intel/pe-xe-2018/binary/lib/intel64
+    flags: {}
+    modules: []
+    operating_system: centos7
+    paths:
+      cc: /cineca/prod/opt/compilers/intel/pe-xe-2018/binary/bin/icc
+      cxx: /cineca/prod/opt/compilers/intel/pe-xe-2018/binary/bin/icpc
+      f77: /cineca/prod/opt/compilers/intel/pe-xe-2018/binary/bin/ifort
+      fc: /cineca/prod/opt/compilers/intel/pe-xe-2018/binary/bin/ifort
+    spec: intel@18.0.5
+    target: x86_64
+
