@@ -41,6 +41,7 @@ packages:
   all:
     compiler:
     - gcc@4.8.2
+    - gcc@4.8.5
     - gcc@6.1.0
     - gcc@7.3.0
     - intel@18.0.5

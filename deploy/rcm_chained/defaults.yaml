@@ -8,7 +8,6 @@ config:
     - 'spack/devel'
     - 'spack/devel/chained'
     - '../deploy/base_spack_devel/config'
-    - '../deploy/rcm_chained/config'
     - 'rcm'
     - 'rcm/server'
     - 'virtualgl'

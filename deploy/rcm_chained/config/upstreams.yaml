@@ -1,6 +1,6 @@
 upstreams:
   rcm:
-    install_tree: /cineca/prod/spack/v002/RCM_spack_deploy/deploy/rcm_chained/install
+    install_tree: "@{RCM_DEPLOY_ROOTPATH}/deploy/rcm_chained/install"
     modules:
-      tcl:  /cineca/prod/spack/v002/RCM_spack_deploy/deploy/rcm_chained/spack/share/spack/modules
+      tcl:  "@{RCM_DEPLOY_ROOTPATH}/deploy/rcm_chained/modules"
 
