@@ -10,7 +10,6 @@ config:
     - '../deploy/base_spack_devel/config'
     - 'rcm'
     - 'rcm/server'
-    - 'virtualgl'
     - 'qt'
     - 'paraview'
 #    - insitu

@@ -3,7 +3,10 @@ packages:
     variants:
     - fabrics=psm2
     - schedulers=tm,slurm
-packages:
+  openssl:
+    version: 
+    - 1.0.2s
+
   all:
     compiler: [gcc@4.8.5, gcc@6.1.0]
 

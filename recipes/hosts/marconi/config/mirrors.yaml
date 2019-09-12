@@ -1,0 +1,3 @@
+mirrors:
+  common_cache: file://@{RCM_DEPLOY_ROOTPATH}/../cache
+
