@@ -12,12 +12,20 @@ shopt -s expand_aliases
 #vglrun -d :0.0 paraview  -geometry 10000x10000
 #STARTKDE="$(type -p startkde)"
 #exec "$STARTKDE"
-module load openbox pcmanfm
+module load openbox pcmanfm tint2 
+module load lxde-icon-theme
+module load leafpad
+module load gpicview
+module load image-magick
+IMMGK_DISPLAY=$(which display)
+TASKBAR=$(which tint2)
 WINDOW_MANAGER=$(which openbox)
 LXTERMINAL=$(which lxterminal)
 #PCMANFM=$(which pcmanfm)
 #module purge
 #module unuse $(module show rcm 2>&1 | python -c "import sys,os; print os.path.dirname(os.path.dirname(sys.stdin.read().split()[1]))")
+display -window root /gpfs/scratch/userinternal/sbna0000/wallpaper.jpg
 exec ${LXTERMINAL}&
 exec $(PCMANFM) --desktop &
+exec ${TASKBAR}&
 ${WINDOW_MANAGER}
