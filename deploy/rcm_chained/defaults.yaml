@@ -6,7 +6,7 @@ config:
   config_folders:
 #    - 'test/overload/defaults.yaml'
     - 'spack/devel'
-    - 'spack/devel/chained'
+#    - 'spack/devel/chained'
     - '../deploy/base_spack_devel/config'
     - 'rcm'
     - 'rcm/server'
