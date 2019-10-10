@@ -1,9 +1,10 @@
 modules:
   tcl:
-    whitelist: ['curl']
+    whitelist: 
+    - curl
+    - opengl
+    - glew
     blacklist: ['%gcc@4.8.5']
     verbose_autoload: False
 
-    vlc:
-      autoload: 'direct'  #it print on stderr and this hurts RCM
 
