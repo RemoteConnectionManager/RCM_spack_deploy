@@ -1,5 +1,5 @@
 upstreams:
-  rcm:
+  base:
     install_tree: "@{RCM_DEPLOY_ROOTPATH}/deploy/rcm_chained/install"
     modules:
       tcl:  "@{RCM_DEPLOY_ROOTPATH}/deploy/rcm_chained/modules"
